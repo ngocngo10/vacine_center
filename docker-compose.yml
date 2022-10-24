@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  backend:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./backend
+
+    volumes:
+      - .:/app
+    command: npm run start:dev
+    ports:
+      - "8080:8080"
+    environment:
+      NODE_ENV: development
+      DEBUG: nodejs-docker-express:*
+      PORT: 8080
+
+  # backend:
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_DATABASE=test
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    volumes:
+      # named volumes
+      - ./mongodb:/data/db
