@@ -4,9 +4,8 @@ services:
     build:
       dockerfile: ./Dockerfile
       context: ./backend
-
     volumes:
-      - .:/app
+      - ./backend/:/app
     command: npm run start:dev
     ports:
       - "8080:8080"
@@ -14,18 +13,16 @@ services:
       NODE_ENV: development
       DEBUG: nodejs-docker-express:*
       PORT: 8080
+    depends_on:
+      - postgres
 
-  # backend:
-
-  mongo:
-    image: mongo:latest
-    container_name: mongo
-    ports:
-      - 27017:27017
-    environment:
-      - MONGO_INITDB_DATABASE=test
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=admin
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    env_file:
+      - .env
     volumes:
-      # named volumes
-      - ./mongodb:/data/db
+      - ./postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
