@@ -19,10 +19,11 @@ services:
   postgres:
     container_name: postgres_container
     image: postgres
-    env_file:
-      - .env
+    environment:
+      - "POSTGRES_PASSWORD=password"
     volumes:
-      - ./postgres:/data/postgres
+      - ./backend/configs/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./backend/postgres/:/data/postgres
     ports:
       - "5432:5432"
     restart: unless-stopped
