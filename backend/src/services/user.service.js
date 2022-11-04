@@ -1,36 +1,40 @@
-const { userRepository } = require('../repositories');
-const ErrorCreator = require('../utils/error_createtor')
-
-async function createUser(requestBody) {
-  const userInfo = {
-    ...requestBody
+const { UserRepository } = require('../repositories');
+const ErrorCreator = require('../utils/error_createtor');
+const bcrypt = require('bcryptjs');
+module.export = class UserService {
+  constructor() {
+    this.repository = userRepository;
   }
-  const isExist = await checkUserExisted(userInfo.phoneNumber);
-  if (isExist) {
-    console.log('User is existed');
-    throw new ErrorCreator('User is existed', 400);
-  }
-  await userRepository.createUser(userInfo);
-  await sendEmail();
-}
-
-async function listUsers(requestQuery) {
-  const userInfo = {
-    ...requestQuery
+  async createUser(requestBody) {
+    const rawPassword = requestBody.password;
+    const salt = bcrypt.genSaltSync(10);
+    const password = bcrypt.hash(rawPassword, salt);
+    const userInfo = {
+      ...requestBody,
+      password
+    }
+    const isExist = await checkUserExisted(userInfo.phoneNumber);
+    if (isExist) {
+      console.log('User is existed');
+      throw new ErrorCreator('User is existed', 400);
+    }
+    const newUser = await this.repository.createUser(userInfo);
+    sendEmail();
   }
   
-  return userRepository.findAllUsers(userInfo);
+  async listUsers(requestQuery) {
+    const userInfo = {
+      ...requestQuery
+    }
+    
+    return this.repository.findAllUsers(userInfo);
+  }
+  
+  async checkUserExisted(phoneNumber) {
+    return this.repository.findUserByPhoneNumber(phoneNumber);
+  }
+  
+  async sendEmail() {
+    console.log('Sending email')
+  }
 }
-
-async function checkUserExisted(phoneNumber) {
-  return userRepository.findUserByPhoneNumber(phoneNumber);
-}
-
-async function sendEmail() {
-  console.log('Sending email')
-}
-
-module.exports = {
-  createUser,
-  listUsers,
-};

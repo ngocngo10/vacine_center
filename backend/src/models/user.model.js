@@ -11,6 +11,15 @@ module.exports = (sequelize, Sequelize) => {
     },
     password: {
       type: Sequelize.STRING
+    },
+    gender: {
+      type: Sequelize.BOOLEAN
+    },
+    forgotPasswordToken: {
+      type: Sequelize.STRING
+    },
+    refreshToken: {
+      type: Sequelize.STRING(500)
     }
   });
 
