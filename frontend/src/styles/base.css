@@ -1,0 +1,12 @@
+body {
+  font-family: 'WorkSans-Regular';
+  line-height: 1.4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}

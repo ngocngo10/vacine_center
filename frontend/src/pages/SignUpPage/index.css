@@ -1,0 +1,53 @@
+.sign-up-card {
+  background-color: var(--color-third);
+  display: flex;
+  width: 1000px;
+  height: 530px;
+  margin: 50px auto;
+  box-shadow: rgb(64 29 131) 2px 2px 6px;
+}
+
+.sign-up-image {
+  width: 50%;
+}
+
+.sign-up-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sign-up-form {
+  width: 60%;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-family: 'WorkSans-Regular';
+  line-height: 1.4;
+}
+
+.form-title {
+  font-family: 'Yeseva One';
+  font-size: 48px;
+  line-height: 55px;
+
+  /* Primary */
+
+  color: var(--color-primary);
+  text-align: center;
+  padding: 15px;
+}
+
+.sign-up-btn {
+  margin: 0 200px;
+  background: var(--color-primary);
+  font-size: 18px;
+  height: 40px;
+  width: 120px;
+  border-radius: 20px;
+  box-shadow: rgb(64 29 131) 2px 2px 4px;
+}
+
+.sign-up-btn:hover {
+  opacity: 0.9;
+  background: var(--color-primary);
+}
