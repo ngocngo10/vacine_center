@@ -8,6 +8,7 @@ require('dotenv').config()
 
 const indexRouter = require('./src/routes/index');
 const authRouter = require('./src/routes/auth');
+const categoryRouter = require('./src/routes/category');
 // var usersRouter = require('./src/routes/users');
 
 var app = express();
@@ -32,6 +33,7 @@ db.sequelize.sync()
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/api/categories', categoryRouter);
 // app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
@@ -46,14 +48,13 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   console.error(err)
 
-  if (err.statusCode === 500) {
-    res.status(err.statusCode || 500);
-    res.json({ error: err.message });
+  if (err.statusCode >= 500) {
+    res.status(500);
+    return res.json({ error: 'Internal Server Error.' });
   } else {
     res.status(err.statusCode);
-    res.json({ error: err.message });
+    return res.json({ error: err.message });
   }
-  
 });
 
 module.exports = app;

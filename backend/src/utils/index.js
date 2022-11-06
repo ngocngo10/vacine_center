@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 
 function generateLoginToken(userInfo) {
-  console.log(' process.env.JWT_TOKEN_KEY',  process.env.JWT_TOKEN_KEY);
   const payload = {
     secrect: process.env.SECRET_PAYLOAD,
     user: userInfo,

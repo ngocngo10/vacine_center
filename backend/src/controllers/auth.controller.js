@@ -2,7 +2,6 @@ const { AuthService }  = require('../services');
 const authService = new AuthService();
   async function register(req, res, next) {
     try {
-      console.log(this);
       const tokens = await authService.register(req.body);
       res.json({
         message: "Account is created successfully",

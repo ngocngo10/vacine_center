@@ -13,7 +13,6 @@ module.exports = class AuthService {
     const rawPassword = requestBody.password;
     const salt = bcrypt.genSaltSync(10);
     const password = bcrypt.hashSync(rawPassword, salt);
-    console.log(password);
     const userInfo = {
       ...requestBody,
       password,

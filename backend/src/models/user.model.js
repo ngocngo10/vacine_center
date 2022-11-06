@@ -21,6 +21,8 @@ module.exports = (sequelize, Sequelize) => {
     refreshToken: {
       type: Sequelize.STRING(500)
     }
+  },{
+    paranoid: true
   });
 
   return User;

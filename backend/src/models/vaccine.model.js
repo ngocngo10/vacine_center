@@ -3,6 +3,9 @@ module.exports = (sequelize, Sequelize) => {
     name: {
       type: Sequelize.STRING
     },
+    description: {
+      type: Sequelize.STRING(2000)
+    },
     origin: {
       type: Sequelize.STRING
     },
@@ -24,6 +27,8 @@ module.exports = (sequelize, Sequelize) => {
       field: 'expirated_date',
       type: Sequelize.DATE
     }
+  }, {
+    paranoid: true
   });
 
   return Vaccine;
