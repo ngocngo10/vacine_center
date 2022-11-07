@@ -18,8 +18,8 @@ module.exports = class CategoryService {
 
   async find(reqQuery) {
     const findConditions = {};
-    if (reqQuery.division) {
-      findConditions.division = reqQuery.division;
+    if (reqQuery.vaccineGroup) {
+      findConditions.vaccineGroup = reqQuery.vaccineGroup;
     }
 
     const other = {};

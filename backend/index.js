@@ -9,6 +9,7 @@ require('dotenv').config()
 const indexRouter = require('./src/routes/index');
 const authRouter = require('./src/routes/auth');
 const categoryRouter = require('./src/routes/category');
+const vaccineRouter = require('./src/routes/vaccine');
 // var usersRouter = require('./src/routes/users');
 
 var app = express();
@@ -34,6 +35,7 @@ db.sequelize.sync()
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/api/categories', categoryRouter);
+app.use('/api/vaccines', vaccineRouter)
 // app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
