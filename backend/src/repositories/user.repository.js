@@ -1,10 +1,9 @@
 const db = require("../models");
-const User = db.users;
 const Op = db.Sequelize.Op;
 
 module.exports = class UserRepository {
   constructor() {
-    this.model = User;
+    this.model = db.User;
   }
 
   async createUser(userInfo) {

@@ -14,16 +14,34 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   }
 });
 
-const db = {};
+User = require("./user.model.js")(sequelize, Sequelize);
+Patient = require('./patient.model')(sequelize, Sequelize);
+Appointment = require('./appointment.model')(sequelize, Sequelize);
+Vaccine = require('./vaccine.model')(sequelize, Sequelize);
+Category = require('./category.model')(sequelize, Sequelize);
+VaccineCategory = require('./vaccine-category.model')(sequelize, Sequelize);
 
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
+// define relations
+Category.hasMany(VaccineCategory, { as: "vaccineCategories" });
+VaccineCategory.belongsTo(Category, {
+  foreignKey: "category_id",
+  as: "category",
+});
+Vaccine.hasMany(VaccineCategory, { as: "vaccineCategories" });
+VaccineCategory.belongsTo(Vaccine, {
+  foreignKey: "vaccine_id",
+  as: "vaccine",
+});
+Vaccine.belongsToMany(Category, { through: VaccineCategory, as: 'categories' });
+Category.belongsToMany(Vaccine, { through: VaccineCategory, as: 'vaccines' });
 
-db.users = require("./user.model.js")(sequelize, Sequelize);
-db.patients = require('./patient.model')(sequelize, Sequelize);
-db.appointments = require('./appointment.model')(sequelize, Sequelize);
-db.vaccines = require('./vaccine.model')(sequelize, Sequelize);
-db.categories = require('./category.model')(sequelize, Sequelize);
-db.vaccineCategories = require('./vaccine-category.model')(sequelize, Sequelize);
-
-module.exports = db;
+module.exports = {
+  Sequelize,
+  sequelize,
+  Vaccine,
+  User,
+  Patient,
+  Appointment,
+  Category,
+  VaccineCategory,
+};

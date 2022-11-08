@@ -1,4 +1,5 @@
 const { VaccineService } = require('../services');
+const ErrorCreator = require('../utils/error_createtor');
 const vaccineService = new VaccineService();
 async function create(req, res, next) {
   try {
@@ -7,7 +8,7 @@ async function create(req, res, next) {
       message: "Vaccine is created successfully",
     });
   } catch (error) {
-    next(error);
+    next(error.statusCode ? error : new ErrorCreator(error.message, 500));
   }
 };
 

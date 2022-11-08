@@ -5,46 +5,41 @@ module.exports = class CategoryService {
     this.repository = new CategoryRepository();
   }
   async create(data) {
-    return this.repository.create(data);
+    await this.repository.create(data);
+    return;
   }
 
   async update(id, body) {
-    const findCondition = { id };
     const updateData = {
       ...body
     }
-    return this.repository.update(findCondition, updateData);
+    await this.repository.update(id, updateData);
+    return;
   }
 
   async find(reqQuery) {
-    const findConditions = {};
-    if (reqQuery.vaccineGroup) {
-      findConditions.vaccineGroup = reqQuery.vaccineGroup;
+    const findOptions = {};
+    if (reqQuery.categoryGroup) {
+      findOptions.where = {
+        categoryGroup: reqQuery.categoryGroup,
+      }
+    }
+    if (reqQuery.page) {
+      findOptions.limit = +reqQuery.perPage || 10;
+      findOptions.offset = (+reqQuery.page - 1) * findOptions.limit;
     }
 
-    const other = {};
-    if (reqQuery.page) {
-      other.page = +reqQuery.page;
-    }
-    if (reqQuery.perPage) {
-      other.perPage = +reqQuery.perPage;
-    }
     if (reqQuery.orderBy) {
-      other.orderBy = reqQuery.orderBy;
+      findOptions.order = [reqQuery.orderBy, reqQuery.orderType || 'DESC']
     }
-    if (reqQuery.orderType) {
-      other.orderType = reqQuery.orderType;
-    }
-    return this.repository.find(
-      Object.keys(findConditions).length ? findConditions : null,
-      Object.keys(other).length ? other : null);
+    return await this.repository.find(findOptions)
   }
 
   async findOne(id) {
-    return this.repository.findOne({ id })
+    return await this.repository.findOne(id)
   }
 
   async deleteCategory(id) {
-    return this.repository.delete(id);
+    return await this.repository.delete(id);
   }
 }

@@ -6,6 +6,9 @@ module.exports = (sequelize, Sequelize) => {
     categoryGroup: {
       field: 'category_group',
       type: Sequelize.ENUM(['AGE', 'DISEASE'])
+    },
+    image: {
+      type: Sequelize.STRING(2000)
     }
   }, {
     paranoid: true

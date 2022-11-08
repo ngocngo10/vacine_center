@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require("cors");
+const log = require('loglevel');
 require('dotenv').config()
 
 const indexRouter = require('./src/routes/index');
@@ -14,7 +15,7 @@ const vaccineRouter = require('./src/routes/vaccine');
 
 var app = express();
 var corsOptions = {
-  origin: "http://localhost:8081"
+  origin: "http://127.0.0.1:5173"
 };
 app.use(cors(corsOptions));
 app.use(logger('dev'));
@@ -48,13 +49,13 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-  console.error(err)
+  log.error(err)
 
-  if (err.statusCode >= 500) {
+  if (!err.status) {
     res.status(500);
     return res.json({ error: 'Internal Server Error.' });
   } else {
-    res.status(err.statusCode);
+    res.status(err.status);
     return res.json({ error: err.message });
   }
 });
