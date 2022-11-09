@@ -11,8 +11,8 @@ export const getCategoryList = (cateGroup) => async (dispatch) => {
       type: CATEGORY_LIST_REQUEST
     });
     const url = cateGroup
-      ? `http://192.168.1.16:8080/api/categories`
-      : `http://192.168.1.16:8080/api/categories?categoryGroup=${cateGroup}`;
+      ? `http://localhost:8080/api/categories`
+      : `http://localhost:8080/api/categories?categoryGroup=${cateGroup}`;
     const { data } = await axios.get(url);
     const categories = [];
     let index = 0;
