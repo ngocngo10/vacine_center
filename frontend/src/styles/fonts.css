@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'WorkSans-Regular';
+  src: url('../assets/fonts/WorkSans/WorkSans-Regular.ttf');
+  /* font-weight: 400; */
+}
+
+@font-face {
+  font-family: 'WorkSans-Medium';
+  src: url('../assets/fonts/WorkSans/WorkSans-Medium.ttf');
+  /* font-weight: 500; */
+}
+
+@font-face {
+  font-family: 'WorkSans-SemiBold';
+  src: url('../assets/fonts/WorkSans/WorkSans-SemiBold.ttf');
+  /* font-weight: 600; */
+}
+
+@font-face {
+  font-family: 'Yeseva One';
+  src: url('../assets/fonts/Yeseva_One/YesevaOne-Regular.ttf');
+  /* font-weight: 400; */
+}

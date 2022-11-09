@@ -1,0 +1,36 @@
+.login-header {
+  background-color: var(--color-primary);
+  height: 84px;
+}
+
+.login-form {
+  font-family: 'WorkSans-Regular';
+  line-height: 1.4;
+}
+
+.login-card {
+  width: 500px;
+  padding: 20px 20px;
+  margin: 50px auto;
+  box-shadow: rgb(64 29 131) 2px 2px 6px;
+  background-color: var(--color-third);
+}
+
+.login-form-title {
+  font-family: 'Yeseva One';
+  font-size: 48px;
+  line-height: 55px;
+  color: var(--color-primary);
+  text-align: center;
+  padding: 15px;
+}
+
+.login-form-btn {
+  margin: 0 160px;
+  background: var(--color-primary);
+  font-size: 18px;
+  height: 40px;
+  width: 120px;
+  border-radius: 20px;
+  box-shadow: rgb(64 29 131) 2px 2px 4px;
+}
