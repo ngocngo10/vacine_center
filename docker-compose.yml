@@ -6,7 +6,7 @@ services:
       context: ./backend
     volumes:
       - ./backend/:/app
-    command: npm run start:dev
+    command: npm i && npm run start:dev
     ports:
       - "8080:8080"
     environment:
@@ -23,7 +23,7 @@ services:
       - "POSTGRES_PASSWORD=password"
     volumes:
       - ./backend/configs/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./backend/postgres/:/data/postgres
+      - ./backend/postgres/:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     restart: unless-stopped

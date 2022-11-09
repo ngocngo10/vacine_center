@@ -12,6 +12,8 @@ module.exports = (sequelize, Sequelize) => {
     birthday: {
       type: Sequelize.DATE
     }
+  }, {
+    paranoid: true
   });
 
   return Patient;

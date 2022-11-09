@@ -20,6 +20,8 @@ module.exports = (sequelize, Sequelize) => {
       name: 'is_confirmed',
       type: Sequelize.BOOLEAN
     }
+  }, {
+    paranoid: true
   });
 
   return Appointment;

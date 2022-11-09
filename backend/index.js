@@ -50,8 +50,8 @@ app.use(function (err, req, res, next) {
     res.status(err.statusCode || 500);
     res.json({ error: err.message });
   } else {
-    res.status(err.statusCode);
-    res.json({ error: err.message });
+    res.status(err.status);
+    return res.json({ error: err.message });
   }
 });
 
