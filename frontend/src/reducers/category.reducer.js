@@ -13,7 +13,6 @@ const initialState = {
 export const CategoryListReducer = (state = initialState, action) => {
   switch (action.type) {
     case CATEGORY_LIST_REQUEST:
-      console.log('CATEGORY_LIST_REQUEST');
       return { ...state, loading: true };
     case CATEGORY_LIST_SUCCESS:
       return { ...state, loading: false, categories: action.payload };

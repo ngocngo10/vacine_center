@@ -9,7 +9,6 @@ import './index.css';
 const VaccineCategoryCarousel = () => {
   const categoryList = useSelector((state) => state.categoryList);
   const { loading, error, categories } = categoryList;
-  console.log('categoryList', categoryList);
 
   return error ? (
     <Message description={error} />

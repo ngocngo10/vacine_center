@@ -43,7 +43,7 @@
 }
 
 .slideshow-btn a:hover {
-  background-color: #ff7400;
+  background-color: var(--color-primary);
 }
 
 .slideshow-search {

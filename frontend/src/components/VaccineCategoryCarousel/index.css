@@ -17,7 +17,7 @@
 }
 
 .category-item div:hover {
-  background-color: #ff7400;
+  background-color: var(--color-primary);
   border-radius: 50%;
 }
 
