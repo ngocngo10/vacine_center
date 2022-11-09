@@ -36,7 +36,7 @@ const VaccineListPage = () => {
     console.log('Effect--Before');
     dispatch(getCategoryList());
     console.log('Effect--After');
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

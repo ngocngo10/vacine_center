@@ -1,8 +1,8 @@
 .section-slideshow {
   width: 100%;
   height: 445px;
-  background-image: url('https://www.nhassurance.com/assets/covidvaccine/covid%20page%20footer-89592742ad9044bf503a041e40466dc1c4c8d2435ff6a1db2426d75846d96f2c.png');
   background-size: cover;
+  background-image: url('./bgr-vaccine-categories.jpg');
 }
 
 .slideshow-nav {

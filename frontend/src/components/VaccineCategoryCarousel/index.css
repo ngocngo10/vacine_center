@@ -1,7 +1,10 @@
+.slideshow-list {
+  height: 180px;
+}
+
 .slideshow-item {
   display: flex;
   justify-content: center;
-  padding-bottom: 30px;
 }
 
 .category-item {
@@ -11,12 +14,17 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin: 0 10px;
+}
+
+.category-item div:hover {
+  background-color: #ff7400;
+  border-radius: 50%;
 }
 
 .category-item__image {
   width: 90px;
   height: 90px;
+  margin-bottom: 15px;
 }
 
 .category-item__name a {

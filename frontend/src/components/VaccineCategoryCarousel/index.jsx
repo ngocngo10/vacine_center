@@ -14,30 +14,32 @@ const VaccineCategoryCarousel = () => {
   return error ? (
     <Message description={error} />
   ) : (
-    <Carousel autoplay="true" dotPosition="bottom" className="slideshow-list">
-      {console.log('render1')}
-      {categories &&
-        categories.map((subCategories, index) => {
-          {
-            console.log('subCategories', subCategories);
-          }
-          <div key={`slideshow-item-${index}`} className="slideshow-item">
-            {subCategories.map((category) => {
-              {
-                console.log('Categories', category);
-              }
-              <div key={category.id} className="category-item">
-                <Link to={`/product/${category.id}`}>
-                  <img className="category-item__image" src={category.image} alt="slideshow-item" />
-                </Link>
-                <h3 className="category-item__name">
-                  <Link to={`/product/${category._id}`}></Link>
-                </h3>
-              </div>;
-            })}
-          </div>;
-        })}
-    </Carousel>
+    categories.length && (
+      <Carousel autoplay="true" dotPosition="bottom" className="slideshow-list">
+        {categories.map((subCategories, index) => (
+          <div key={`slideshow-item-${index}`}>
+            <div className="slideshow-item">
+              {subCategories.map((category) => (
+                <div key={category.id} className="category-item">
+                  <Link to={`/product/${category.id}`}>
+                    <div>
+                      <img
+                        className="category-item__image"
+                        src={category.image}
+                        alt="slideshow-item"
+                      />
+                    </div>
+                  </Link>
+                  <h3 className="category-item__name">
+                    <Link to={`/product/${category._id}`}>{category.name}</Link>
+                  </h3>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </Carousel>
+    )
   );
 };
 
