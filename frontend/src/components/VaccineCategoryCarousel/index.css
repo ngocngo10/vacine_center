@@ -1,0 +1,29 @@
+.slideshow-item ul {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 30px;
+}
+
+.category-item {
+  width: 181px;
+  height: 132px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 10px;
+}
+
+.category-item__image {
+  width: 90px;
+  height: 90px;
+}
+
+.category-item__name a {
+  font-family: 'WorkSans-SemiBold';
+  font-size: 16px;
+  line-height: 21px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-third);
+}
