@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 services:
   backend:
     build:
@@ -6,7 +6,7 @@ services:
       context: ./backend
     volumes:
       - ./backend/:/app
-    command: npm i && npm run start:dev
+    command: npm run start:dev
     ports:
       - "8080:8080"
     environment:

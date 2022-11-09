@@ -11,8 +11,8 @@ export const getCategoryList = (cateGroup) => async (dispatch) => {
       type: CATEGORY_LIST_REQUEST
     });
     const url = cateGroup
-      ? `http://localhost:8080/api/categories`
-      : `http://localhost:8080/api/categories?categoryGroup=${cateGroup}`;
+      ? `http://localhost:8080/api/categories?categoryGroup=${cateGroup}`
+      : `http://localhost:8080/api/categories`;
     const { data } = await axios.get(url);
     const categories = [];
     let index = 0;
@@ -20,7 +20,7 @@ export const getCategoryList = (cateGroup) => async (dispatch) => {
       categories.push(data.categories.slice(index, index + 6));
       index = index + 6;
     }
-    console.log(data, 'cate', categories);
+
     dispatch({
       type: CATEGORY_LIST_SUCCESS,
       payload: categories

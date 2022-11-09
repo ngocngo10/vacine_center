@@ -15,6 +15,7 @@ const SignInPage = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
+  console.log('userLogin', userLogin);
 
   useEffect(() => {
     if (userInfo) {
@@ -23,8 +24,9 @@ const SignInPage = () => {
   }, [userInfo]);
 
   const onFinish = (values) => {
-    const { phone, password } = values;
-    dispatch(login(phone, password));
+    const { phoneNumber, password } = values;
+    console.log('values', values);
+    dispatch(login(phoneNumber, password));
   };
   return (
     <>
@@ -36,7 +38,7 @@ const SignInPage = () => {
             <h3 className="login-form-title">Đăng nhập</h3>
             <Form name="login-form" className="login-form" onFinish={onFinish}>
               <Form.Item
-                name="phone"
+                name="phoneNumber"
                 rules={[
                   {
                     required: true,

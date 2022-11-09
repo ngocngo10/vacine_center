@@ -6,5 +6,6 @@ ENV NODE_ENV=development
 ENV NODE_OPTIONS=--max_old_space_size=4096
 RUN npm install -g nodemon && npm install
 COPY . /
+CMD ["npm", "install"]
 CMD ["nodemon", "bin/www"]
 EXPOSE 8080
