@@ -1,6 +1,6 @@
 import { AudioOutlined, ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import { Input, Space } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 const { Search } = Input;
 import { Link } from 'react-router-dom';
@@ -35,6 +35,10 @@ const VaccineListPage = () => {
   const handleGetCategories = (cateGroup) => {
     dispatch(getCategoryList(cateGroup));
   };
+
+  useEffect(() => {
+    dispatch(getCategoryList(), [dispatch]);
+  });
 
   return (
     <>
