@@ -1,31 +1,28 @@
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
 const cors = require("cors");
-const log = require('loglevel');
-require('dotenv').config()
+require("dotenv").config();
 
-const indexRouter = require('./src/routes/index');
-const authRouter = require('./src/routes/auth');
-const categoryRouter = require('./src/routes/category');
-const vaccineRouter = require('./src/routes/vaccine');
+const indexRouter = require("./src/routes/index");
+const authRouter = require("./src/routes/auth");
 // var usersRouter = require('./src/routes/users');
 
 var app = express();
 var corsOptions = {
-  origin: "http://127.0.0.1:5173"
+  origin: "http://127.0.0.1:5173",
 };
 app.use(cors(corsOptions));
-app.use(logger('dev'));
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-
 const db = require("./src/models");
-db.sequelize.sync()
+db.sequelize
+  .sync()
   .then(() => {
     console.log("Synced db.");
   })
@@ -33,27 +30,25 @@ db.sequelize.sync()
     console.log("Failed to sync db: " + err.message);
   });
 
-app.use('/', indexRouter);
-app.use('/auth', authRouter);
-app.use('/api/categories', categoryRouter);
-app.use('/api/vaccines', vaccineRouter)
+app.use("/", indexRouter);
+app.use("/auth", authRouter);
 // app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-  log.error(err)
+  res.locals.error = req.app.get("env") === "development" ? err : {};
+  console.error(err);
 
-  if (!err.status) {
-    res.status(500);
-    return res.json({ error: 'Internal Server Error.' });
+  if (err.statusCode === 500) {
+    res.status(err.statusCode || 500);
+    res.json({ error: err.message });
   } else {
     res.status(err.status);
     return res.json({ error: err.message });
