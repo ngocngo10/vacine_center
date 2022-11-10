@@ -10,22 +10,7 @@ import VaccineCategoryCarousel from '../../components/VaccineCategoryCarousel';
 import 'antd/dist/antd.css';
 import './index.css';
 import { getCategoryList } from '../../actions/category.action';
-
-// const contentStyle = {
-//   height: '160px',
-//   color: '#fff',
-//   lineHeight: '160px',
-//   textAlign: 'center'
-//   // background: '#364d79'
-// };
-const suffix = (
-  <AudioOutlined
-    style={{
-      fontSize: 16,
-      color: '#1890ff'
-    }}
-  />
-);
+import VaccineList from '../../components/VaccineList';
 
 const onSearch = (value) => console.log(value);
 
@@ -72,6 +57,11 @@ const VaccineListPage = () => {
             <section className="section-categories">
               <VaccineCategoryCarousel />
             </section>
+          </Container>
+        </section>
+        <section className="section-vaccine-list">
+          <Container>
+            <VaccineList />
           </Container>
         </section>
       </main>
