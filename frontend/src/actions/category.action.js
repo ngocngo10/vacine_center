@@ -10,9 +10,10 @@ export const getCategoryList = (cateGroup) => async (dispatch) => {
     dispatch({
       type: CATEGORY_LIST_REQUEST
     });
+    const BASE_URL = process.env.BASE_URL;
     const url = cateGroup
-      ? `http://localhost:8080/api/categories?categoryGroup=${cateGroup}`
-      : `http://localhost:8080/api/categories`;
+      ? `${BASE_URL}/api/categories?categoryGroup=${cateGroup}`
+      : `${BASE_URL}/api/categories`;
     const { data } = await axios.get(url);
     const categories = [];
     let index = 0;

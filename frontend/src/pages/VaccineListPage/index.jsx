@@ -10,6 +10,7 @@ import VaccineCategoryCarousel from '../../components/VaccineCategoryCarousel';
 import 'antd/dist/antd.css';
 import './index.css';
 import { getCategoryList } from '../../actions/category.action';
+import { getVaccineList } from '../../actions/vaccine.action';
 import VaccineList from '../../components/VaccineList';
 
 const onSearch = (value) => console.log(value);
@@ -23,6 +24,7 @@ const VaccineListPage = () => {
 
   useEffect(() => {
     dispatch(getCategoryList());
+    dispatch(getVaccineList());
   }, []);
 
   return (

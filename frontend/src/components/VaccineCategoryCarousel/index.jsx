@@ -1,14 +1,20 @@
 import { Carousel } from 'antd';
 import 'antd/dist/antd.css';
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Message from '../Message';
+import { getVaccineList } from '../../actions/vaccine.action';
 import './index.css';
 
 const VaccineCategoryCarousel = () => {
+  const dispatch = useDispatch();
   const categoryList = useSelector((state) => state.categoryList);
   const { loading, error, categories } = categoryList;
+
+  const handleGetVaccines = () => {
+    dispatch(getVaccineList());
+  };
 
   return error ? (
     <Message description={error} />
@@ -20,7 +26,11 @@ const VaccineCategoryCarousel = () => {
             <div className="slideshow-item">
               {subCategories.map((category) => (
                 <div key={category.id} className="category-item">
-                  <Link to={`/product/${category.id}`}>
+                  <Link
+                    to={`/categories/${category.id}`}
+                    onClick={() => {
+                      handleGetVaccines();
+                    }}>
                     <div>
                       <img
                         className="category-item__image"
@@ -30,7 +40,13 @@ const VaccineCategoryCarousel = () => {
                     </div>
                   </Link>
                   <h3 className="category-item__name">
-                    <Link to={`/product/${category._id}`}>{category.name}</Link>
+                    <Link
+                      to={`/product/${category._id}`}
+                      onClick={() => {
+                        handleGetVaccines();
+                      }}>
+                      {category.name}
+                    </Link>
                   </h3>
                 </div>
               ))}

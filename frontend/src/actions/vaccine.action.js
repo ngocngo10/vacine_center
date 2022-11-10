@@ -10,10 +10,10 @@ export const getVaccineList = (vaccineGroup) => async (dispatch) => {
     dispatch({
       type: VACCINE_LIST_REQUEST
     });
-
+    const BASE_URL = process.env.BASE_URL;
     const url = vaccineGroup
-      ? `http://localhost:8080/api/vaccines?vaccineGroup=${vaccineGroup}`
-      : `http://localhost:8080/api/vaccines`;
+      ? `${BASE_URL}/api/vaccines?vaccineGroup=${vaccineGroup}`
+      : `${BASE_URL}/api/vaccines`;
 
     const { data } = await axios.get(url);
     const { vaccines } = data;

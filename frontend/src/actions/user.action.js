@@ -20,8 +20,8 @@ export const register = (values) => async (dispatch) => {
         'Content-Type': 'application/json'
       }
     };
-
-    const { data } = await axios.post('http://localhost:8080/auth/register', values, config);
+    const BASE_URL = process.env.BASE_URL;
+    const { data } = await axios.post(`${BASE_URL}/auth/register`, values, config);
 
     dispatch({
       type: USER_REGISTER_SUCCESS,
@@ -56,7 +56,7 @@ export const login = (phoneNumber, password) => async (dispatch) => {
     };
 
     const { data } = await axios.post(
-      'http://localhost:8080/api/auth/login',
+      `${BASE_URL}/api/auth/login`,
       { phoneNumber, password },
       config
     );
