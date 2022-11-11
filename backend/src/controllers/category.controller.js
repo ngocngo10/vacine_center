@@ -15,7 +15,7 @@ async function create(req, res, next) {
 async function find(req, res, next) {
   try {
     const categories = await categoryService.find(req.query);
-    return res.json({ categories });
+    return res.json(categories);
   } catch (error) {
     next(error);
   }

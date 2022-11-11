@@ -1,7 +1,9 @@
 const ErrorCreator = require("./error_createtor");
 
 module.exports = class BaseRepository {
-  constructor() {}
+  constructor() {
+    this.model;
+  }
 
   async create(data) {
     return this.model.create(data);
@@ -9,7 +11,7 @@ module.exports = class BaseRepository {
 
   async find(findOptions) {
     console.log(findOptions);
-    return this.model.findAll(findOptions);
+    return this.model.findAndCountAll(findOptions);
   }
 
   async findOne(id, relation = []) {
