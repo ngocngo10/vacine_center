@@ -6,14 +6,21 @@ import {
 } from '../constants/vaccine.constant';
 import { BASE_URL } from '../constants/base_url.constant';
 
-export const getVaccineList = (categoryId) => async (dispatch) => {
+export const getVaccineList = (query) => async (dispatch) => {
   try {
     dispatch({
       type: VACCINE_LIST_REQUEST
     });
+    const queries = [];
+    for (let key in query) {
+      if (query[key]) {
+        queries.push(`${key}=${query[key]}`);
+      }
+    }
+    const queryString = queries.join('&');
 
-    const url = categoryId
-      ? `${BASE_URL}/api/vaccines?categoryId=${categoryId}`
+    const url = queryString
+      ? `${BASE_URL}/api/vaccines?${queryString}`
       : `${BASE_URL}/api/vaccines`;
 
     const { data } = await axios.get(url);
