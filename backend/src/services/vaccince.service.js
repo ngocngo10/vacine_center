@@ -1,5 +1,5 @@
-const { VaccinRepository } = require('../repositories');
-const ErrorCreator = require('../utils/error_createtor');
+const { VaccinRepository } = require("../repositories");
+const ErrorCreator = require("../utils/error_createtor");
 const { Op } = require("sequelize");
 
 module.exports = class VaccineService {
@@ -10,6 +10,7 @@ module.exports = class VaccineService {
     const categoryId = bodyRequest.categoryId;
     const {
       name,
+      image,
       description,
       origin,
       injectionRoute,
@@ -19,10 +20,11 @@ module.exports = class VaccineService {
       conserve,
       affectPregnancy,
       injectedNumberTotal,
-      price
+      price,
     } = bodyRequest;
     const data = {
       name,
+      image,
       description,
       origin,
       injectionRoute,
@@ -32,7 +34,7 @@ module.exports = class VaccineService {
       conserve,
       affectPregnancy,
       injectedNumberTotal,
-      price
+      price,
     };
     try {
       this.repository.createVaccine(data, categoryId);
@@ -45,8 +47,8 @@ module.exports = class VaccineService {
   async update(id, body) {
     const findCondition = { id };
     const updateData = {
-      ...body
-    }
+      ...body,
+    };
     try {
       await this.repository.update(findCondition, updateData);
       return;
@@ -56,32 +58,36 @@ module.exports = class VaccineService {
   }
 
   async find(reqQuery) {
-    let findConditions = {};
-    if (reqQuery.name) {
-      findConditions = {
-        name: {
-          [Op.substring]: reqQuery.name
-        }
-      }
-    }
-
-    const other = {};
-    if (reqQuery.page) {
-      other.page = +reqQuery.page;
-    }
-    if (reqQuery.perPage) {
-      other.perPage = +reqQuery.perPage;
-    }
-    if (reqQuery.orderBy) {
-      other.orderBy = reqQuery.orderBy;
-    }
-    if (reqQuery.orderType) {
-      other.orderType = reqQuery.orderType;
-    }
     try {
-      const vaccines = await this.repository.find(
-        Object.keys(findConditions).length ? findConditions : null,
-        Object.keys(other).length ? other : null);
+      let findOptions = {};
+      if (reqQuery.name) {
+        findOptions.where = {
+          name: {
+            [Op.substring]: reqQuery.name,
+          },
+        };
+      }
+
+      if (reqQuery.categoryId) {
+        findOptions.include = [
+          {
+            model: VaccineCategory,
+            as: "vaccineCategories",
+            where: { categoryId: reqQuery.categoryId },
+          },
+        ];
+      }
+
+      if (reqQuery.page) {
+        findOptions.limit = +reqQuery.perPage || 10;
+        findOptions.offset = (+reqQuery.page - 1) * findOptions.limit;
+      }
+
+      if (reqQuery.orderBy) {
+        findOptions.order = [reqQuery.orderBy, reqQuery.orderType || "DESC"];
+      }
+
+      const vaccines = await this.repository.find(findOptions);
       return vaccines;
     } catch (error) {
       throw new ErrorCreator(error.message, 500);
@@ -90,7 +96,7 @@ module.exports = class VaccineService {
 
   async findOne(id) {
     try {
-      const vaccine = await this.repository.findOne({ id });
+      const vaccine = await this.repository.findOne(id);
       return vaccine;
     } catch (error) {
       throw new ErrorCreator(error.message, 500);
@@ -105,4 +111,4 @@ module.exports = class VaccineService {
       throw new ErrorCreator(error.message, 500);
     }
   }
-}
+};

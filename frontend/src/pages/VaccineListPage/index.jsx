@@ -10,22 +10,8 @@ import VaccineCategoryCarousel from '../../components/VaccineCategoryCarousel';
 import 'antd/dist/antd.css';
 import './index.css';
 import { getCategoryList } from '../../actions/category.action';
-
-// const contentStyle = {
-//   height: '160px',
-//   color: '#fff',
-//   lineHeight: '160px',
-//   textAlign: 'center'
-//   // background: '#364d79'
-// };
-const suffix = (
-  <AudioOutlined
-    style={{
-      fontSize: 16,
-      color: '#1890ff'
-    }}
-  />
-);
+import { getVaccineList } from '../../actions/vaccine.action';
+import VaccineList from '../../components/VaccineList';
 
 const onSearch = (value) => console.log(value);
 
@@ -37,8 +23,9 @@ const VaccineListPage = () => {
   };
 
   useEffect(() => {
-    dispatch(getCategoryList(), [dispatch]);
-  });
+    dispatch(getCategoryList());
+    dispatch(getVaccineList());
+  }, []);
 
   return (
     <>
@@ -57,10 +44,12 @@ const VaccineListPage = () => {
             </nav>
             <h2 className="slideshow-title">Thông tin sản phẩm vắc xin</h2>
             <div className="slideshow-btn">
-              <Link to="/vaccine-list?cateGroup=age" onClick={handleGetCategories('AGE')}>
+              <Link to="/vaccine-list?cate-group=age" onClick={() => handleGetCategories('AGE')}>
                 Vắc xin theo nhóm bệnh
               </Link>
-              <Link to="/vaccine-list?cateGroup=disease" onClick={handleGetCategories('DISEASE')}>
+              <Link
+                to="/vaccine-list?cate-group=disease"
+                onClick={() => handleGetCategories('DISEASE')}>
                 Vắc xin theo độ tuổi
               </Link>
             </div>
@@ -70,6 +59,11 @@ const VaccineListPage = () => {
             <section className="section-categories">
               <VaccineCategoryCarousel />
             </section>
+          </Container>
+        </section>
+        <section className="section-vaccine-list">
+          <Container>
+            <VaccineList />
           </Container>
         </section>
       </main>

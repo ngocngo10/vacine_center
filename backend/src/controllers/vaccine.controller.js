@@ -1,5 +1,5 @@
-const { VaccineService } = require('../services');
-const ErrorCreator = require('../utils/error_createtor');
+const { VaccineService } = require("../services");
+const ErrorCreator = require("../utils/error_createtor");
 const vaccineService = new VaccineService();
 async function create(req, res, next) {
   try {
@@ -10,16 +10,16 @@ async function create(req, res, next) {
   } catch (error) {
     next(error.statusCode ? error : new ErrorCreator(error.message, 500));
   }
-};
+}
 
 async function find(req, res, next) {
   try {
-    const vaccinces = await vaccineService.find(req.query);
-    return res.json({ vaccinces });
+    const vaccines = await vaccineService.find(req.query);
+    return res.json({ vaccines });
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function findOne(req, res, next) {
   try {
@@ -28,25 +28,25 @@ async function findOne(req, res, next) {
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function update(req, res, next) {
   try {
     await vaccineService.update(req.params.id, req.body);
-    return res.json({ message: 'Updated.' });
+    return res.json({ message: "Updated." });
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function deleteVaccine(req, res, next) {
   try {
     await vaccineService.deleteCategory(req.params.id);
-    return res.json({ message: 'Deleted.' });
+    return res.json({ message: "Deleted." });
   } catch (error) {
     next(error);
   }
-};
+}
 
 module.exports = {
   create,
@@ -54,4 +54,4 @@ module.exports = {
   findOne,
   update,
   // deleteCategory
-}
+};
