@@ -12,8 +12,8 @@ const VaccineCategoryCarousel = () => {
   const categoryList = useSelector((state) => state.categoryList);
   const { loading, error, categories } = categoryList;
 
-  const handleGetVaccines = () => {
-    dispatch(getVaccineList());
+  const handleGetVaccines = (categoryId) => {
+    dispatch(getVaccineList(categoryId));
   };
 
   return error ? (
@@ -27,10 +27,8 @@ const VaccineCategoryCarousel = () => {
               {subCategories.map((category) => (
                 <div key={category.id} className="category-item">
                   <Link
-                    to={`/categories/${category.id}`}
-                    onClick={() => {
-                      handleGetVaccines();
-                    }}>
+                    to={`/vaccine-list?cate=${category.id}`}
+                    onClick={() => handleGetVaccines(category.id)}>
                     <div>
                       <img
                         className="category-item__image"
@@ -41,9 +39,9 @@ const VaccineCategoryCarousel = () => {
                   </Link>
                   <h3 className="category-item__name">
                     <Link
-                      to={`/product/${category._id}`}
+                      to={`/vaccine-list?cate=${category.id}`}
                       onClick={() => {
-                        handleGetVaccines();
+                        handleGetVaccines(category.id);
                       }}>
                       {category.name}
                     </Link>

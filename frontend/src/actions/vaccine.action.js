@@ -4,23 +4,23 @@ import {
   VACCINE_LIST_SUCCESS,
   VACCINE_LIST_FAIL
 } from '../constants/vaccine.constant';
+import { BASE_URL } from '../constants/base_url.constant';
 
-export const getVaccineList = (vaccineGroup) => async (dispatch) => {
+export const getVaccineList = (categoryId) => async (dispatch) => {
   try {
     dispatch({
       type: VACCINE_LIST_REQUEST
     });
-    const BASE_URL = process.env.BASE_URL;
-    const url = vaccineGroup
-      ? `${BASE_URL}/api/vaccines?vaccineGroup=${vaccineGroup}`
+
+    const url = categoryId
+      ? `${BASE_URL}/api/vaccines?categoryId=${categoryId}`
       : `${BASE_URL}/api/vaccines`;
 
     const { data } = await axios.get(url);
-    const { vaccines } = data;
 
     dispatch({
       type: VACCINE_LIST_SUCCESS,
-      payload: vaccines
+      payload: data
     });
   } catch (error) {
     dispatch({

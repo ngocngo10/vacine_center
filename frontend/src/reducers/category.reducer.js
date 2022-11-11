@@ -10,7 +10,7 @@ const initialState = {
   error: null
 };
 
-export const CategoryListReducer = (state = initialState, action) => {
+export const categoryListReducer = (state = initialState, action) => {
   switch (action.type) {
     case CATEGORY_LIST_REQUEST:
       return { ...state, loading: true };

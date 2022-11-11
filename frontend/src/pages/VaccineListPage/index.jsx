@@ -44,11 +44,11 @@ const VaccineListPage = () => {
             </nav>
             <h2 className="slideshow-title">Thông tin sản phẩm vắc xin</h2>
             <div className="slideshow-btn">
-              <Link to="/vaccine-list?categroup=age" onClick={() => handleGetCategories('AGE')}>
+              <Link to="/vaccine-list?cate-group=age" onClick={() => handleGetCategories('AGE')}>
                 Vắc xin theo nhóm bệnh
               </Link>
               <Link
-                to="/vaccine-list?categroup=disease"
+                to="/vaccine-list?cate-group=disease"
                 onClick={() => handleGetCategories('DISEASE')}>
                 Vắc xin theo độ tuổi
               </Link>

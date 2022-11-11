@@ -4,13 +4,14 @@ import {
   CATEGORY_LIST_SUCCESS,
   CATEGORY_LIST_FAIL
 } from '../constants/category.constant';
+import { BASE_URL } from '../constants/base_url.constant';
 
 export const getCategoryList = (cateGroup) => async (dispatch) => {
   try {
     dispatch({
       type: CATEGORY_LIST_REQUEST
     });
-    const BASE_URL = process.env.BASE_URL;
+
     const url = cateGroup
       ? `${BASE_URL}/api/categories?categoryGroup=${cateGroup}`
       : `${BASE_URL}/api/categories`;
