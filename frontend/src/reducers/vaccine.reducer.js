@@ -15,9 +15,14 @@ export const vaccineListReducer = (state = initialState, action) => {
     case VACCINE_LIST_REQUEST:
       return { ...state, loading: true };
     case VACCINE_LIST_SUCCESS:
-      return { ...state, loading: false, vaccines: action.payload.vaccines };
+      return {
+        ...state,
+        loading: false,
+        vaccines: action.payload.rows,
+        totalItem: action.payload.count
+      };
     case VACCINE_LIST_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload.error };
     default:
       return state;
   }

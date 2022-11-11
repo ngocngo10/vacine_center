@@ -11,13 +11,16 @@ export const getVaccineList = (query) => async (dispatch) => {
     dispatch({
       type: VACCINE_LIST_REQUEST
     });
+    const reqQuery = { ...query, perPage: 6, page: query.page };
+    console.log('reqQuery', reqQuery);
     const queries = [];
-    for (let key in query) {
-      if (query[key]) {
-        queries.push(`${key}=${query[key]}`);
+    for (let key in reqQuery) {
+      if (reqQuery[key]) {
+        queries.push(`${key}=${reqQuery[key]}`);
       }
     }
     const queryString = queries.join('&');
+    console.log('queryString', queryString);
 
     const url = queryString
       ? `${BASE_URL}/api/vaccines?${queryString}`

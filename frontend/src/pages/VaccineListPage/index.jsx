@@ -27,7 +27,7 @@ const VaccineListPage = () => {
 
   useEffect(() => {
     dispatch(getCategoryList());
-    dispatch(getVaccineList());
+    dispatch(getVaccineList({}));
   }, []);
 
   return (
