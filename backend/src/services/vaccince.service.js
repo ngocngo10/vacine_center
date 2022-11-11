@@ -1,5 +1,5 @@
 const { VaccinRepository } = require("../repositories");
-const { sequelize } = require('../models');
+const { sequelize } = require("../models");
 const ErrorCreator = require("../utils/error_createtor");
 const { Op } = require("sequelize");
 
@@ -64,8 +64,8 @@ module.exports = class VaccineService {
       if (reqQuery.name) {
         findOptions.where = {
           name: {
-            [Op.iLike]: `%${reqQuery.name}%` ,
-          }
+            [Op.iLike]: `%${reqQuery.name}%`,
+          },
         };
       }
 
@@ -79,10 +79,9 @@ module.exports = class VaccineService {
         ];
       }
 
-      if (reqQuery.page) {
-        findOptions.limit = +reqQuery.perPage || 10;
-        findOptions.offset = (+reqQuery.page - 1) * findOptions.limit;
-      }
+      const page = reqQuery.page || 1;
+      findOptions.limit = +reqQuery.perPage || 10;
+      findOptions.offset = (page - 1) * findOptions.limit;
 
       if (reqQuery.orderBy) {
         findOptions.order = [reqQuery.orderBy, reqQuery.orderType || "DESC"];

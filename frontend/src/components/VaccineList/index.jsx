@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Message from '../Message';
 import VaccineItem from '../VaccineItem';
 import { getVaccineList } from '../../actions/vaccine.action';
+import 'antd/dist/antd.css';
 import './index.css';
 
 const VaccineList = () => {
@@ -12,15 +13,7 @@ const VaccineList = () => {
   const { loading, error, vaccines, totalItem } = vaccineList;
   const dispatch = useDispatch();
 
-  const perPage = 6;
-  const pages = !(totalItem % perPage)
-    ? Math.floor(totalItem / perPage)
-    : Math.floor(totalItem / perPage) + 1;
-
-  const total = pages * perPage;
-
   const onChangePage = (page) => {
-    console.log(page);
     dispatch(getVaccineList({ page }));
     setCurrent(page);
   };
@@ -66,7 +59,15 @@ const VaccineList = () => {
           <VaccineItem key={vaccine.id} vaccine={vaccine} />
         ))}
       </ul>
-      {pages > 1 && <Pagination current={current} onChange={onChangePage} total={total} />}
+
+      <Pagination
+        className="page-pagination"
+        current={current}
+        onChange={onChangePage}
+        pageSize={6}
+        total={totalItem}
+        hideOnSinglePage
+      />
     </>
   ) : (
     <div className="empty-vaccine-list">No records</div>

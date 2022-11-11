@@ -1,5 +1,11 @@
 .vaccine-list {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 25px;
+  margin: 30px 0;
+}
+
+.ant-pagination {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
 }
