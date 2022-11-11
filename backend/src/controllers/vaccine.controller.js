@@ -15,7 +15,7 @@ async function create(req, res, next) {
 async function find(req, res, next) {
   try {
     const vaccines = await vaccineService.find(req.query);
-    return res.json({ vaccines });
+    return res.json(vaccines);
   } catch (error) {
     next(error);
   }

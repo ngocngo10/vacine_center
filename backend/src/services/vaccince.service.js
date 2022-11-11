@@ -1,4 +1,5 @@
 const { VaccinRepository } = require("../repositories");
+const { sequelize } = require('../models');
 const ErrorCreator = require("../utils/error_createtor");
 const { Op } = require("sequelize");
 
@@ -63,8 +64,8 @@ module.exports = class VaccineService {
       if (reqQuery.name) {
         findOptions.where = {
           name: {
-            [Op.substring]: reqQuery.name,
-          },
+            [Op.iLike]: `%${reqQuery.name}%` ,
+          }
         };
       }
 
