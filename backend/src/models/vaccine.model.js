@@ -12,28 +12,6 @@ module.exports = (sequelize, Sequelize) => {
     origin: {
       type: Sequelize.TEXT
     },
-    injectionRoute: {
-      type: Sequelize.TEXT,
-      field: 'injection_route'
-    },
-    contraindications: {
-      type: Sequelize.TEXT
-    },
-    drugInteractions: {
-      field: 'drug_interaction',
-      type: Sequelize.TEXT,
-    },
-    sideEffects: {
-      field: 'side_effects',
-      type: Sequelize.TEXT,
-    },
-    conserve: {
-      type: Sequelize.TEXT,
-    },
-    affectPregnancy: {
-      field: 'affect_pregnancy',
-      type: Sequelize.TEXT
-    },
     injectedNumberTotal: {
       field: 'injected_number_total',
       type: Sequelize.INTEGER
