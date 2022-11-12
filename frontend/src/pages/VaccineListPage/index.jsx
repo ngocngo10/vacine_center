@@ -13,8 +13,6 @@ import { getCategoryList } from '../../actions/category.action';
 import { getVaccineList } from '../../actions/vaccine.action';
 import VaccineList from '../../components/VaccineList';
 
-const onSearch = (value) => console.log(value);
-
 const VaccineListPage = () => {
   const dispatch = useDispatch();
 
@@ -22,9 +20,14 @@ const VaccineListPage = () => {
     dispatch(getCategoryList(cateGroup));
   };
 
+  const handleOnSearch = (name) => {
+    console.log(name);
+    dispatch(getVaccineList({ name }));
+  };
+
   useEffect(() => {
     dispatch(getCategoryList());
-    dispatch(getVaccineList());
+    dispatch(getVaccineList({}));
   }, []);
 
   return (
@@ -54,7 +57,7 @@ const VaccineListPage = () => {
               </Link>
             </div>
             <Space direction="vertical" className="slideshow-search">
-              <Search placeholder="Tìm kiếm ..." onSearch={onSearch} enterButton />
+              <Search placeholder="Tìm kiếm vắc xin ..." onSearch={handleOnSearch} enterButton />
             </Space>
             <section className="section-categories">
               <VaccineCategoryCarousel />

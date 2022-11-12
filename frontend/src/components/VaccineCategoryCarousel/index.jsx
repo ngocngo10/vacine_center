@@ -13,7 +13,7 @@ const VaccineCategoryCarousel = () => {
   const { loading, error, categories } = categoryList;
 
   const handleGetVaccines = (categoryId) => {
-    dispatch(getVaccineList(categoryId));
+    dispatch(getVaccineList({ categoryId }));
   };
 
   return error ? (

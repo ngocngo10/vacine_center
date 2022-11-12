@@ -18,8 +18,8 @@ export const getCategoryList = (cateGroup) => async (dispatch) => {
     const { data } = await axios.get(url);
     const categories = [];
     let index = 0;
-    while (categories.length < data.categories.length / 6.0) {
-      categories.push(data.categories.slice(index, index + 6));
+    while (categories.length < data.rows.length / 6.0) {
+      categories.push(data.rows.slice(index, index + 6));
       index = index + 6;
     }
 
