@@ -1,0 +1,60 @@
+.path-nav {
+  font-family: 'WorkSans-Regular';
+  font-size: 16px;
+  color: var(--color-primary);
+  padding: 10px 0px;
+}
+
+.path-nav__link {
+  color: inherit;
+}
+
+.section-vaccine-base-inform {
+  display: flex;
+}
+
+.vaccine-image {
+  width: 700px;
+  height: 450px;
+}
+
+.vaccine-image img {
+  width: 700px;
+  height: 450px;
+  object-fit: cover;
+}
+
+.vaccine-name {
+  font-family: 'WorkSans-SemiBold';
+  font-size: 26px;
+  line-height: 35px;
+  text-transform: uppercase;
+  margin-top: 50px;
+}
+
+.vaccine-des {
+  font-family: 'WorkSans-Regular';
+  font-size: 18px;
+  line-height: 26px;
+  color: var(--color-fifth);
+  margin-top: 50px;
+}
+
+.vaccine_price {
+  color: #d0021c;
+  font-family: 'Yeseva One';
+  font-size: 26px;
+  line-height: 35px;
+}
+
+.vaccine_price del {
+  color: var(--color-fifth);
+  font-family: 'Yeseva One';
+  font-size: 18px;
+  line-height: 35px;
+}
+
+hr {
+  width: 40%;
+  margin-left: 0;
+}
