@@ -1,7 +1,8 @@
-const { VaccineDetailRepository } = require('../repositories');
+const { VaccineDetailRepository, VaccinRepository } = require('../repositories');
 
 module.exports = class VaccineDetailService {
   constructor() {
+    this.vaccineRepository = new VaccinRepository();
     this.repository = new VaccineDetailRepository();
   }
   async create(data) {
@@ -21,14 +22,20 @@ module.exports = class VaccineDetailService {
 
   async find(reqQuery) {
     const findOptions = {};
+    let vaccine;
+    const result = {};
     if (reqQuery.vaccineId) {
       findOptions.where = {
         vaccineId: reqQuery.vaccineId,
       }
+      vaccine = await this.vaccineRepository.findOne(reqQuery.vaccineId);
+      result.vaccine = vaccine;
     }
-    findOptions.order = [['id', 'ASC']]
+    findOptions.order = [['id', 'ASC']];
+    const vaccineDetails = await this.repository.model.findAll(findOptions);
+    result.vaccineDetails = vaccineDetails;
 
-    return await this.repository.model.findAll(findOptions);
+    return result;
   }
 
   async findOne(id) {
