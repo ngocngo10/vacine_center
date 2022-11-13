@@ -9,6 +9,10 @@ module.exports = (sequelize, Sequelize) => {
     },
     image: {
       type: Sequelize.STRING(2000)
+    },
+    injectionSchedule: {
+      field: 'injection_schedule',
+      type: Sequelize.TEXT
     }
   }, {
     paranoid: true
