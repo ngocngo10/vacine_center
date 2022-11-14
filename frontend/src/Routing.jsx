@@ -11,7 +11,7 @@ const Routing = () => {
       <Route path="/register" element={<SignUpPage />} />
       <Route path="/login" element={<SignInPage />} />
       <Route path="/vaccine-list" element={<VaccineListPage />} />
-      <Route path="/vaccine-detail" element={<VaccineDetailPage />} />
+      <Route path="/vaccine-detail/:vaccineId" element={<VaccineDetailPage />} />
     </Routes>
   );
 };

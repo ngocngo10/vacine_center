@@ -1,9 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
 import Header from '../../components/Header';
 import Message from '../../components/Message';
 import VaccineInformItem from '../../components/VaccineInformItem';
 import Container from '../../layout/Container';
+import { getVaccineDetails } from '../../actions/vaccine.action';
 import './index.css';
 
 const VaccineDetailPage = () => {
@@ -94,78 +96,84 @@ const VaccineDetailPage = () => {
     }
   ];
 
-  return (
-    <>
-      <Header />
-      <main className="main-page">
-        <Container>
-          <nav className="path-nav">
-            <p>
-              <Link to="/" className="path-nav__link">
-                Trang chủ
-              </Link>
-              <span>/</span>
-              <Link to="/vaccine-list" className="path-nav__link">
-                Thông tin sản phẩm vắc xin
-              </Link>
-              <span>/</span>
-              <span></span>
-            </p>
-          </nav>
-          <section className="section-vaccine-base-inform">
-            <div className="vaccine-image">
-              <img src="https://vnvc.vn/wp-content/uploads/2022/06/MMR.jpg" alt="vaccine-image" />
-            </div>
-            <div className="vaccine-base-inform">
-              <h2 className="vaccine-name">
-                Vắc xin GARDASIL 9 (Mỹ) phòng các bệnh do 9 tuýp virus HPV nguy hiểm
-              </h2>
-              <hr />
-              <p className="vaccine-des">
-                Vắc xin Heberbiovac HB là vắc xin viêm gan B tái tổ hợp phòng bệnh do virus viêm gan
-                B – loại virus có thể lây truyền dễ dàng qua đường máu, quan hệ tình dục và từ mẹ
-                truyền sang con.
+  const dispatch = useDispatch();
+  const vaccineDetail = useSelector((state) => state.vaccineDetail);
+  const { loading, error, vaccine } = vaccineDetail;
+
+  const { vaccineId } = useParams();
+
+  useEffect(() => {
+    dispatch(getVaccineDetails(vaccineId));
+  }, []);
+
+  return error ? (
+    <Message description={error} />
+  ) : (
+    vaccine && (
+      <>
+        <Header />
+        <main className="main-page">
+          <Container>
+            <nav className="path-nav">
+              <p>
+                <Link to="/" className="path-nav__link">
+                  Trang chủ
+                </Link>
+                <span>/</span>
+                <Link to="/vaccine-list" className="path-nav__link">
+                  Thông tin sản phẩm vắc xin
+                </Link>
+                <span>/</span>
+                <span></span>
               </p>
-              <p className="vaccine_price">
-                3.890.000₫ <del>3.590.000₫ </del>
-              </p>
-            </div>
-          </section>
-          <section className="section-vaccine-detail-inform">
-            <Container>
-              <div className="vaccine-detail-card">
-                <aside className="sidebar">
-                  <ul className="sidebar-list">
-                    {vaccineInform &&
-                      vaccineInform.map((informItem, index) => (
-                        <li key={informItem.id} className="sidebar-item">
-                          <a href={`#inform-${informItem.id}`}>{`${index + 1}. ${
-                            informItem.title
-                          }`}</a>
-                        </li>
-                      ))}
-                  </ul>
-                </aside>
-                <div className="vaccine-detail-inform">
-                  <h3 className="inform-heading">Thông tin chi tiết vaccine</h3>
-                  <ul className="inform-list">
-                    {vaccineInform.length &&
-                      vaccineInform.map((informItem) => (
-                        <VaccineInformItem
-                          id={informItem.id}
-                          key={informItem.id}
-                          title={informItem.title}
-                          content={informItem.content}
-                        />
-                      ))}
-                  </ul>
-                </div>
+            </nav>
+            <section className="section-vaccine-base-inform">
+              <div className="vaccine-image">
+                <img src={vaccine.vaccine.image} alt="vaccine-image" />
               </div>
-            </Container>
-          </section>
-        </Container>
-      </main>
-    </>
+              <div className="vaccine-base-inform">
+                <h2 className="vaccine-name">{vaccine.vaccine.name}</h2>
+                <hr />
+                <p className="vaccine-des">{vaccine.vaccine.description}</p>
+                <p className="vaccine_price">{/* 3.890.000₫ <del>3.590.000₫ </del> */}</p>
+              </div>
+            </section>
+            <section className="section-vaccine-detail-inform">
+              <Container>
+                <div className="vaccine-detail-card">
+                  <aside className="sidebar">
+                    <ul className="sidebar-list">
+                      {vaccine.vaccineDetails.length &&
+                        vaccine.vaccineDetails.map((informItem, index) => (
+                          <li key={informItem.id} className="sidebar-item">
+                            <a href={`#inform-${informItem.id}`}>{`${index + 1}. ${
+                              informItem.title
+                            }`}</a>
+                          </li>
+                        ))}
+                    </ul>
+                  </aside>
+                  <div className="vaccine-detail-inform">
+                    <h3 className="inform-heading">Thông tin chi tiết vaccine</h3>
+                    <ul className="inform-list">
+                      {vaccine.vaccineDetails.length &&
+                        vaccine.vaccineDetails.map((informItem, index) => (
+                          <VaccineInformItem
+                            id={index + 1}
+                            key={informItem.id}
+                            title={informItem.title}
+                            content={informItem.content}
+                          />
+                        ))}
+                    </ul>
+                  </div>
+                </div>
+              </Container>
+            </section>
+          </Container>
+        </main>
+      </>
+    )
   );
 };
 

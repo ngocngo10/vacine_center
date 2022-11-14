@@ -32,7 +32,7 @@
   padding: 15px;
 }
 
-.vaccine-name {
+.vaccine-item__name {
   font-family: 'WorkSans-SemiBold';
   font-size: 16px;
   line-height: 22px;
@@ -40,7 +40,7 @@
   line-clamp: 2;
 }
 
-.vaccine-desc {
+.vaccine-item__desc {
   font-family: 'WorkSans-Regular';
   font-size: 16px;
   line-height: 22px;

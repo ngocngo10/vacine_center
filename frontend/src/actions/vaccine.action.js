@@ -23,7 +23,6 @@ export const getVaccineList = (query) => async (dispatch) => {
       }
     }
     const queryString = queries.join('&');
-    console.log('queryString', queryString);
 
     const url = queryString
       ? `${BASE_URL}/api/vaccines?${queryString}`
@@ -44,13 +43,13 @@ export const getVaccineList = (query) => async (dispatch) => {
   }
 };
 
-export const getVaccineDetails = (query) => async (dispatch) => {
+export const getVaccineDetails = (vaccineId) => async (dispatch) => {
   try {
     dispatch({
       type: VACCINE_DETAIL_REQUEST
     });
 
-    const url = `${BASE_URL}/api/vaccine-detail?${req.vaccineId}`;
+    const url = `${BASE_URL}/api/vaccine-details?vaccineId=${vaccineId}`;
 
     const { data } = await axios.get(url);
 

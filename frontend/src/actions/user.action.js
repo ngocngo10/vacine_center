@@ -8,6 +8,7 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS
 } from '../constants/user.constant';
+import { BASE_URL } from '../constants/base_url.constant';
 
 export const register = (values) => async (dispatch) => {
   try {
@@ -20,7 +21,7 @@ export const register = (values) => async (dispatch) => {
         'Content-Type': 'application/json'
       }
     };
-    const BASE_URL = process.env.BASE_URL;
+
     const { data } = await axios.post(`${BASE_URL}/auth/register`, values, config);
 
     dispatch({
@@ -35,6 +36,7 @@ export const register = (values) => async (dispatch) => {
 
     localStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {
+    console.log(error);
     dispatch({
       type: USER_REGISTER_FAIL,
       payload:
@@ -68,10 +70,10 @@ export const login = (phoneNumber, password) => async (dispatch) => {
 
     localStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {
+    console.log(error);
     dispatch({
       type: USER_LOGIN_FAIL,
-      payload:
-        error.response && error.response.data.message ? error.response.data.message : error.message
+      payload: data
     });
   }
 };

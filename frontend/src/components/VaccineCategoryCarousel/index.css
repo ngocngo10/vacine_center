@@ -1,5 +1,5 @@
 .slideshow-list {
-  height: 180px;
+  height: 230px;
 }
 
 .slideshow-item {
@@ -9,11 +9,11 @@
 
 .category-item {
   width: 181px;
-  height: 132px;
+  height: 180px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
+  padding: 0 10px;
 }
 
 .category-item div:hover {
@@ -27,11 +27,14 @@
   margin-bottom: 15px;
 }
 
-.category-item__name a {
-  font-family: 'WorkSans-SemiBold';
-  font-size: 16px;
-  line-height: 21px;
+.category-item__name {
+  font-family: 'WorkSans-Medium';
+  font-size: 14px;
+  line-height: 22px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-third);
+  -webkit-line-clamp: 3; /* number of lines to show */
+  line-clamp: 3;
+  text-align: center;
 }
