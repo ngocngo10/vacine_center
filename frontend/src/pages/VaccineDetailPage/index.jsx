@@ -133,28 +133,33 @@ const VaccineDetailPage = () => {
           </section>
           <section className="section-vaccine-detail-inform">
             <Container>
-              <nav className="sidebar">
-                <ul className="sidebar-list">
-                  {vaccineInform &&
-                    vaccineInform.map((informItem) => (
-                      <li className="sidebar-item">
-                        <a href="">{informItem.title}</a>
-                      </li>
-                    ))}
-                </ul>
-              </nav>
-              <div className="vaccine-detail-vaccine">
-                <h3 className="">Thông tin chi tiết vaccine</h3>
-                <ul className="inform-list">
-                  {vaccineInform.length &&
-                    vaccineInform.map((informItem) => (
-                      <VaccineInformItem
-                        key={informItem.id}
-                        title={informItem.title}
-                        content={informItem.content}
-                      />
-                    ))}
-                </ul>
+              <div className="vaccine-detail-card">
+                <aside className="sidebar">
+                  <ul className="sidebar-list">
+                    {vaccineInform &&
+                      vaccineInform.map((informItem, index) => (
+                        <li key={informItem.id} className="sidebar-item">
+                          <a href={`#inform-${informItem.id}`}>{`${index + 1}. ${
+                            informItem.title
+                          }`}</a>
+                        </li>
+                      ))}
+                  </ul>
+                </aside>
+                <div className="vaccine-detail-inform">
+                  <h3 className="inform-heading">Thông tin chi tiết vaccine</h3>
+                  <ul className="inform-list">
+                    {vaccineInform.length &&
+                      vaccineInform.map((informItem) => (
+                        <VaccineInformItem
+                          id={informItem.id}
+                          key={informItem.id}
+                          title={informItem.title}
+                          content={informItem.content}
+                        />
+                      ))}
+                  </ul>
+                </div>
               </div>
             </Container>
           </section>

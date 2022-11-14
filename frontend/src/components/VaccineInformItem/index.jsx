@@ -3,16 +3,17 @@ import parse from 'html-react-parser';
 import './index.css';
 
 const VaccineInformItem = (props) => {
-  const { title, content } = props;
-  // const HTMLParser = require('node-html-parser');
+  const { title, content, id } = props;
   const ContentElement = parse(content);
   console.log(ContentElement);
 
   return (
-    <li className="inform-item">
-      <h4>{title}</h4>
-      {ContentElement}
-    </li>
+    <>
+      <li id={`inform-${id}`} className="inform-item">
+        <h4 className="inform-title">{`${id}. ${title}`}</h4>
+        {ContentElement}
+      </li>
+    </>
   );
 };
 
