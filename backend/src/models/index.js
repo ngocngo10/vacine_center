@@ -42,6 +42,13 @@ VaccineDetail.belongsTo(Vaccine, {
   as: "vaccine",
 });
 
+User.hasMany(Patient, { as: 'patients', foreignKey: 'representative'});
+Patient.belongsTo(User, {
+  targetKey: 'id',
+  foreignKey: 'representative',
+  as: 'representator'
+});
+
 module.exports = {
   Sequelize,
   sequelize,

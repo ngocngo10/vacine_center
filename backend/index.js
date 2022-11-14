@@ -12,6 +12,8 @@ const authRouter = require("./src/routes/auth");
 const categoryRouter = require("./src/routes/category");
 const vaccineRouter = require("./src/routes/vaccine");
 const vaccineDetailRouter = require("./src/routes/vaccine-detail");
+const patientRouter = require("./src/routes/patient");
+
 // var usersRouter = require('./src/routes/users');
 
 var app = express();
@@ -39,6 +41,7 @@ app.use("/auth", authRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/vaccines", vaccineRouter);
 app.use("/api/vaccine-details", vaccineDetailRouter);
+app.use('/api/patients', patientRouter);
 // app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler

@@ -3,6 +3,7 @@ const AuthService = require('./auth.service');
 const CategoryService = require('./category.service');
 const VaccineService = require('./vaccince.service');
 const VaccineDetailService = require('./vaccine-detail.service');
+const PatientService = require('./patient.service');
 
 module.exports = {
   UserService,
@@ -10,4 +11,5 @@ module.exports = {
   CategoryService,
   VaccineService,
   VaccineDetailService,
+  PatientService,
 };
