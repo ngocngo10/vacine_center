@@ -37,8 +37,7 @@ export const getVaccineList = (query) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: VACCINE_LIST_FAIL,
-      payload:
-        error.response && error.response.data.message ? error.response.data.message : error.message
+      payload: error.response.data.error
     });
   }
 };
@@ -60,8 +59,7 @@ export const getVaccineDetails = (vaccineId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: VACCINE_DETAIL_FAIL,
-      payload:
-        error.response && error.response.data.message ? error.response.data.message : error.message
+      payload: error.response.data.error
     });
   }
 };

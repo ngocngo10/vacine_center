@@ -36,11 +36,9 @@ export const register = (values) => async (dispatch) => {
 
     localStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {
-    console.log(error);
     dispatch({
       type: USER_REGISTER_FAIL,
-      payload:
-        error.response && error.response.data.message ? error.response.data.message : error.message
+      payload: error.response.data.error
     });
   }
 };
@@ -57,11 +55,7 @@ export const login = (phoneNumber, password) => async (dispatch) => {
       }
     };
 
-    const { data } = await axios.post(
-      `${BASE_URL}/api/auth/login`,
-      { phoneNumber, password },
-      config
-    );
+    const { data } = await axios.post(`${BASE_URL}/auth/login`, { phoneNumber, password }, config);
 
     dispatch({
       type: USER_LOGIN_SUCCESS,
@@ -70,10 +64,9 @@ export const login = (phoneNumber, password) => async (dispatch) => {
 
     localStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {
-    console.log(error);
     dispatch({
       type: USER_LOGIN_FAIL,
-      payload: data
+      payload: error.response.data.error
     });
   }
 };

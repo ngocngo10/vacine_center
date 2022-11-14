@@ -30,8 +30,7 @@ export const getCategoryList = (cateGroup) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: CATEGORY_LIST_FAIL,
-      payload:
-        error.response && error.response.data.message ? error.response.data.message : error.message
+      payload: error.response.data.error
     });
   }
 };

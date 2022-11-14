@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import 'antd/dist/antd.css';
 import { Button, Form, Input, Select } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import Container from '../../layout/Container';
@@ -8,8 +7,9 @@ import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import patterns from '../../constants/pattern.constant';
 import { register } from '../../actions/user.action';
-import './index.css';
 import Header from '../../components/Header';
+import 'antd/dist/antd.css';
+import './index.css';
 
 const { Option } = Select;
 
@@ -34,7 +34,6 @@ const SignUpPage = () => {
 
   const userRegister = useSelector((state) => state.userRegister);
   const { loading, error, userInfo } = userRegister;
-  console.log('userRegister', userRegister);
 
   useEffect(() => {
     if (userInfo) {
