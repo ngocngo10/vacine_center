@@ -4,7 +4,6 @@
   width: 1000px;
   height: 530px;
   margin: 50px auto;
-  margin-bottom: 100px;
   box-shadow: rgb(64 29 131) 2px 2px 6px;
 }
 
@@ -40,7 +39,7 @@
 
 .sign-up-btn {
   margin: 0 200px;
-  background: var(--color-primary);
+  /* background: var(--color-primary); */
   font-size: 18px;
   height: 40px;
   width: 120px;

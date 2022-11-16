@@ -8,6 +8,7 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS
 } from '../constants/user.constant';
+import { BASE_URL } from '../constants/base_url.constant';
 
 export const register = (values) => async (dispatch) => {
   try {
@@ -20,7 +21,7 @@ export const register = (values) => async (dispatch) => {
         'Content-Type': 'application/json'
       }
     };
-    const BASE_URL = process.env.BASE_URL;
+
     const { data } = await axios.post(`${BASE_URL}/auth/register`, values, config);
 
     dispatch({
@@ -37,8 +38,7 @@ export const register = (values) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_REGISTER_FAIL,
-      payload:
-        error.response && error.response.data.message ? error.response.data.message : error.message
+      payload: error.response.data.error
     });
   }
 };
@@ -55,11 +55,7 @@ export const login = (phoneNumber, password) => async (dispatch) => {
       }
     };
 
-    const { data } = await axios.post(
-      `${BASE_URL}/api/auth/login`,
-      { phoneNumber, password },
-      config
-    );
+    const { data } = await axios.post(`${BASE_URL}/auth/login`, { phoneNumber, password }, config);
 
     dispatch({
       type: USER_LOGIN_SUCCESS,
@@ -70,8 +66,7 @@ export const login = (phoneNumber, password) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
-      payload:
-        error.response && error.response.data.message ? error.response.data.message : error.message
+      payload: error.response.data.error
     });
   }
 };

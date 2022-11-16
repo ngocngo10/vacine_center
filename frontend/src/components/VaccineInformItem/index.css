@@ -1,0 +1,22 @@
+.inform-item {
+  color: var(--color-fifth);
+  font-family: 'WorkSans-Regular';
+  font-size: 18px;
+  line-height: 140%;
+  margin: 30px 0px;
+}
+
+.inform-item h3 {
+  color: var(--color-fifth);
+  font-family: 'WorkSans-Bold';
+  font-size: 26px;
+  line-height: 140%;
+}
+
+.inform-title {
+  color: var(--color-primary);
+  font-family: 'Yeseva One';
+  font-size: 30px;
+  line-height: 140%;
+  background-color: var(--color-fourth);
+}

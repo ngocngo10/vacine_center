@@ -37,15 +37,13 @@ const VaccineCategoryCarousel = () => {
                       />
                     </div>
                   </Link>
-                  <h3 className="category-item__name">
-                    <Link
-                      to={`/vaccine-list?cate=${category.id}`}
-                      onClick={() => {
-                        handleGetVaccines(category.id);
-                      }}>
-                      {category.name}
-                    </Link>
-                  </h3>
+                  <Link
+                    to={`/vaccine-list?cate=${category.id}`}
+                    onClick={() => {
+                      handleGetVaccines(category.id);
+                    }}>
+                    <h3 className="category-item__name text"> {category.name}</h3>
+                  </Link>
                 </div>
               ))}
             </div>

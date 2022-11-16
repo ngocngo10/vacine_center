@@ -1,0 +1,115 @@
+.path-nav {
+  font-family: 'WorkSans-Regular';
+  font-size: 16px;
+  color: var(--color-primary);
+  padding: 10px 0px;
+}
+
+.path-nav__link {
+  color: inherit;
+}
+
+.section-vaccine-base-inform {
+  display: flex;
+}
+
+.vaccine-image {
+  width: 700px;
+  height: 450px;
+}
+
+.vaccine-image img {
+  width: 700px;
+  height: 450px;
+  object-fit: cover;
+}
+
+.vaccine-name {
+  font-family: 'WorkSans-SemiBold';
+  font-size: 26px;
+  line-height: 35px;
+  text-transform: uppercase;
+  margin-top: 50px;
+}
+
+.vaccine-des {
+  font-family: 'WorkSans-Regular';
+  font-size: 18px;
+  line-height: 26px;
+  color: var(--color-fifth);
+  margin-top: 50px;
+}
+
+.vaccine_price {
+  color: #d0021c;
+  font-family: 'Yeseva One';
+  font-size: 26px;
+  line-height: 35px;
+}
+
+.vaccine_price del {
+  color: var(--color-fifth);
+  font-family: 'Yeseva One';
+  font-size: 18px;
+  line-height: 35px;
+}
+
+hr {
+  width: 40%;
+  margin-left: 0;
+}
+
+.vaccine-detail-card {
+  display: flex;
+}
+
+.sidebar {
+  width: 25%;
+  margin-top: 100px;
+}
+
+.sidebar-list {
+  padding: 15px 10px;
+  border-radius: 12px;
+  background-color: #e4e6eb;
+  position: sticky;
+  top: 50px;
+}
+
+.sidebar-item {
+  width: 260px;
+  padding: 9px 9px;
+  margin: 0 auto;
+  border-radius: 12px;
+}
+
+.sidebar-item:hover {
+  background-color: white;
+}
+
+.selected-sidebar-item {
+  width: 260px;
+  padding: 9px 9px;
+  margin: 0 auto;
+  border-radius: 12px;
+  background-color: white;
+}
+
+.sidebar a {
+  color: var(--color-fifth);
+  font-family: 'WorkSans-Medium';
+  font-size: 18px;
+  text-align: center;
+}
+
+.vaccine-detail-inform {
+  width: 75%;
+  padding: 25px 0 50px 25px;
+}
+
+.inform-heading {
+  color: var(--color-fifth);
+  font-family: 'Yeseva One';
+  font-size: 36px;
+  line-height: 140%;
+}

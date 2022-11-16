@@ -4,13 +4,14 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { userRegisterReducer, userLoginReducer } from './reducers/user.reducer';
 import { categoryListReducer } from './reducers/category.reducer';
-import { vaccineListReducer } from './reducers/vaccine.reducer';
+import { vaccineListReducer, vaccineDetailReducer } from './reducers/vaccine.reducer';
 
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
   categoryList: categoryListReducer,
-  vaccineList: vaccineListReducer
+  vaccineList: vaccineListReducer,
+  vaccineDetail: vaccineDetailReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
