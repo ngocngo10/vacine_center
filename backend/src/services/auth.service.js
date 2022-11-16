@@ -16,25 +16,23 @@ module.exports = class AuthService {
     const userInfo = {
       ...requestBody,
       password,
+      roles: ['user'],
     }
     const isExist = await this.checkUserExisted(userInfo.phoneNumber);
     if (isExist) {
       throw new ErrorCreator(constants.USER_EXISTED, 400);
     }
+    console.log(userInfo);
     const newUser = await this.repository.createUser(userInfo);
     const token = generateLoginToken({
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        phoneNumber: newUser.phoneNumber
-      }
+      id: newUser.id,
+      email: newUser.email,
+      phoneNumber: newUser.phoneNumber,
     });
     const refreshToken = generateRefreshToken({
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        phoneNumber: newUser.phoneNumber
-      }
+      id: newUser.id,
+      email: newUser.email,
+      phoneNumber: newUser.phoneNumber,
     });
     newUser.refreshToken = refreshToken;
     await newUser.save();
@@ -53,18 +51,14 @@ module.exports = class AuthService {
     const isCorrectPassword = bcrypt.compareSync(password, user.password);
     if (isCorrectPassword) {
       const token = generateLoginToken({
-        user: {
-          id: user.id,
-          email: user.email,
-          phoneNumber: user.phoneNumber
-        }
+        id: user.id,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
       });
       const refreshToken = generateRefreshToken({
-        user: {
-          id: user.id,
-          email: user.email,
-          phoneNumber: user.phoneNumber
-        }
+        id: user.id,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
       });
       await this.repository.update(user.id, { refreshToken: refreshToken });
       return {
