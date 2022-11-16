@@ -1,0 +1,47 @@
+.brand {
+  font-family: 'Yeseva One';
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 42px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  display: inline-block;
+  margin: 19px 0px;
+  background-color: var(--color-third);
+  width: 220px;
+  text-align: center;
+}
+
+.admin-menu {
+  background-color: var(--color-primary);
+  margin-top: 50px;
+  border-right: none;
+  font-family: 'WorkSans-SemiBold';
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--color-third);
+}
+
+.admin-menu a {
+  color: inherit;
+}
+
+.icon {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  padding: 5px 5px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgb(0 0 0 / 12%);
+  border-radius: 6px;
+  justify-content: center;
+  align-items: center;
+  margin-right: 11px;
+  vertical-align: middle;
+}
+
+.ant-menu > .ant-menu-item-selected {
+  color: #000;
+  border-radius: 10px;
+  background-color: #fff !important;
+}

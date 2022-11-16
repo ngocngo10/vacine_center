@@ -1,0 +1,23 @@
+.admin-sider {
+  width: 500px;
+  position: fixed;
+  left: 0;
+  z-index: 99;
+  height: 100vh;
+  margin: 0;
+  padding: 33px 20px;
+  background-color: var(--color-primary);
+}
+
+.admin-header {
+  height: 80px;
+  background-color: var(--color-primary);
+  margin: 15px 20px 20px 270px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.admin-content {
+  margin: 0px 20px 20px 270px;
+}
