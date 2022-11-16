@@ -20,6 +20,9 @@ module.exports = (sequelize, Sequelize) => {
     },
     refreshToken: {
       type: Sequelize.STRING(500)
+    },
+    roles: {
+      type: Sequelize.ARRAY(Sequelize.STRING)
     }
   },{
     paranoid: true
