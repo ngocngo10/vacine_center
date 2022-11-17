@@ -21,6 +21,8 @@ Vaccine = require('./vaccine.model')(sequelize, Sequelize);
 Category = require('./category.model')(sequelize, Sequelize);
 VaccineCategory = require('./vaccine-category.model')(sequelize, Sequelize);
 VaccineDetail = require('./vaccine-detail.model')(sequelize, Sequelize);
+ScheduleConfig = require('./schedule-config.model')(sequelize, Sequelize);
+Schedule = require('./schedule.model')(sequelize, Sequelize);
 
 // define relations
 Category.hasMany(VaccineCategory, { as: "vaccineCategories" });
@@ -48,6 +50,11 @@ Patient.belongsTo(User, {
   foreignKey: 'representative',
   as: 'representator'
 });
+Schedule.hasMany(Appointment, { as: 'appointments' });
+Appointment.belongsTo(Schedule, {
+  foreignKey: 'schedule_id',
+  as: 'schedule'
+});
 
 module.exports = {
   Sequelize,
@@ -59,4 +66,7 @@ module.exports = {
   Category,
   VaccineCategory,
   VaccineDetail,
+  Appointment,
+  Schedule,
+  ScheduleConfig,
 };
