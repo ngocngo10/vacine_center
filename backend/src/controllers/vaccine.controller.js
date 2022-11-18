@@ -48,10 +48,19 @@ async function deleteSingle(req, res, next) {
   }
 }
 
+async function deleteMulti(req, res, next) {
+  try {
+    await Promise.all(req.body.ids.map(async (id) => vaccineService.deleteVaccine(id)));
+    return res.json({ message: 'Deleted.' });
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
   create,
   find,
   findOne,
   update,
-  deleteSingle
+  deleteSingle,
+  deleteMulti
 };

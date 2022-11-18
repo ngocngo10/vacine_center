@@ -1,4 +1,7 @@
-const { VaccineDetailRepository, VaccineRepository: VaccineRepository } = require('../repositories');
+const {
+  VaccineDetailRepository,
+  VaccineRepository: VaccineRepository
+} = require('../repositories');
 
 module.exports = class VaccineDetailService {
   constructor() {

@@ -16,13 +16,14 @@ async function validateToken(req, res, next) {
       return next();
     }
 
-    next(new ErrorCreator(constants.INVALID_AUTH_TOKEN, 401));
+    next(new ErrorCreator(constants.INVALID_TOKEN, 401));
   } catch (error) {
+    console.log(error);
     if (error.name === constants.TOKEN_EXPIRED_ERROR) {
       next(new ErrorCreator(constants.TOKEN_EXPIRED_ERROR, 401));
     }
 
-    next(new ErrorCreator(constants.INVALID_AUTH_TOKEN, 401));
+    next(new ErrorCreator(constants.INVALID_TOKEN, 401));
   }
 }
 
