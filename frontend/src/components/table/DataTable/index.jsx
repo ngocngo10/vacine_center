@@ -13,7 +13,6 @@ function useDataTable({ columns, dataSource, updateEntityPath }) {
   const [actionColumnView] = useActionMenu({ selectedRow, updateEntityPath });
 
   const hasSelected = selectedRowKeys.length > 0;
-
   const rowSelection = {
     selectedRowKeys,
     onChange: (selected) => {
@@ -29,10 +28,6 @@ function useDataTable({ columns, dataSource, updateEntityPath }) {
       render: () => actionColumnView
     }
   ];
-
-  const handleSingleDelete = () => {
-    console.log('handleSingleDelete, selected:', selectedRow);
-  };
 
   const resetPagination = () => {
     setCurrentPage(DEFAULT_PAGE_NUMBER);
