@@ -12,8 +12,8 @@ module.exports = (sequelize, Sequelize) => {
       name: 'injected_time',
       type: Sequelize.DATE
     },
-    registerTimeId: {
-      name: 'register_time_id',
+    scheduleId: {
+      name: 'scheduleId',
       type: Sequelize.INTEGER
     },
     isConfirmed: {

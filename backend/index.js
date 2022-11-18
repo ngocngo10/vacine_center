@@ -13,6 +13,7 @@ const categoryRouter = require("./src/routes/category");
 const vaccineRouter = require("./src/routes/vaccine");
 const vaccineDetailRouter = require("./src/routes/vaccine-detail");
 const patientRouter = require("./src/routes/patient");
+const scheduleConfigRoute = require('./src/routes/schedule-config');
 
 // var usersRouter = require('./src/routes/users');
 
@@ -42,6 +43,7 @@ app.use("/api/categories", categoryRouter);
 app.use("/api/vaccines", vaccineRouter);
 app.use("/api/vaccine-details", vaccineDetailRouter);
 app.use('/api/patients', patientRouter);
+app.use('/api/schedule-configs', scheduleConfigRoute);
 // app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler

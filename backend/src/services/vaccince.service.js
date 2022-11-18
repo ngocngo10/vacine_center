@@ -96,7 +96,7 @@ module.exports = class VaccineService {
 
   async findOne(id) {
     try {
-      const vaccine = await this.repository.findOne(id);
+      const vaccine = await this.repository.findOne(id, ['categories', 'vaccineDetails']);
       return vaccine;
     } catch (error) {
       throw new ErrorCreator(error.message, 500);

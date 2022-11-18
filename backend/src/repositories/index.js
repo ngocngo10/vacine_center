@@ -3,6 +3,7 @@ const CategoryRepository = require('./category.repository');
 const VaccinRepository = require('./vaccine.repository');
 const VaccineDetailRepository = require('./vaccine-detail.repository');
 const PatientRepository = require('./patient.repository');
+const ScheduleConfigRepository = require('./schedule-config.repository');
 
 module.exports = {
   UserRepository,
@@ -10,4 +11,5 @@ module.exports = {
   VaccinRepository,
   VaccineDetailRepository,
   PatientRepository,
+  ScheduleConfigRepository,
 };
