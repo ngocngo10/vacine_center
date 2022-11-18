@@ -5,7 +5,10 @@ import {
   VACCINE_LIST_FAIL,
   VACCINE_DETAIL_REQUEST,
   VACCINE_DETAIL_SUCCESS,
-  VACCINE_DETAIL_FAIL
+  VACCINE_DETAIL_FAIL,
+  SINGLE_PRODUCT_DELETE_REQUEST,
+  SINGLE_PRODUCT_DELETE_SUCCESS,
+  SINGLE_PRODUCT_DELETE_FAIL
 } from '../constants/vaccine.constant';
 import { BASE_URL } from '../constants/base_url.constant';
 
@@ -53,12 +56,34 @@ export const getVaccineDetails = (vaccineId) => async (dispatch) => {
     const { data } = await axios.get(url);
 
     dispatch({
-      type: VACCINE_DETAIL_SUCCESS,
+      type: SINGLE_PRODUCT_DELETE_SUCCESS,
       payload: data
     });
   } catch (error) {
     dispatch({
-      type: VACCINE_DETAIL_FAIL,
+      type: SINGLE_PRODUCT_DELETE_FAIL,
+      payload: error.response.data.error
+    });
+  }
+};
+
+export const deleteSingleVaccine = (vaccineId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: SINGLE_PRODUCT_DELETE_REQUEST
+    });
+
+    const url = `${BASE_URL}/api/vaccines/${vaccineId}`;
+
+    const { data } = await axios.delete(url);
+
+    dispatch({
+      type: SINGLE_PRODUCT_DELETE_SUCCESS,
+      payload: data
+    });
+  } catch (error) {
+    dispatch({
+      type: SINGLE_PRODUCT_DELETE_FAIL,
       payload: error.response.data.error
     });
   }

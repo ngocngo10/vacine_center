@@ -1,12 +1,11 @@
-import { Table } from 'antd';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Image } from 'antd';
 import Header from '../../components/table/Header';
 import useDataTable from '../../components/table/DataTable';
-import { getVaccineList } from '../../actions/vaccine.action';
-import './index.css';
+import { getVaccineList, deleteSingleVaccine } from '../../actions/vaccine.action';
 import Message from '../../components/Message';
+import './index.css';
 
 const AdminVaccinePage = () => {
   const vaccineList = useSelector((state) => state.vaccineList);
@@ -74,11 +73,17 @@ const AdminVaccinePage = () => {
     qty: 34
   }));
 
-  const { DataTable, hasSelected, selectedRow, currentPage, pageSize, resetPagination } =
+  const handleDeleteSingleVaccine = (id) => {
+    console.log('id', id);
+    dispatch(deleteSingleVaccine(id));
+  };
+
+  const { DataTable, hasSelected, selectedRow, currentPage, pageSize, resetPagination, deleteId } =
     useDataTable({
       columns: columns,
       dataSource: data,
-      updateEntityPath: `update-vaccine`
+      updateEntityPath: `update-vaccine`,
+      handleDelete: handleDeleteSingleVaccine
     });
 
   return error ? (

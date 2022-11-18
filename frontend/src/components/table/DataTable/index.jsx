@@ -5,12 +5,16 @@ import useActionMenu from '../ActionMenu';
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_PAGE_NUMBER = 0;
 
-function useDataTable({ columns, dataSource, updateEntityPath }) {
+function useDataTable({ columns, dataSource, updateEntityPath, handleDelete }) {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
-  const [actionColumnView] = useActionMenu({ selectedRow, updateEntityPath });
+  const { actionColumnView } = useActionMenu({
+    selectedRow,
+    updateEntityPath,
+    handleDelete
+  });
 
   const hasSelected = selectedRowKeys.length > 0;
   const rowSelection = {

@@ -4,7 +4,10 @@ import {
   VACCINE_LIST_FAIL,
   VACCINE_DETAIL_REQUEST,
   VACCINE_DETAIL_SUCCESS,
-  VACCINE_DETAIL_FAIL
+  VACCINE_DETAIL_FAIL,
+  SINGLE_PRODUCT_DELETE_REQUEST,
+  SINGLE_PRODUCT_DELETE_SUCCESS,
+  SINGLE_PRODUCT_DELETE_FAIL
 } from '../constants/vaccine.constant';
 
 const initialState = {
@@ -43,6 +46,22 @@ export const vaccineDetailReducer = (state = {}, action) => {
       };
     case VACCINE_DETAIL_FAIL:
       return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const vaccineSingleDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case SINGLE_PRODUCT_DELETE_REQUEST:
+      return { loading: true };
+    case SINGLE_PRODUCT_DELETE_SUCCESS:
+      return {
+        loading: false,
+        success: true
+      };
+    case SINGLE_PRODUCT_DELETE_FAIL:
+      return { loading: false, error: action.payload };
     default:
       return state;
   }
