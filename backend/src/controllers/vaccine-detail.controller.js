@@ -1,16 +1,16 @@
 const { VaccineDetailService } = require('../services');
-const ErrorCreator = require('../utils/error_createtor');
+const ErrorCreator = require('../utils/error_creator');
 const vaccineDetailService = new VaccineDetailService();
 async function create(req, res, next) {
   try {
     await vaccineDetailService.create(req.body);
     return res.json({
-      message: "Vaccine detail is created successfully",
+      message: 'Vaccine detail is created successfully'
     });
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function find(req, res, next) {
   try {
@@ -19,7 +19,7 @@ async function find(req, res, next) {
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function findOne(req, res, next) {
   try {
@@ -29,7 +29,7 @@ async function findOne(req, res, next) {
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function update(req, res, next) {
   try {
@@ -38,7 +38,7 @@ async function update(req, res, next) {
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function deleteVaccineDetail(req, res, next) {
   try {
@@ -47,7 +47,7 @@ async function deleteVaccineDetail(req, res, next) {
   } catch (error) {
     next(error);
   }
-};
+}
 
 module.exports = {
   create,
@@ -55,4 +55,4 @@ module.exports = {
   findOne,
   update,
   deleteVaccineDetail
-}
+};

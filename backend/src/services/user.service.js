@@ -1,5 +1,5 @@
 const { UserRepository } = require('../repositories');
-const ErrorCreator = require('../utils/error_createtor');
+const ErrorCreator = require('../utils/error_creator');
 const bcrypt = require('bcryptjs');
 module.export = class UserService {
   constructor() {
@@ -12,7 +12,7 @@ module.export = class UserService {
     const userInfo = {
       ...requestBody,
       password
-    }
+    };
     const isExist = await checkUserExisted(userInfo.phoneNumber);
     if (isExist) {
       console.log('User is existed');
@@ -21,20 +21,20 @@ module.export = class UserService {
     const newUser = await this.repository.createUser(userInfo);
     sendEmail();
   }
-  
+
   async listUsers(requestQuery) {
     const userInfo = {
       ...requestQuery
-    }
-    
+    };
+
     return this.repository.findAllUsers(userInfo);
   }
-  
+
   async checkUserExisted(phoneNumber) {
     return this.repository.findUserByPhoneNumber(phoneNumber);
   }
-  
+
   async sendEmail() {
-    console.log('Sending email')
+    console.log('Sending email');
   }
-}
+};

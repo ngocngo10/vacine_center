@@ -12,7 +12,7 @@ module.exports = class ScheduleConfigService {
   async update(id, body) {
     const updateData = {
       ...body
-    }
+    };
     await this.repository.update(id, updateData);
     return;
   }
@@ -20,4 +20,4 @@ module.exports = class ScheduleConfigService {
   async findOne() {
     return await this.repository.find()[0];
   }
-}
+};

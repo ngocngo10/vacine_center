@@ -1,5 +1,5 @@
 const { ScheduleConfigService } = require('../services');
-const ErrorCreator = require('../utils/error_createtor');
+const ErrorCreator = require('../utils/error_creator');
 const scheduleConfigService = new ScheduleConfigService();
 async function create(req, res, next) {
   try {
@@ -9,12 +9,12 @@ async function create(req, res, next) {
     }
     await scheduleConfigService.create(req.body);
     return res.json({
-      message: "Schedule config is created successfully",
+      message: 'Schedule config is created successfully'
     });
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function findOne(req, res, next) {
   try {
@@ -23,7 +23,7 @@ async function findOne(req, res, next) {
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function update(req, res, next) {
   try {
@@ -32,10 +32,10 @@ async function update(req, res, next) {
   } catch (error) {
     next(error);
   }
-};
+}
 
 module.exports = {
   create,
   findOne,
-  update,
-}
+  update
+};

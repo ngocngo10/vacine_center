@@ -13,5 +13,5 @@ module.exports = {
   VaccineService,
   VaccineDetailService,
   PatientService,
-  ScheduleConfigService,
+  ScheduleConfigService
 };
