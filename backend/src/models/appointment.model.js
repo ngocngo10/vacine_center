@@ -1,28 +1,32 @@
 module.exports = (sequelize, Sequelize) => {
-  const Appointment = sequelize.define("appointments", {
-    patientId: {
-      name: 'patient_id',
-      type: Sequelize.INTEGER
+  const Appointment = sequelize.define(
+    'appointments',
+    {
+      patientId: {
+        name: 'patient_id',
+        type: Sequelize.INTEGER
+      },
+      vaccineId: {
+        name: 'vaccine_id',
+        type: Sequelize.INTEGER
+      },
+      injectedTime: {
+        name: 'injected_time',
+        type: Sequelize.DATE
+      },
+      scheduleId: {
+        name: 'scheduleId',
+        type: Sequelize.INTEGER
+      },
+      isConfirmed: {
+        name: 'is_confirmed',
+        type: Sequelize.BOOLEAN
+      }
     },
-    vaccineId: {
-      name: 'vaccine_id',
-      type: Sequelize.INTEGER
-    },
-    injectedTime: {
-      name: 'injected_time',
-      type: Sequelize.DATE
-    },
-    scheduleId: {
-      name: 'scheduleId',
-      type: Sequelize.INTEGER
-    },
-    isConfirmed: {
-      name: 'is_confirmed',
-      type: Sequelize.BOOLEAN
+    {
+      paranoid: true
     }
-  }, {
-    paranoid: true
-  });
+  );
 
   return Appointment;
 };

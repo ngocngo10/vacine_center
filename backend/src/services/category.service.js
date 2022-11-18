@@ -12,7 +12,7 @@ module.exports = class CategoryService {
   async update(id, body) {
     const updateData = {
       ...body
-    }
+    };
     await this.repository.update(id, updateData);
     return;
   }
@@ -21,8 +21,8 @@ module.exports = class CategoryService {
     const findOptions = {};
     if (reqQuery.categoryGroup) {
       findOptions.where = {
-        categoryGroup: reqQuery.categoryGroup,
-      }
+        categoryGroup: reqQuery.categoryGroup
+      };
     }
     if (reqQuery.page) {
       findOptions.limit = +reqQuery.perPage || 10;
@@ -30,16 +30,16 @@ module.exports = class CategoryService {
     }
 
     if (reqQuery.orderBy) {
-      findOptions.order = [reqQuery.orderBy, reqQuery.orderType || 'DESC']
+      findOptions.order = [reqQuery.orderBy, reqQuery.orderType || 'DESC'];
     }
-    return await this.repository.find(findOptions)
+    return await this.repository.find(findOptions);
   }
 
   async findOne(id) {
-    return await this.repository.findOne(id)
+    return await this.repository.findOne(id);
   }
 
   async deleteCategory(id) {
     return await this.repository.delete(id);
   }
-}
+};

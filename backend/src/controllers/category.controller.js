@@ -1,16 +1,16 @@
 const { CategoryService } = require('../services');
-const ErrorCreator = require('../utils/error_createtor');
+const ErrorCreator = require('../utils/error_creator');
 const categoryService = new CategoryService();
 async function create(req, res, next) {
   try {
     await categoryService.create(req.body);
     return res.json({
-      message: "Category is created successfully",
+      message: 'Category is created successfully'
     });
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function find(req, res, next) {
   try {
@@ -19,7 +19,7 @@ async function find(req, res, next) {
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function findOne(req, res, next) {
   try {
@@ -28,7 +28,7 @@ async function findOne(req, res, next) {
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function update(req, res, next) {
   try {
@@ -37,7 +37,7 @@ async function update(req, res, next) {
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function deleteCategory(req, res, next) {
   try {
@@ -46,7 +46,7 @@ async function deleteCategory(req, res, next) {
   } catch (error) {
     next(error);
   }
-};
+}
 
 module.exports = {
   create,
@@ -54,4 +54,4 @@ module.exports = {
   findOne,
   update,
   deleteCategory
-}
+};

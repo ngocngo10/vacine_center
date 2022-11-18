@@ -1,11 +1,11 @@
-const { VaccinRepository } = require("../repositories");
-const { sequelize } = require("../models");
-const ErrorCreator = require("../utils/error_createtor");
-const { Op } = require("sequelize");
+const { VaccineRepository } = require('../repositories');
+const { sequelize } = require('../models');
+const ErrorCreator = require('../utils/error_creator');
+const { Op } = require('sequelize');
 
 module.exports = class VaccineService {
   constructor() {
-    this.repository = new VaccinRepository();
+    this.repository = new VaccineRepository();
   }
   async create(bodyRequest) {
     const categoryId = bodyRequest.categoryId;
@@ -21,7 +21,7 @@ module.exports = class VaccineService {
       conserve,
       affectPregnancy,
       injectedNumberTotal,
-      price,
+      price
     } = bodyRequest;
     const data = {
       name,
@@ -35,7 +35,7 @@ module.exports = class VaccineService {
       conserve,
       affectPregnancy,
       injectedNumberTotal,
-      price,
+      price
     };
     try {
       this.repository.createVaccine(data, categoryId);
@@ -48,7 +48,7 @@ module.exports = class VaccineService {
   async update(id, body) {
     const findCondition = { id };
     const updateData = {
-      ...body,
+      ...body
     };
     try {
       await this.repository.update(findCondition, updateData);
@@ -64,8 +64,8 @@ module.exports = class VaccineService {
       if (reqQuery.name) {
         findOptions.where = {
           name: {
-            [Op.iLike]: `%${reqQuery.name}%`,
-          },
+            [Op.iLike]: `%${reqQuery.name}%`
+          }
         };
       }
 
@@ -73,9 +73,9 @@ module.exports = class VaccineService {
         findOptions.include = [
           {
             model: VaccineCategory,
-            as: "vaccineCategories",
-            where: { categoryId: reqQuery.categoryId },
-          },
+            as: 'vaccineCategories',
+            where: { categoryId: reqQuery.categoryId }
+          }
         ];
       }
 
@@ -84,7 +84,7 @@ module.exports = class VaccineService {
       findOptions.offset = (page - 1) * findOptions.limit;
 
       if (reqQuery.orderBy) {
-        findOptions.order = [reqQuery.orderBy, reqQuery.orderType || "DESC"];
+        findOptions.order = [reqQuery.orderBy, reqQuery.orderType || 'DESC'];
       }
 
       const vaccines = await this.repository.find(findOptions);
