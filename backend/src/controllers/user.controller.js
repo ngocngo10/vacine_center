@@ -3,12 +3,12 @@ async function register(req, res, next) {
   try {
     await userService.createUser(req.body);
     res.json({
-      message: "created",
+      message: 'created'
     });
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function listUsers(req, res, next) {
   try {

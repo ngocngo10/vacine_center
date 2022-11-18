@@ -1,9 +1,9 @@
-const { UserRepository } = require("../repositories");
-const ErrorCreator = require("../utils/error_createtor");
-const constants = require("../constants");
-const { generateLoginToken, generateRefreshToken } = require("../utils");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const { UserRepository } = require('../repositories');
+const ErrorCreator = require('../utils/error_creator');
+const constants = require('../constants');
+const { generateLoginToken, generateRefreshToken } = require('../utils');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 module.exports = class AuthService {
   constructor() {
@@ -16,7 +16,7 @@ module.exports = class AuthService {
     const userInfo = {
       ...requestBody,
       password,
-      roles: ["user"],
+      roles: requestBody.roles || ['user']
     };
     const isExist = await this.checkUserExisted(userInfo.phoneNumber);
     if (isExist) {
@@ -27,18 +27,19 @@ module.exports = class AuthService {
     const token = generateLoginToken({
       id: newUser.id,
       email: newUser.email,
-      phoneNumber: newUser.phoneNumber,
+      phoneNumber: newUser.phoneNumber
     });
     const refreshToken = generateRefreshToken({
       id: newUser.id,
       email: newUser.email,
-      phoneNumber: newUser.phoneNumber,
+      phoneNumber: newUser.phoneNumber
     });
     newUser.refreshToken = refreshToken;
     await newUser.save();
     return {
       token,
       refreshToken,
+      user: { name: newUser.name, roles: newUser.roles }
     };
   }
 
@@ -53,18 +54,18 @@ module.exports = class AuthService {
       const token = generateLoginToken({
         id: user.id,
         email: user.email,
-        phoneNumber: user.phoneNumber,
+        phoneNumber: user.phoneNumber
       });
       const refreshToken = generateRefreshToken({
         id: user.id,
         email: user.email,
-        phoneNumber: user.phoneNumber,
+        phoneNumber: user.phoneNumber
       });
       await this.repository.update(user.id, { refreshToken: refreshToken });
       return {
         token,
         refreshToken,
-        user: { name: user.name, roles: user.roles },
+        user: { name: user.name, roles: user.roles }
       };
     }
 
@@ -74,14 +75,8 @@ module.exports = class AuthService {
   async refreshToken(requestBody) {
     const { refreshToken } = requestBody;
     try {
-      const decoded = jwt.verify(
-        refreshToken,
-        process.env.JWT_REFRESH_TOKEN_KEY
-      );
-      if (
-        decoded.email &&
-        decoded.secrect === process.env.SECRET_REFRESH_PAYLOAD
-      ) {
+      const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_KEY);
+      if (decoded.email && decoded.secret === process.env.SECRET_REFRESH_PAYLOAD) {
         const user = await this.repository.findUser({ refreshToken });
         if (user?.refreshToken === refreshToken) {
           return generateLoginToken();
@@ -99,12 +94,9 @@ module.exports = class AuthService {
 
   async logout(userId) {
     try {
-      if (
-        decoded.email &&
-        decoded.secrect === process.env.SECRET_REFRESH_PAYLOAD
-      ) {
+      if (decoded.email && decoded.secret === process.env.SECRET_REFRESH_PAYLOAD) {
         const user = await this.repository.findUser({ id: userId });
-        await this.repository.update(user.id, { refreshToken: "" });
+        await this.repository.update(user.id, { refreshToken: '' });
         return;
       }
       throw new ErrorCreator(constants.INVALID_REFRESH_TOKEN, 400);

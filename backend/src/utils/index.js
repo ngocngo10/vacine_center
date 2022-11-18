@@ -2,8 +2,8 @@ const jwt = require('jsonwebtoken');
 
 function generateLoginToken(userInfo) {
   const payload = {
-    secrect: process.env.SECRET_PAYLOAD,
-    user: userInfo,
+    secret: process.env.SECRET_PAYLOAD,
+    user: userInfo
   };
   const token = jwt.sign(payload, process.env.JWT_TOKEN_KEY, {
     expiresIn: '1h'
@@ -13,8 +13,8 @@ function generateLoginToken(userInfo) {
 
 function generateRefreshToken(userInfo) {
   const payload = {
-    secrect: process.env.SECRET_REFRESH_PAYLOAD,
-    user: userInfo,
+    secret: process.env.SECRET_REFRESH_PAYLOAD,
+    user: userInfo
   };
   const token = jwt.sign(payload, process.env.JWT_REFRESH_TOKEN_KEY, {
     expiresIn: '90d'
@@ -24,5 +24,5 @@ function generateRefreshToken(userInfo) {
 
 module.exports = {
   generateLoginToken,
-  generateRefreshToken,
+  generateRefreshToken
 };

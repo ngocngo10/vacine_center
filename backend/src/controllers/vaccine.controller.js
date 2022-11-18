@@ -1,11 +1,11 @@
-const { VaccineService } = require("../services");
-const ErrorCreator = require("../utils/error_createtor");
+const { VaccineService } = require('../services');
+const ErrorCreator = require('../utils/error_creator');
 const vaccineService = new VaccineService();
 async function create(req, res, next) {
   try {
     await vaccineService.create(req.body);
     return res.json({
-      message: "Vaccine is created successfully",
+      message: 'Vaccine is created successfully'
     });
   } catch (error) {
     next(error.statusCode ? error : new ErrorCreator(error.message, 500));
@@ -33,7 +33,7 @@ async function findOne(req, res, next) {
 async function update(req, res, next) {
   try {
     await vaccineService.update(req.params.id, req.body);
-    return res.json({ message: "Updated." });
+    return res.json({ message: 'Updated.' });
   } catch (error) {
     next(error);
   }
@@ -42,16 +42,25 @@ async function update(req, res, next) {
 async function deleteSingle(req, res, next) {
   try {
     await vaccineService.deleteVaccine(req.params.id);
-    return res.json({ message: "Deleted." });
+    return res.json({ message: 'Deleted.' });
   } catch (error) {
     next(error);
   }
 }
 
+async function deleteMulti(req, res, next) {
+  try {
+    await Promise.all(req.body.ids.map(async (id) => vaccineService.deleteVaccine(id)));
+    return res.json({ message: 'Deleted.' });
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
   create,
   find,
   findOne,
   update,
   deleteSingle,
+  deleteMulti
 };

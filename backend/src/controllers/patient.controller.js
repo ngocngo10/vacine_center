@@ -1,16 +1,16 @@
 const { PatientService } = require('../services');
-const ErrorCreator = require('../utils/error_createtor');
+const ErrorCreator = require('../utils/error_creator');
 const patientService = new PatientService();
 async function create(req, res, next) {
   try {
     await patientService.create(req.body);
     return res.json({
-      message: "Patient is created successfully",
+      message: 'Patient is created successfully'
     });
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function find(req, res, next) {
   try {
@@ -19,7 +19,7 @@ async function find(req, res, next) {
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function findOne(req, res, next) {
   try {
@@ -28,7 +28,7 @@ async function findOne(req, res, next) {
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function update(req, res, next) {
   try {
@@ -37,7 +37,7 @@ async function update(req, res, next) {
   } catch (error) {
     next(error);
   }
-};
+}
 
 async function deletePatient(req, res, next) {
   try {
@@ -46,12 +46,12 @@ async function deletePatient(req, res, next) {
   } catch (error) {
     next(error);
   }
-};
+}
 
 module.exports = {
   create,
   find,
   findOne,
   update,
-  deletePatient,
-}
+  deletePatient
+};

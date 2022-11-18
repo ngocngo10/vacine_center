@@ -1,6 +1,6 @@
-const dbConfig = require("../../configs/db.config.js");
+const dbConfig = require('../../configs/db.config.js');
 
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize');
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
@@ -14,7 +14,7 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   }
 });
 
-User = require("./user.model.js")(sequelize, Sequelize);
+User = require('./user.model.js')(sequelize, Sequelize);
 Patient = require('./patient.model')(sequelize, Sequelize);
 Appointment = require('./appointment.model')(sequelize, Sequelize);
 Vaccine = require('./vaccine.model')(sequelize, Sequelize);
@@ -25,26 +25,26 @@ ScheduleConfig = require('./schedule-config.model')(sequelize, Sequelize);
 Schedule = require('./schedule.model')(sequelize, Sequelize);
 
 // define relations
-Category.hasMany(VaccineCategory, { as: "vaccineCategories" });
+Category.hasMany(VaccineCategory, { as: 'vaccineCategories' });
 VaccineCategory.belongsTo(Category, {
-  foreignKey: "category_id",
-  as: "category",
+  foreignKey: 'category_id',
+  as: 'category'
 });
-Vaccine.hasMany(VaccineCategory, { as: "vaccineCategories" });
+Vaccine.hasMany(VaccineCategory, { as: 'vaccineCategories' });
 VaccineCategory.belongsTo(Vaccine, {
-  foreignKey: "vaccine_id",
-  as: "vaccine",
+  foreignKey: 'vaccine_id',
+  as: 'vaccine'
 });
 Vaccine.belongsToMany(Category, { through: VaccineCategory, as: 'categories' });
 Category.belongsToMany(Vaccine, { through: VaccineCategory, as: 'vaccines' });
 
-Vaccine.hasMany(VaccineDetail, { as: "vaccineDetails" });
+Vaccine.hasMany(VaccineDetail, { as: 'vaccineDetails' });
 VaccineDetail.belongsTo(Vaccine, {
-  foreignKey: "vaccine_id",
-  as: "vaccine",
+  foreignKey: 'vaccine_id',
+  as: 'vaccine'
 });
 
-User.hasMany(Patient, { as: 'patients', foreignKey: 'representative'});
+User.hasMany(Patient, { as: 'patients', foreignKey: 'representative' });
 Patient.belongsTo(User, {
   targetKey: 'id',
   foreignKey: 'representative',
@@ -68,5 +68,5 @@ module.exports = {
   VaccineDetail,
   Appointment,
   Schedule,
-  ScheduleConfig,
+  ScheduleConfig
 };

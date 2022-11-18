@@ -1,8 +1,11 @@
-const { VaccineDetailRepository, VaccinRepository } = require('../repositories');
+const {
+  VaccineDetailRepository,
+  VaccineRepository: VaccineRepository
+} = require('../repositories');
 
 module.exports = class VaccineDetailService {
   constructor() {
-    this.vaccineRepository = new VaccinRepository();
+    this.vaccineRepository = new VaccineRepository();
     this.repository = new VaccineDetailRepository();
   }
   async create(data) {
@@ -13,7 +16,7 @@ module.exports = class VaccineDetailService {
   async update(id, body) {
     const updateData = {
       ...body
-    }
+    };
     const vaccineDetail = this.repository.findOne(id);
     if (!vaccineDetail) throw new ErrorCreator('Not found', 404);
     await this.repository.update(id, updateData);
@@ -26,8 +29,8 @@ module.exports = class VaccineDetailService {
     const result = {};
     if (reqQuery.vaccineId) {
       findOptions.where = {
-        vaccineId: reqQuery.vaccineId,
-      }
+        vaccineId: reqQuery.vaccineId
+      };
       vaccine = await this.vaccineRepository.findOne(reqQuery.vaccineId);
       result.vaccine = vaccine;
     }
@@ -47,4 +50,4 @@ module.exports = class VaccineDetailService {
     if (!vaccineDetail) throw new ErrorCreator('Not found', 404);
     return await this.repository.delete(id);
   }
-}
+};
