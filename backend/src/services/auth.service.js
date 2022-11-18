@@ -1,9 +1,9 @@
-const { UserRepository } = require('../repositories');
-const ErrorCreator = require('../utils/error_createtor');
-const constants = require('../constants');
-const { generateLoginToken, generateRefreshToken } = require('../utils');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const { UserRepository } = require("../repositories");
+const ErrorCreator = require("../utils/error_createtor");
+const constants = require("../constants");
+const { generateLoginToken, generateRefreshToken } = require("../utils");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 module.exports = class AuthService {
   constructor() {
@@ -16,8 +16,8 @@ module.exports = class AuthService {
     const userInfo = {
       ...requestBody,
       password,
-      roles: ['user'],
-    }
+      roles: ["user"],
+    };
     const isExist = await this.checkUserExisted(userInfo.phoneNumber);
     if (isExist) {
       throw new ErrorCreator(constants.USER_EXISTED, 400);
@@ -38,10 +38,10 @@ module.exports = class AuthService {
     await newUser.save();
     return {
       token,
-      refreshToken
-    }
+      refreshToken,
+    };
   }
-  
+
   async login(requestBody) {
     const { phoneNumber, password } = requestBody;
     const user = await this.repository.findUserByPhoneNumber(phoneNumber);
@@ -63,20 +63,27 @@ module.exports = class AuthService {
       await this.repository.update(user.id, { refreshToken: refreshToken });
       return {
         token,
-        refreshToken
-      }
+        refreshToken,
+        user: { name: user.name, roles: user.roles },
+      };
     }
-    
+
     throw new ErrorCreator(constants.INVALID_PHONE_OR_PASSWORD, 400);
   }
-  
+
   async refreshToken(requestBody) {
     const { refreshToken } = requestBody;
     try {
-      const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_KEY);
-      if (decoded.email && decoded.secrect === process.env.SECRET_REFRESH_PAYLOAD) {
+      const decoded = jwt.verify(
+        refreshToken,
+        process.env.JWT_REFRESH_TOKEN_KEY
+      );
+      if (
+        decoded.email &&
+        decoded.secrect === process.env.SECRET_REFRESH_PAYLOAD
+      ) {
         const user = await this.repository.findUser({ refreshToken });
-        if (user?.refreshToken ===  refreshToken) {
+        if (user?.refreshToken === refreshToken) {
           return generateLoginToken();
         }
       }
@@ -85,16 +92,19 @@ module.exports = class AuthService {
       if (error.name === constants.TOKEN_EXPIRED_ERROR) {
         throw new ErrorCreator(constants.LOGIN_AGAIN, 401);
       }
-  
+
       throw new ErrorCreator(constants.INVALID_REFRESH_TOKEN, 401);
     }
   }
-  
+
   async logout(userId) {
     try {
-      if (decoded.email && decoded.secrect === process.env.SECRET_REFRESH_PAYLOAD) {
+      if (
+        decoded.email &&
+        decoded.secrect === process.env.SECRET_REFRESH_PAYLOAD
+      ) {
         const user = await this.repository.findUser({ id: userId });
-        await this.repository.update(user.id, { refreshToken: '' });
+        await this.repository.update(user.id, { refreshToken: "" });
         return;
       }
       throw new ErrorCreator(constants.INVALID_REFRESH_TOKEN, 400);
@@ -102,12 +112,11 @@ module.exports = class AuthService {
       if (error.name === constants.TOKEN_EXPIRED_ERROR) {
         throw new ErrorCreator(constants.LOGIN_AGAIN, 401);
       }
-  
+
       throw new ErrorCreator(constants.INVALID_REFRESH_TOKEN, 401);
     }
-    
   }
   async checkUserExisted(phoneNumber) {
-    return await this.repository.findUser({ phoneNumber })
+    return await this.repository.findUser({ phoneNumber });
   }
-}
+};

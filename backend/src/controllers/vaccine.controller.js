@@ -39,9 +39,9 @@ async function update(req, res, next) {
   }
 }
 
-async function deleteVaccine(req, res, next) {
+async function deleteSingle(req, res, next) {
   try {
-    await vaccineService.deleteCategory(req.params.id);
+    await vaccineService.deleteVaccine(req.params.id);
     return res.json({ message: "Deleted." });
   } catch (error) {
     next(error);
@@ -53,5 +53,5 @@ module.exports = {
   find,
   findOne,
   update,
-  // deleteCategory
+  deleteSingle,
 };

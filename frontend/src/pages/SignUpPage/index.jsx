@@ -42,7 +42,6 @@ const SignUpPage = () => {
   }, [userInfo]);
 
   const onFinish = (values) => {
-    console.log('Received values of form: ', values);
     values.gender = values.gender === 'male';
     dispatch(register(values));
   };
@@ -119,7 +118,6 @@ const SignUpPage = () => {
                 <Select placeholder="Chọn giới tính">
                   <Option value="male">Male</Option>
                   <Option value="female">Female</Option>
-                  <Option value="other">Other</Option>
                 </Select>
               </Form.Item>
               <Form.Item

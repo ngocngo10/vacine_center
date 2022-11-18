@@ -14,7 +14,7 @@ export const getVaccineList = (query) => async (dispatch) => {
     dispatch({
       type: VACCINE_LIST_REQUEST
     });
-    const reqQuery = { ...query, perPage: 6, page: query.page };
+    const reqQuery = { ...query, perPage: query.perPage || 9, page: query.page };
 
     const queries = [];
     for (let key in reqQuery) {

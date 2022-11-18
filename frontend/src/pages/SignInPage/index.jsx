@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import { LockOutlined, PhoneOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
@@ -15,11 +15,12 @@ const SignInPage = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
-  console.log('userLogin', userLogin);
+
+  const url = userInfo?.user.roles.includes('admin') ? '/admin-home' : '/';
 
   useEffect(() => {
     if (userInfo) {
-      navigate('/');
+      navigate(url);
     }
   }, [userInfo]);
 
@@ -73,7 +74,7 @@ const SignInPage = () => {
               </Form.Item>
               <Form.Item>
                 <span>Bạn chưa có tài khoản </span>
-                <a href="">Đăng kí tại đây!</a>
+                <Link to="/register">Đăng kí tại đây!</Link>
               </Form.Item>
             </Form>
           </div>

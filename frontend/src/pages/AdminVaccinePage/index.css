@@ -1,0 +1,11 @@
+.vaccines-card {
+  background-color: white;
+  padding: 20px 15px;
+  border-radius: 10px;
+}
+
+.vaccine-image {
+  width: 100px;
+  height: 70px;
+  object-fit: cover;
+}
