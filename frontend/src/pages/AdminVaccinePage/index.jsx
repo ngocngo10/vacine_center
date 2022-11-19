@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Image } from 'antd';
 import Header from '../../components/table/Header';
 import useDataTable from '../../components/table/DataTable';
@@ -9,12 +10,27 @@ import './index.css';
 
 const AdminVaccinePage = () => {
   const vaccineList = useSelector((state) => state.vaccineList);
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const vaccineSingleDelete = useSelector((state) => state.vaccineSingleDelete);
+  const { singleDeleteSuccess: singleDeleteSuccess } = vaccineSingleDelete;
   const { loading, error, vaccines, totalItem } = vaccineList;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const getVaccines = (page) => {
+    dispatch(getVaccineList({ perPage: 10, page: page }));
+  };
 
   useEffect(() => {
-    dispatch(getVaccineList({ perPage: 10 }));
-  }, []);
+    if (userInfo && userInfo.user.roles.includes('admin')) {
+      dispatch(getVaccineList({ perPage: 10 }));
+    } else {
+      navigate('/login');
+    }
+  }, [singleDeleteSuccess, userInfo]);
+
   const columns = [
     {
       title: '#',
@@ -74,16 +90,16 @@ const AdminVaccinePage = () => {
   }));
 
   const handleDeleteSingleVaccine = (id) => {
-    console.log('id', id);
     dispatch(deleteSingleVaccine(id));
   };
 
-  const { DataTable, hasSelected, selectedRow, currentPage, pageSize, resetPagination, deleteId } =
+  const { DataTable, hasSelected, selectedRow, currentPage, pageSize, resetPagination } =
     useDataTable({
       columns: columns,
       dataSource: data,
       updateEntityPath: `update-vaccine`,
-      handleDelete: handleDeleteSingleVaccine
+      handleDelete: handleDeleteSingleVaccine,
+      handleChangePage: getVaccines
     });
 
   return error ? (

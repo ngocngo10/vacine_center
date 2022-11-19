@@ -58,7 +58,7 @@ export const vaccineSingleDeleteReducer = (state = {}, action) => {
     case SINGLE_PRODUCT_DELETE_SUCCESS:
       return {
         loading: false,
-        success: true
+        singleDeleteSuccess: true
       };
     case SINGLE_PRODUCT_DELETE_FAIL:
       return { loading: false, error: action.payload };

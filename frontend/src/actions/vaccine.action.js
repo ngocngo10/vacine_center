@@ -67,15 +67,25 @@ export const getVaccineDetails = (vaccineId) => async (dispatch) => {
   }
 };
 
-export const deleteSingleVaccine = (vaccineId) => async (dispatch) => {
+export const deleteSingleVaccine = (vaccineId) => async (dispatch, getState) => {
   try {
     dispatch({
       type: SINGLE_PRODUCT_DELETE_REQUEST
     });
 
+    const {
+      userLogin: { userInfo }
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    };
+
     const url = `${BASE_URL}/api/vaccines/${vaccineId}`;
 
-    const { data } = await axios.delete(url);
+    const { data } = await axios.delete(url, config);
 
     dispatch({
       type: SINGLE_PRODUCT_DELETE_SUCCESS,

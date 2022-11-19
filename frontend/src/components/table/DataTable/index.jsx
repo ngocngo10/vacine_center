@@ -5,7 +5,7 @@ import useActionMenu from '../ActionMenu';
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_PAGE_NUMBER = 0;
 
-function useDataTable({ columns, dataSource, updateEntityPath, handleDelete }) {
+function useDataTable({ columns, dataSource, updateEntityPath, handleDelete, handleChangePage }) {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_NUMBER);
@@ -24,6 +24,8 @@ function useDataTable({ columns, dataSource, updateEntityPath, handleDelete }) {
     }
   };
 
+  dataSource.content.forEach((item) => (item.index = item.index + currentPage * 10));
+
   const updatedColumns = [
     ...columns,
     {
@@ -39,6 +41,7 @@ function useDataTable({ columns, dataSource, updateEntityPath, handleDelete }) {
 
   const handleTableChange = (pagination) => {
     console.log('pagination:', pagination);
+    handleChangePage(pagination.current);
     setCurrentPage(pagination.current - 1);
   };
 
