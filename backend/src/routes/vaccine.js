@@ -16,4 +16,11 @@ router.delete(
   VaccineController.deleteSingle
 );
 
+router.delete(
+  '/',
+  authMiddleware.validateToken,
+  authMiddleware.isAdmin,
+  VaccineController.deleteMulti
+);
+
 module.exports = router;
