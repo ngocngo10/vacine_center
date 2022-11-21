@@ -7,7 +7,8 @@ import { categoryListReducer } from './reducers/category.reducer';
 import {
   vaccineListReducer,
   vaccineDetailReducer,
-  vaccineSingleDeleteReducer
+  vaccineSingleDeleteReducer,
+  vaccineMultiDeleteReducer
 } from './reducers/vaccine.reducer';
 
 const reducer = combineReducers({
@@ -16,7 +17,8 @@ const reducer = combineReducers({
   categoryList: categoryListReducer,
   vaccineList: vaccineListReducer,
   vaccineDetail: vaccineDetailReducer,
-  vaccineSingleDelete: vaccineSingleDeleteReducer
+  vaccineSingleDelete: vaccineSingleDeleteReducer,
+  vaccineMultiDelete: vaccineMultiDeleteReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

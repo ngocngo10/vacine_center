@@ -19,8 +19,8 @@ function useDataTable({ columns, dataSource, updateEntityPath, handleDelete, han
   const hasSelected = selectedRowKeys.length > 0;
   const rowSelection = {
     selectedRowKeys,
-    onChange: (selected) => {
-      setSelectedRowKeys(selected);
+    onChange: (select) => {
+      setSelectedRowKeys(select);
     }
   };
 
@@ -40,14 +40,13 @@ function useDataTable({ columns, dataSource, updateEntityPath, handleDelete, han
   };
 
   const handleTableChange = (pagination) => {
-    console.log('pagination:', pagination);
     handleChangePage(pagination.current);
     setCurrentPage(pagination.current - 1);
   };
 
   const DataTable = () => (
     <Table
-      rowKey={(record) => record.id}
+      rowKey={(record) => record.key}
       rowSelection={rowSelection}
       columns={updatedColumns}
       dataSource={dataSource.content}

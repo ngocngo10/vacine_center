@@ -4,24 +4,29 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { Image } from 'antd';
 import Header from '../../components/table/Header';
 import useDataTable from '../../components/table/DataTable';
-import { getVaccineList, deleteSingleVaccine } from '../../actions/vaccine.action';
+import {
+  getVaccineList,
+  deleteSingleVaccine,
+  deleteMultiVaccine
+} from '../../actions/vaccine.action';
 import Message from '../../components/Message';
 import './index.css';
 
 const AdminVaccinePage = () => {
-  const vaccineList = useSelector((state) => state.vaccineList);
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  const vaccineList = useSelector((state) => state.vaccineList);
+  const { loading, error, vaccines, totalItem } = vaccineList;
+
   const vaccineSingleDelete = useSelector((state) => state.vaccineSingleDelete);
   const { singleDeleteSuccess: singleDeleteSuccess } = vaccineSingleDelete;
-  const { loading, error, vaccines, totalItem } = vaccineList;
+
+  const vaccineMultiDelete = useSelector((state) => state.vaccineMultiDelete);
+  const { multiDeleteSuccess: multiDeleteSuccess } = vaccineMultiDelete;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const getVaccines = (page) => {
-    dispatch(getVaccineList({ perPage: 10, page: page }));
-  };
 
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('admin')) {
@@ -29,7 +34,7 @@ const AdminVaccinePage = () => {
     } else {
       navigate('/login');
     }
-  }, [singleDeleteSuccess, userInfo]);
+  }, [singleDeleteSuccess, multiDeleteSuccess, userInfo]);
 
   const columns = [
     {
@@ -93,21 +98,41 @@ const AdminVaccinePage = () => {
     dispatch(deleteSingleVaccine(id));
   };
 
-  const { DataTable, hasSelected, selectedRow, currentPage, pageSize, resetPagination } =
-    useDataTable({
-      columns: columns,
-      dataSource: data,
-      updateEntityPath: `update-vaccine`,
-      handleDelete: handleDeleteSingleVaccine,
-      handleChangePage: getVaccines
-    });
+  const handleDeleteMultiVaccine = (ids) => {
+    dispatch(deleteMultiVaccine(ids));
+  };
+
+  const getVaccines = (page) => {
+    dispatch(getVaccineList({ perPage: 10, page: page }));
+  };
+
+  const {
+    DataTable,
+    hasSelected,
+    selectedRowKeys,
+    selectedRow,
+    currentPage,
+    pageSize,
+    resetPagination
+  } = useDataTable({
+    columns: columns,
+    dataSource: data,
+    updateEntityPath: `update-vaccine`,
+    handleDelete: handleDeleteSingleVaccine,
+    handleChangePage: getVaccines
+  });
 
   return error ? (
     <Message description={error} />
   ) : data.totalElements ? (
     <div className="vaccines-card">
       <>
-        <Header addNewPath="add-vaccine" hasSelected={hasSelected} />
+        <Header
+          addNewPath="add-vaccine"
+          selectedRowKeys={selectedRowKeys}
+          hasSelected={hasSelected}
+          handleMultiDelete={handleDeleteMultiVaccine}
+        />
         <DataTable />
       </>
     </div>
