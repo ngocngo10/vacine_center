@@ -6,6 +6,7 @@ import VaccineListPage from './pages/VaccineListPage';
 import VaccineDetailPage from './pages/VaccineDetailPage';
 import AdminMain from './layout/AdminMain';
 import AdminVaccinePage from './pages/AdminVaccinePage';
+import AdminAddVaccine from './pages/AdminAddVaccine';
 
 const Routing = () => {
   return (
@@ -18,6 +19,7 @@ const Routing = () => {
       <Route exact path="/admin-home" element={<AdminMain />}>
         <Route index element={<AdminVaccinePage />} />
         <Route path="vaccines" element={<AdminVaccinePage />} />
+        <Route path="add-vaccines" element={<AdminAddVaccine />} />
       </Route>
     </Routes>
   );
