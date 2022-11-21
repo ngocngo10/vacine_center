@@ -17,13 +17,17 @@ function Header({ addNewPath, hasSelected, selectedRowKeys, handleMultiDelete, h
     handleMultiDelete(selectedRowKeys);
   };
 
+  const handleOnSearch = (value) => {
+    handleSearch(value);
+  };
+
   return (
     <>
       <Row>
         <Col>
           <Search
             placeholder="Search"
-            onSearch={handleSearch}
+            onSearch={handleOnSearch}
             allowClear
             style={{ float: 'left', width: 350 }}
           />

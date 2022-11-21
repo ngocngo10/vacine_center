@@ -106,6 +106,10 @@ const AdminVaccinePage = () => {
     dispatch(getVaccineList({ perPage: 10, page: page }));
   };
 
+  const handleOnSearch = (name) => {
+    dispatch(getVaccineList({ name, perPage: 10 }));
+  };
+
   const {
     DataTable,
     hasSelected,
@@ -132,6 +136,7 @@ const AdminVaccinePage = () => {
           selectedRowKeys={selectedRowKeys}
           hasSelected={hasSelected}
           handleMultiDelete={handleDeleteMultiVaccine}
+          handleSearch={handleOnSearch}
         />
         <DataTable />
       </>
