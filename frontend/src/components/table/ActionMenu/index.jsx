@@ -1,10 +1,20 @@
-import { Popconfirm, Button } from 'antd';
+import { Button, Modal } from 'antd';
 import 'antd/dist/antd.css';
 import React, { useState } from 'react';
-import { QuestionCircleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import './index.css';
 
-function useActionMenu({ selectedRow, updateEntityPath }) {
+function useActionMenu({ selectedRow, updateEntityPath, handleDelete }) {
+  const [open, setOpen] = useState(false);
+
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const hideModal = () => {
+    setOpen(false);
+  };
+
   const navigate = useNavigate();
 
   const handleEdit = () => {
@@ -12,34 +22,38 @@ function useActionMenu({ selectedRow, updateEntityPath }) {
     navigate(updatePath);
   };
 
-  const handleSingleDelete = () => {
-    console.log('handleSingleDelete, selected:', selectedRow.key);
+  const handleDeleteSingle = () => {
+    hideModal();
+    handleDelete(selectedRow.key);
   };
 
   const actionColumnView = (
     <>
-      <Button type="primary" danger style={{ float: 'right' }}>
-        <Popconfirm
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-          title="Sure to delete?"
-          icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-          onConfirm={handleSingleDelete}>
+      <span>
+        <Button type="primary" danger style={{ float: 'right' }} onClick={showModal}>
           Delete
-        </Popconfirm>
-      </Button>
-
-      <Button
-        type="primary"
-        onClick={handleEdit}
-        style={{ background: '#ffc107', border: '#ffc107' }}>
-        Edit
-      </Button>
+        </Button>
+        <Button
+          type="primary"
+          onClick={handleEdit}
+          style={{ background: '#ffc107', border: '#ffc107' }}>
+          Edit
+        </Button>
+        <Modal
+          mask={false}
+          title="Delete Vaccine"
+          open={open}
+          onOk={handleDeleteSingle}
+          onCancel={hideModal}
+          okText="Delete"
+          cancelText="Cancel">
+          <p>Are you sure you want to delete this vaccine?</p>
+        </Modal>
+      </span>
     </>
   );
 
-  return [actionColumnView];
+  return { actionColumnView: [actionColumnView] };
 }
 
 export default useActionMenu;

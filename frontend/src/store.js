@@ -4,21 +4,28 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { userRegisterReducer, userLoginReducer } from './reducers/user.reducer';
 import { categoryListReducer } from './reducers/category.reducer';
-import { vaccineListReducer, vaccineDetailReducer } from './reducers/vaccine.reducer';
+import {
+  vaccineListReducer,
+  vaccineDetailReducer,
+  vaccineSingleDeleteReducer,
+  vaccineMultiDeleteReducer
+} from './reducers/vaccine.reducer';
 
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
   categoryList: categoryListReducer,
   vaccineList: vaccineListReducer,
-  vaccineDetail: vaccineDetailReducer
+  vaccineDetail: vaccineDetailReducer,
+  vaccineSingleDelete: vaccineSingleDeleteReducer,
+  vaccineMultiDelete: vaccineMultiDeleteReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
   ? JSON.parse(localStorage.getItem('userInfo'))
   : null;
 
-const initialState = {};
+const initialState = { userLogin: { userInfo: userInfoFromStorage } };
 
 const middleware = [thunk];
 

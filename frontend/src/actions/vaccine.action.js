@@ -5,7 +5,13 @@ import {
   VACCINE_LIST_FAIL,
   VACCINE_DETAIL_REQUEST,
   VACCINE_DETAIL_SUCCESS,
-  VACCINE_DETAIL_FAIL
+  VACCINE_DETAIL_FAIL,
+  SINGLE_PRODUCT_DELETE_REQUEST,
+  SINGLE_PRODUCT_DELETE_SUCCESS,
+  SINGLE_PRODUCT_DELETE_FAIL,
+  MULTI_PRODUCT_DELETE_REQUEST,
+  MULTI_PRODUCT_DELETE_SUCCESS,
+  MULTI_PRODUCT_DELETE_FAIL
 } from '../constants/vaccine.constant';
 import { BASE_URL } from '../constants/base_url.constant';
 
@@ -60,6 +66,72 @@ export const getVaccineDetails = (vaccineId) => async (dispatch) => {
     dispatch({
       type: VACCINE_DETAIL_FAIL,
       payload: error.response.data.error
+    });
+  }
+};
+
+export const deleteSingleVaccine = (vaccineId) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: SINGLE_PRODUCT_DELETE_REQUEST
+    });
+
+    const {
+      userLogin: { userInfo }
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    };
+
+    const url = `${BASE_URL}/api/vaccines/${vaccineId}`;
+
+    const { data } = await axios.delete(url, config);
+
+    dispatch({
+      type: SINGLE_PRODUCT_DELETE_SUCCESS,
+      payload: data
+    });
+  } catch (error) {
+    dispatch({
+      type: SINGLE_PRODUCT_DELETE_FAIL,
+      payload: error.response.data.error
+    });
+  }
+};
+
+export const deleteMultiVaccine = (ids) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: MULTI_PRODUCT_DELETE_REQUEST
+    });
+
+    const {
+      userLogin: { userInfo }
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json'
+      },
+      data: { ids: ids }
+    };
+
+    const url = `${BASE_URL}/api/vaccines`;
+
+    const { data } = await axios.delete(url, config);
+
+    dispatch({
+      type: MULTI_PRODUCT_DELETE_SUCCESS,
+      payload: data
+    });
+  } catch (error) {
+    dispatch({
+      type: MULTI_PRODUCT_DELETE_FAIL,
+      payload: error.response?.data.error
     });
   }
 };

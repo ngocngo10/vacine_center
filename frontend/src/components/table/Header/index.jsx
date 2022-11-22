@@ -6,11 +6,19 @@ import './index.css';
 
 const { Search } = Input;
 
-function Header({ addNewPath, hasSelected, handleSearch }) {
+function Header({ addNewPath, hasSelected, selectedRowKeys, handleMultiDelete, handleSearch }) {
   const navigate = useNavigate();
 
   const handleAddNew = () => {
     navigate('/' + addNewPath);
+  };
+
+  const handleOnConfirm = () => {
+    handleMultiDelete(selectedRowKeys);
+  };
+
+  const handleOnSearch = (value) => {
+    handleSearch(value);
   };
 
   return (
@@ -19,7 +27,7 @@ function Header({ addNewPath, hasSelected, handleSearch }) {
         <Col>
           <Search
             placeholder="Search"
-            onSearch={handleSearch}
+            onSearch={handleOnSearch}
             allowClear
             style={{ float: 'left', width: 350 }}
           />
@@ -41,7 +49,7 @@ function Header({ addNewPath, hasSelected, handleSearch }) {
             <Popconfirm
               title="Sure to delete?"
               icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-              onConfirm={() => {}}>
+              onConfirm={handleOnConfirm}>
               Delete
             </Popconfirm>
           </Button>
