@@ -5,7 +5,7 @@
   font-family: 'WorkSans-Regular';
 }
 
-.vaccine-image {
+.vaccine-list__image {
   width: 100px;
   height: 70px;
   object-fit: cover;

@@ -12,6 +12,10 @@
   margin-right: 30px;
 }
 
+.btn-reset {
+  margin-left: 30px;
+}
+
 .preview-image {
   width: 330px;
   height: 200px;
@@ -35,8 +39,8 @@
   padding: 5px 8px;
   outline: none;
   white-space: nowrap;
-  font-family: 'WorkSans-Regular';
   /* -webkit-user-select: none; */
+  font-family: 'WorkSans-Regular';
   cursor: pointer;
   margin-left: 100px;
 }
