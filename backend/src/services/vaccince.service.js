@@ -86,6 +86,7 @@ module.exports = class VaccineService {
       if (reqQuery.orderBy) {
         findOptions.order = [reqQuery.orderBy, reqQuery.orderType || 'DESC'];
       }
+      findOptions.include = ['categories'];
 
       const vaccines = await this.repository.find(findOptions);
       return vaccines;

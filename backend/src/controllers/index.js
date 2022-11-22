@@ -5,6 +5,7 @@ const VaccineController = require('./vaccine.controller');
 const VaccineDetailController = require('./vaccine-detail.controller');
 const PatientController = require('./patient.controller');
 const ScheduleConfig = require('./schedule-config.controller');
+const UploadController = require('./upload.controller');
 
 module.exports = {
   AuthController,
@@ -12,5 +13,6 @@ module.exports = {
   VaccineController,
   VaccineDetailController,
   PatientController,
-  ScheduleConfig
+  ScheduleConfig,
+  UploadController
 };
