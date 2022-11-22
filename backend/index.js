@@ -14,6 +14,7 @@ const vaccineRouter = require("./src/routes/vaccine");
 const vaccineDetailRouter = require("./src/routes/vaccine-detail");
 const patientRouter = require("./src/routes/patient");
 const scheduleConfigRoute = require('./src/routes/schedule-config');
+const uploadRouter = require('./src/routes/upload');
 
 // var usersRouter = require('./src/routes/users');
 
@@ -44,6 +45,7 @@ app.use("/api/vaccines", vaccineRouter);
 app.use("/api/vaccine-details", vaccineDetailRouter);
 app.use('/api/patients', patientRouter);
 app.use('/api/schedule-configs', scheduleConfigRoute);
+app.use('/api/upload', uploadRouter);
 // app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
