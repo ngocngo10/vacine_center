@@ -89,7 +89,7 @@ const AdminVaccinePage = () => {
     image: vaccine.image,
     name: vaccine.name,
     price: vaccine.price,
-    category: 'Phòng lao',
+    category: vaccine.category,
     origin: vaccine.origin,
     qty: 34
   }));
@@ -132,7 +132,7 @@ const AdminVaccinePage = () => {
     <div className="vaccines-card">
       <>
         <Header
-          addNewPath="add-vaccine"
+          addNewPath="admin-home/add-vaccines"
           selectedRowKeys={selectedRowKeys}
           hasSelected={hasSelected}
           handleMultiDelete={handleDeleteMultiVaccine}

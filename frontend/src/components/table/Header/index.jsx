@@ -38,7 +38,7 @@ function Header({ addNewPath, hasSelected, selectedRowKeys, handleMultiDelete, h
             type="primary"
             style={{ float: 'right' }}
             onClick={handleAddNew}>
-            Add New
+            Thêm
           </Button>
 
           <Button
@@ -50,7 +50,7 @@ function Header({ addNewPath, hasSelected, selectedRowKeys, handleMultiDelete, h
               title="Sure to delete?"
               icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
               onConfirm={handleOnConfirm}>
-              Delete
+              Xóa
             </Popconfirm>
           </Button>
         </Col>

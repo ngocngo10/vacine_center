@@ -29,7 +29,7 @@ function useDataTable({ columns, dataSource, updateEntityPath, handleDelete, han
   const updatedColumns = [
     ...columns,
     {
-      title: 'Action',
+      title: 'Xóa/Cập nhật',
       key: 'action',
       render: () => actionColumnView
     }

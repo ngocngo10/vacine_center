@@ -1,0 +1,50 @@
+.add-vaccine-card {
+  border-radius: 10px;
+  margin-top: 30px;
+  font-family: 'WorkSans-SemiBold';
+}
+
+.add-form {
+  font-family: 'WorkSans-Regular';
+}
+
+.btn-cancel {
+  margin-right: 30px;
+}
+
+.preview-image {
+  width: 330px;
+  height: 200px;
+  object-fit: cover;
+  margin-bottom: 30px;
+}
+
+.custom-file-input {
+  color: transparent;
+}
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.custom-file-input::before {
+  content: 'Thay đổi ảnh';
+  color: var(--color-third);
+  display: inline-block;
+  background: -webkit-linear-gradient(top, var(--color-primary), var(--color-primary));
+  border: 1px solid var(--color-primary);
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  margin-left: 100px;
+}
+.custom-file-input:hover::before {
+  border-color: var(--color-primary);
+}
+.custom-file-input:active {
+  outline: 0;
+}
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}

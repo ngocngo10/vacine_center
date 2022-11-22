@@ -31,13 +31,13 @@ function useActionMenu({ selectedRow, updateEntityPath, handleDelete }) {
     <>
       <span>
         <Button type="primary" danger style={{ float: 'right' }} onClick={showModal}>
-          Delete
+          Xóa
         </Button>
         <Button
           type="primary"
           onClick={handleEdit}
           style={{ background: '#ffc107', border: '#ffc107' }}>
-          Edit
+          Cập nhật
         </Button>
         <Modal
           mask={false}
