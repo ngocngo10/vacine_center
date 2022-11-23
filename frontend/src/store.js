@@ -8,7 +8,8 @@ import {
   vaccineListReducer,
   vaccineDetailReducer,
   vaccineSingleDeleteReducer,
-  vaccineMultiDeleteReducer
+  vaccineMultiDeleteReducer,
+  vaccineCreateReducer
 } from './reducers/vaccine.reducer';
 
 const reducer = combineReducers({
@@ -18,7 +19,8 @@ const reducer = combineReducers({
   vaccineList: vaccineListReducer,
   vaccineDetail: vaccineDetailReducer,
   vaccineSingleDelete: vaccineSingleDeleteReducer,
-  vaccineMultiDelete: vaccineMultiDeleteReducer
+  vaccineMultiDelete: vaccineMultiDeleteReducer,
+  vaccineCreate: vaccineCreateReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

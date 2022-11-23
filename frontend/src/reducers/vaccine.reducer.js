@@ -10,7 +10,10 @@ import {
   SINGLE_PRODUCT_DELETE_FAIL,
   MULTI_PRODUCT_DELETE_REQUEST,
   MULTI_PRODUCT_DELETE_SUCCESS,
-  MULTI_PRODUCT_DELETE_FAIL
+  MULTI_PRODUCT_DELETE_FAIL,
+  VACCINE_CREATE_REQUEST,
+  VACCINE_CREATE_SUCCESS,
+  VACCINE_CREATE_FAIL
 } from '../constants/vaccine.constant';
 
 const initialState = {
@@ -80,6 +83,22 @@ export const vaccineMultiDeleteReducer = (state = {}, action) => {
         multiDeleteSuccess: true
       };
     case MULTI_PRODUCT_DELETE_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const vaccineCreateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case VACCINE_CREATE_REQUEST:
+      return { loading: true };
+    case VACCINE_CREATE_SUCCESS:
+      return {
+        loading: false,
+        createSuccess: true
+      };
+    case VACCINE_CREATE_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;
