@@ -19,9 +19,9 @@ const VaccineCategoryCarousel = () => {
   return error ? (
     <Message description={error} />
   ) : (
-    categories.length && (
+    categories?.carouselCategories?.length && (
       <Carousel autoplay="true" dotPosition="bottom" className="slideshow-list">
-        {categories.map((subCategories, index) => (
+        {categories.carouselCategories.map((subCategories, index) => (
           <div key={`slideshow-item-${index}`}>
             <div className="slideshow-item">
               {subCategories.map((category) => (
