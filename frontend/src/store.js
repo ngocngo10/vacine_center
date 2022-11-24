@@ -12,6 +12,7 @@ import {
   vaccineCreateReducer,
   vaccineEditReducer
 } from './reducers/vaccine.reducer';
+import { vaccineInformCreateReducer } from './reducers/vaccine_detail.reducer';
 import { uploadReducer } from './reducers/upload.reducer';
 
 const reducer = combineReducers({
@@ -24,7 +25,8 @@ const reducer = combineReducers({
   vaccineMultiDelete: vaccineMultiDeleteReducer,
   vaccineCreate: vaccineCreateReducer,
   upload: uploadReducer,
-  vaccineEdit: vaccineEditReducer
+  vaccineEdit: vaccineEditReducer,
+  vaccineInformCreate: vaccineInformCreateReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../components/Loader';
 import { Card, Form, Input, Row, Col, Select, Divider, Button, Image } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { getCategoryList } from '../../actions/category.action';
 import { getSignedRequest } from '../../actions/upload.action';
 import Message from '../../components/Message';
@@ -11,12 +12,13 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const AdminAddVaccine = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [imageSrc, setImageSrc] = useState();
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const dispatch = useDispatch();
   const categoryList = useSelector((state) => state.categoryList);
   const { loading, error, categories } = categoryList;
 
