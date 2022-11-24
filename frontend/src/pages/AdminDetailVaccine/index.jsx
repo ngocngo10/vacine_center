@@ -1,15 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Modal, Input } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import TinyMceEditor from '../../components/TinyMceEditor';
+import { createVaccineDetail } from '../../actions/vaccine_detail.action';
 import './index.css';
 
 const AdminDetailVaccine = () => {
   const [open, setOpen] = useState(false);
+  const [contentInform, setContentInform] = useState();
+  const vaccineInformTitleInput = useRef();
+  const dispatch = useDispatch();
+
   const showModal = () => {
     setOpen(true);
   };
   const hideModal = () => {
     setOpen(false);
+  };
+
+  const handleOk = () => {
+    hideModal();
+    const vaccineInformTitle = vaccineInformTitleInput.current.value;
+    const { id } = useParams();
+    const vaccineDetail = {
+      title: vaccineInformTitle,
+      content: contentInform,
+      vaccineId: id
+    };
+    dispatch(createVaccineDetail(vaccineDetail));
   };
 
   return (
@@ -62,14 +81,17 @@ const AdminDetailVaccine = () => {
         className="modal-vaccine-inform"
         title="Thêm thông tin chi tiết vắc xin"
         open={open}
-        onOk={hideModal}
+        onOk={handleOk}
         onCancel={hideModal}
         okText="Thêm"
         cancelText="Hủy"
-        width={1000}
-        height={'1vh'}>
-        <Input placeholder="Tiêu đề thông tin vắc xin" className="vaccinee-subject-input" />
-        <TinyMceEditor />
+        width={1000}>
+        <Input
+          ref={vaccineInformTitleInput}
+          placeholder="Tiêu đề thông tin vắc xin"
+          className="vaccinee-subject-input"
+        />
+        <TinyMceEditor contentInform={contentInform} setContentInform={setContentInform} />
       </Modal>
     </>
   );

@@ -3,7 +3,12 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import './index.css';
 
-const TinyMceEditor = () => {
+const TinyMceEditor = ({ contentInform, setContentInform }) => {
+  const handleOnChange = (event, editor) => {
+    const data = editor.getData();
+    console.log({ event, editor, data });
+    setContentInform(data);
+  };
   return (
     <div className="ckeditor-wrapper">
       <CKEditor
@@ -77,10 +82,7 @@ const TinyMceEditor = () => {
           // You can store the "editor" and use when it is needed.
           console.log('Editor is ready to use!', editor);
         }}
-        onChange={(event, editor) => {
-          const data = editor.getData();
-          console.log({ event, editor, data });
-        }}
+        onChange={handleOnChange}
         onBlur={(event, editor) => {
           console.log('Blur.', editor);
         }}
