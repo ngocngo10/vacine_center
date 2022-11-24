@@ -4,13 +4,7 @@ import {
   CATEGORY_LIST_FAIL
 } from '../constants/category.constant';
 
-const initialState = {
-  loading: false,
-  categories: [],
-  error: null
-};
-
-export const categoryListReducer = (state = initialState, action) => {
+export const categoryListReducer = (state = {}, action) => {
   switch (action.type) {
     case CATEGORY_LIST_REQUEST:
       return { ...state, loading: true };

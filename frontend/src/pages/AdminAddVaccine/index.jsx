@@ -1,17 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../../components/Loader';
 import { Card, Form, Input, Row, Col, Select, Divider, Button, Image } from 'antd';
-
+import { getCategoryList } from '../../actions/category.action';
+import { getSignedRequest } from '../../actions/upload.action';
+import Message from '../../components/Message';
 import './index.css';
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 const AdminAddVaccine = () => {
-  const [form] = Form.useForm();
-  const [imageSrc, setImageSrc] = useState('javascript:void(0)');
+  const [imageSrc, setImageSrc] = useState();
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const dispatch = useDispatch();
+  const categoryList = useSelector((state) => state.categoryList);
+  const { loading, error, categories } = categoryList;
 
   const onChange = (e) => {
     let files = e.target.files;
-    console.log(files);
+    console.log('files', files);
+    console.log(files[0]);
+    dispatch(getSignedRequest(files[0]));
     let reader = new FileReader();
 
     reader.onload = (e) => {
@@ -27,37 +40,19 @@ const AdminAddVaccine = () => {
     // call save API
   };
 
-  const ownerArray = [
-    {
-      id: 1,
-      value: 'John Nash'
-    },
-    {
-      id: 2,
-      value: 'Leonhard Euler'
-    },
-    {
-      id: 3,
-      value: 'Alan Turing'
+  useEffect(() => {
+    if (userInfo && userInfo.user.roles.includes('admin')) {
+      dispatch(getCategoryList());
+    } else {
+      navigate('/login');
     }
-  ];
+  }, [userInfo]);
 
-  const categoryArray = [
-    {
-      id: 1,
-      value: 'Clothing'
-    },
-    {
-      id: 2,
-      value: 'Jewelery'
-    },
-    {
-      id: 3,
-      value: 'Accessory'
-    }
-  ];
-
-  return (
+  return loading ? (
+    <Loader />
+  ) : error ? (
+    <Message description={error} />
+  ) : (
     <Card title="Thêm Vắc xin" loading={false} className="add-vaccine-card">
       <Row justify="space-around">
         <Col span={6}>
@@ -78,7 +73,6 @@ const AdminAddVaccine = () => {
             className="add-form"
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 16 }}
-            form={form}
             name="product-form"
             onFinish={handleSave}>
             <Form.Item
@@ -118,7 +112,7 @@ const AdminAddVaccine = () => {
                   whitespace: true
                 }
               ]}>
-              <Input />
+              <TextArea rows={6} />
             </Form.Item>
             <Form.Item
               label="Loại vắc xin"
@@ -126,14 +120,13 @@ const AdminAddVaccine = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Vui lòng chọn loại vắc xin!',
-                  whitespace: true
+                  message: 'Vui lòng chọn loại vắc xin!'
                 }
               ]}>
-              <Select>
-                {categoryArray.map((item) => (
+              <Select placeholder="Chọn loại vắc xin">
+                {categories?.data.rows.map((item) => (
                   <Option key={item.id} value={item.id}>
-                    {item.value}
+                    {item.name}
                   </Option>
                 ))}
               </Select>

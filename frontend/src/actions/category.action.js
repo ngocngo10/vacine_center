@@ -15,17 +15,18 @@ export const getCategoryList = (cateGroup) => async (dispatch) => {
     const url = cateGroup
       ? `${BASE_URL}/api/categories?categoryGroup=${cateGroup}`
       : `${BASE_URL}/api/categories`;
+
     const { data } = await axios.get(url);
-    const categories = [];
+    const carouselCategories = [];
     let index = 0;
-    while (categories.length < data.rows.length / 6.0) {
-      categories.push(data.rows.slice(index, index + 6));
+    while (carouselCategories.length < data.rows.length / 6.0) {
+      carouselCategories.push(data.rows.slice(index, index + 6));
       index = index + 6;
     }
 
     dispatch({
       type: CATEGORY_LIST_SUCCESS,
-      payload: categories
+      payload: { data, carouselCategories }
     });
   } catch (error) {
     dispatch({

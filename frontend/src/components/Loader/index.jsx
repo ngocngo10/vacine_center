@@ -6,14 +6,14 @@ import './index.css';
 const antIcon = (
   <LoadingOutlined
     style={{
-      fontSize: 30
+      fontSize: 50
     }}
     spin
   />
 );
 
 const Loader = () => {
-  return <Spin indicator={antIcon} />;
+  return <Spin className="loader" indicator={antIcon} />;
 };
 
 export default Loader;
