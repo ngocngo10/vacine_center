@@ -88,3 +88,10 @@ hr {
 .admin-add-inform-btn:hover {
   opacity: 0.9;
 }
+
+.vaccinee-subject-input {
+  margin-bottom: 30px;
+  font-family: 'WorkSans-Regular';
+  font-size: 18px;
+  line-height: 1.4;
+}

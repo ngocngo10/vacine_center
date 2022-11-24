@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal } from 'antd';
+import { Modal, Input } from 'antd';
 import TinyMceEditor from '../../components/TinyMceEditor';
 import './index.css';
 
@@ -59,12 +59,16 @@ const AdminDetailVaccine = () => {
         </section>
       </div>
       <Modal
+        className="modal-vaccine-inform"
         title="Thêm thông tin chi tiết vắc xin"
         open={open}
         onOk={hideModal}
         onCancel={hideModal}
         okText="Thêm"
-        cancelText="Hủy">
+        cancelText="Hủy"
+        width={1000}
+        height={'1vh'}>
+        <Input placeholder="Tiêu đề thông tin vắc xin" className="vaccinee-subject-input" />
         <TinyMceEditor />
       </Modal>
     </>
