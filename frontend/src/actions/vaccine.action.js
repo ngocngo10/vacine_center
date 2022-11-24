@@ -14,7 +14,10 @@ import {
   MULTI_PRODUCT_DELETE_FAIL,
   VACCINE_CREATE_REQUEST,
   VACCINE_CREATE_SUCCESS,
-  VACCINE_CREATE_FAIL
+  VACCINE_CREATE_FAIL,
+  VACCINE_EDIT_REQUEST,
+  VACCINE_EDIT_SUCCESS,
+  VACCINE_EDIT_FAIL
 } from '../constants/vaccine.constant';
 import { BASE_URL } from '../constants/base_url.constant';
 
@@ -168,6 +171,40 @@ export const createVaccine = (vaccine) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: VACCINE_CREATE_FAIL,
+      payload: error.response?.data.error
+    });
+  }
+};
+
+export const editVaccine = (vaccine) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: VACCINE_EDIT_REQUEST
+    });
+
+    const {
+      userLogin: { userInfo }
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json'
+      },
+      data: vaccine
+    };
+
+    const url = `${BASE_URL}/api/vaccines`;
+
+    const { data } = await axios.put(url, config);
+
+    dispatch({
+      type: VACCINE_EDIT_SUCCESS,
+      payload: data
+    });
+  } catch (error) {
+    dispatch({
+      type: VACCINE_EDIT_FAIL,
       payload: error.response?.data.error
     });
   }
