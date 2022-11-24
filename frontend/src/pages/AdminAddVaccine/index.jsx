@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../components/Loader';
 import { Card, Form, Input, Row, Col, Select, Divider, Button, Image } from 'antd';
 import { getCategoryList } from '../../actions/category.action';
+import { getSignedRequest } from '../../actions/upload.action';
 import Message from '../../components/Message';
 import './index.css';
 
@@ -21,7 +22,9 @@ const AdminAddVaccine = () => {
 
   const onChange = (e) => {
     let files = e.target.files;
-    console.log(files);
+    console.log('files', files);
+    console.log(files[0]);
+    dispatch(getSignedRequest(files[0]));
     let reader = new FileReader();
 
     reader.onload = (e) => {
