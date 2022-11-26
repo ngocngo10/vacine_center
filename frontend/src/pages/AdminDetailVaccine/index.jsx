@@ -4,7 +4,11 @@ import { EditOutlined, DeleteOutlined, QuestionCircleOutlined } from '@ant-desig
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import TinyMceEditor from '../../components/TinyMceEditor';
-import { createVaccineDetail, getVaccineDetails } from '../../actions/vaccine_detail.action';
+import {
+  createVaccineDetail,
+  getVaccineDetails,
+  deleteVaccineDetail
+} from '../../actions/vaccine_detail.action';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import './index.css';
@@ -24,6 +28,9 @@ const AdminDetailVaccine = () => {
 
   const vaccineDetails = useSelector((state) => state.vaccineInformList);
   const { vaccineInforms, vaccine } = vaccineDetails;
+
+  const vaccineInformDelete = useSelector((state) => state.vaccineInformDelete);
+  const { deleteSuccess } = vaccineInformDelete;
 
   const { id } = useParams();
 
@@ -51,6 +58,7 @@ const AdminDetailVaccine = () => {
 
   const handleDeleteVaccineInform = (informId) => {
     console.log('informId', informId);
+    dispatch(deleteVaccineDetail(informId));
   };
 
   useEffect(() => {
@@ -59,7 +67,7 @@ const AdminDetailVaccine = () => {
     } else {
       navigate('/login');
     }
-  }, [userInfo, id, createSuccess]);
+  }, [userInfo, id, createSuccess, deleteSuccess]);
 
   return vaccineDetails.loading ? (
     <Loader />

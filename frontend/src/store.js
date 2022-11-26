@@ -13,7 +13,9 @@ import {
 } from './reducers/vaccine.reducer';
 import {
   vaccineInformCreateReducer,
-  vaccineInformListReducer
+  vaccineInformListReducer,
+  vaccineInformDeleteReducer,
+  vaccineInformEditReducer
 } from './reducers/vaccine_detail.reducer';
 import { uploadReducer } from './reducers/upload.reducer';
 
@@ -28,7 +30,9 @@ const reducer = combineReducers({
   upload: uploadReducer,
   vaccineEdit: vaccineEditReducer,
   vaccineInformCreate: vaccineInformCreateReducer,
-  vaccineInformList: vaccineInformListReducer
+  vaccineInformList: vaccineInformListReducer,
+  vaccineInformDelete: vaccineInformDeleteReducer,
+  vaccineInformEdit: vaccineInformEditReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
