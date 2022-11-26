@@ -1,4 +1,5 @@
 import { Button, Modal } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -31,13 +32,13 @@ function useActionMenu({ selectedRow, updateEntityPath, handleDelete }) {
     <>
       <span>
         <Button type="primary" danger style={{ float: 'right' }} onClick={showModal}>
-          Xóa
+          <DeleteOutlined />
         </Button>
         <Button
           type="primary"
           onClick={handleEdit}
           style={{ background: '#ffc107', border: '#ffc107' }}>
-          Cập nhật
+          <EditOutlined />
         </Button>
         <Modal
           mask={false}

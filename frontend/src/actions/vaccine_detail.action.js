@@ -7,6 +7,7 @@ import {
   VACCINE_INFORM_LIST_SUCCESS,
   VACCINE_INFORM_LIST_FAIL
 } from '../constants/vaccine.constant';
+import { BASE_URL } from '../constants/base_url.constant';
 
 export const createVaccineDetail = (vaccineDetail) => async (dispatch, getState) => {
   try {
@@ -22,13 +23,14 @@ export const createVaccineDetail = (vaccineDetail) => async (dispatch, getState)
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
         'Content-Type': 'application/json'
-      },
-      data: vaccineDetail
+      }
     };
+
+    console.log('config', config);
 
     const url = `${BASE_URL}/api/vaccine-details`;
 
-    const { data } = await axios.post(url, config);
+    const { data } = await axios.post(url, vaccineDetail, config);
 
     dispatch({
       type: VACCINE_INFORM_CREATE_SUCCESS,
@@ -48,18 +50,13 @@ export const getVaccineDetails = (vaccineId) => async (dispatch, getState) => {
       type: VACCINE_INFORM_LIST_REQUEST
     });
 
-    const {
-      userLogin: { userInfo }
-    } = getState();
-
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
         'Content-Type': 'application/json'
       }
     };
-
     const url = `${BASE_URL}/api/vaccine-details?vaccineId=${vaccineId}`;
+    console.log('url', url);
 
     const { data } = await axios.get(url, config);
 

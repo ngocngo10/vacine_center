@@ -13,7 +13,7 @@ const TinyMceEditor = ({ contentInform, setContentInform }) => {
     <div className="ckeditor-wrapper">
       <CKEditor
         editor={ClassicEditor}
-        data="<p>Hello from CKEditor 5!</p>"
+        data=""
         config={{
           toolbar: [
             'heading',
@@ -68,15 +68,6 @@ const TinyMceEditor = ({ contentInform, setContentInform }) => {
             '/',
             { name: 'document', items: ['Source'] }
           ]
-        }}
-        onInit={(editor) => {
-          // You can store the "editor" and use when it is needed.
-          console.log('Editor is ready to use!', editor);
-          console.log('toolbar: ', Array.from(editor.ui.componentFactory.names()));
-          console.log(
-            'plugins: ',
-            ClassicEditor.builtinPlugins.map((plugin) => plugin.pluginName)
-          );
         }}
         onReady={(editor) => {
           // You can store the "editor" and use when it is needed.

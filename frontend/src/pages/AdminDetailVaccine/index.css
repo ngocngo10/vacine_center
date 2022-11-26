@@ -6,8 +6,11 @@
 
 .section-admin-vaccine-base-inform {
   display: flex;
-
   border-radius: 10px;
+  font-family: 'WorkSans-Regular';
+  font-size: 18px;
+  line-height: 26px;
+  color: var(--color-fifth);
 }
 
 .admin-vaccine-image {
@@ -30,10 +33,6 @@
 }
 
 .admin-vaccine-des {
-  font-family: 'WorkSans-Regular';
-  font-size: 18px;
-  line-height: 26px;
-  color: var(--color-fifth);
   margin-top: 50px;
 }
 
@@ -57,10 +56,10 @@ hr {
 }
 
 .admin-vaccine-category {
-  font-family: 'WorkSans-Regular';
-  font-size: 18px;
-  line-height: 26px;
-  color: var(--color-fifth);
+  margin-top: 30px;
+}
+
+.admin-vaccine-origin {
   margin-top: 30px;
 }
 
@@ -92,6 +91,17 @@ hr {
 .vaccinee-subject-input {
   margin-bottom: 30px;
   font-family: 'WorkSans-Regular';
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.admin-inform-list {
+  font-family: 'WorkSans-Medium';
+  color: var(--color-third);
+  margin-top: 30px;
+}
+
+.admin-inform-item a {
   font-size: 18px;
   line-height: 1.4;
 }

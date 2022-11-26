@@ -30,7 +30,8 @@ export const vaccineInformListReducer = (state = {}, action) => {
     case VACCINE_INFORM_LIST_SUCCESS:
       return {
         loading: false,
-        vaccineInforms: action.payload
+        vaccineInforms: action.payload.vaccineDetails,
+        vaccine: action.payload.vaccine
       };
     case VACCINE_INFORM_LIST_FAIL:
       return { loading: false, error: action.payload };

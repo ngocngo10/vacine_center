@@ -90,7 +90,7 @@ const AdminVaccinePage = () => {
     image: vaccine.image,
     name: vaccine.name,
     price: vaccine.price,
-    category: vaccine.category,
+    // category: vaccine.categories.name,
     origin: vaccine.origin,
     qty: 34
   }));
