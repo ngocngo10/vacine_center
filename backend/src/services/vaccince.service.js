@@ -8,37 +8,8 @@ module.exports = class VaccineService {
     this.repository = new VaccineRepository();
   }
   async create(bodyRequest) {
-    const categoryId = bodyRequest.categoryId;
-    const {
-      name,
-      image,
-      description,
-      origin,
-      injectionRoute,
-      contraindications,
-      drugInteractions,
-      sideEffects,
-      conserve,
-      affectPregnancy,
-      injectedNumberTotal,
-      price
-    } = bodyRequest;
-    const data = {
-      name,
-      image,
-      description,
-      origin,
-      injectionRoute,
-      contraindications,
-      drugInteractions,
-      sideEffects,
-      conserve,
-      affectPregnancy,
-      injectedNumberTotal,
-      price
-    };
     try {
-      this.repository.createVaccine(data, categoryId);
+      this.repository.create(bodyRequest);
       return;
     } catch (error) {
       throw new ErrorCreator(error.message, 500);
@@ -86,7 +57,7 @@ module.exports = class VaccineService {
       if (reqQuery.orderBy) {
         findOptions.order = [reqQuery.orderBy, reqQuery.orderType || 'DESC'];
       }
-      findOptions.include = ['categories'];
+      findOptions.include = ['category'];
 
       const vaccines = await this.repository.find(findOptions);
       return vaccines;
