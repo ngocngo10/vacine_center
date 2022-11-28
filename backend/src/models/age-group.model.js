@@ -7,7 +7,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       image: {
         type: Sequelize.STRING(2000)
-      },
+      }
     },
     {
       paranoid: true

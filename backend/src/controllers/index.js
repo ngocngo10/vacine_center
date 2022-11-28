@@ -16,5 +16,5 @@ module.exports = {
   PatientController,
   ScheduleConfig,
   UploadController,
-  AgeGroupController,
+  AgeGroupController
 };

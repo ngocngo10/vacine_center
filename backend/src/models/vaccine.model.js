@@ -6,10 +6,6 @@ module.exports = (sequelize, Sequelize) => {
         field: 'category_id',
         type: Sequelize.INTEGER
       },
-      ageGroupId: {
-        field: 'age_group_id',
-        type: Sequelize.INTEGER
-      },
       name: {
         type: Sequelize.STRING(5000)
       },
