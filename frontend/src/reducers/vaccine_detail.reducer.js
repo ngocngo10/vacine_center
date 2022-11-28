@@ -10,7 +10,10 @@ import {
   VACCINE_INFORM_EDIT_FAIL,
   VACCINE_INFORM_DELETE_REQUEST,
   VACCINE_INFORM_DELETE_SUCCESS,
-  VACCINE_INFORM_DELETE_FAIL
+  VACCINE_INFORM_DELETE_FAIL,
+  VACCINE_INFORM_REQUEST,
+  VACCINE_INFORM_SUCCESS,
+  VACCINE_INFORM_FAIL
 } from '../constants/vaccine.constant';
 
 export const vaccineInformCreateReducer = (state = {}, action) => {
@@ -72,6 +75,22 @@ export const vaccineInformListReducer = (state = {}, action) => {
         vaccine: action.payload.vaccine
       };
     case VACCINE_INFORM_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const vaccineInformReducer = (state = {}, action) => {
+  switch (action.type) {
+    case VACCINE_INFORM_REQUEST:
+      return { loading: true };
+    case VACCINE_INFORM_SUCCESS:
+      return {
+        loading: false,
+        vaccineInformItem: action.payload
+      };
+    case VACCINE_INFORM_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Modal, Input, List, Button, Popconfirm } from 'antd';
+import { Modal, Input, List, Button, Popconfirm, Form } from 'antd';
 import { EditOutlined, DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate, Link } from 'react-router-dom';
@@ -7,32 +7,49 @@ import TinyMceEditor from '../../components/TinyMceEditor';
 import {
   createVaccineDetail,
   getVaccineDetails,
-  deleteVaccineDetail
+  deleteVaccineDetail,
+  editVaccineDetail
 } from '../../actions/vaccine_detail.action';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import './index.css';
+import {
+  VACCINE_INFORM_CREATE_REQUEST,
+  VACCINE_INFORM_EDIT_REQUEST,
+  VACCINE_INFORM_DELETE_REQUEST
+} from '../../constants/vaccine.constant';
 
 const AdminDetailVaccine = () => {
   const [open, setOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState();
+  const [okText, setOkText] = useState();
   const [contentInform, setContentInform] = useState();
-  const vaccineInformTitleInput = useRef();
+  const [titleInform, setTitleInform] = useState();
+  const [informId, setInformId] = useState();
+  const [action, setAction] = useState();
+  const vaccineInformTitleRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { id } = useParams();
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  const vaccineList = useSelector((state) => state.vaccineList);
+  const { vaccines } = vaccineList;
+  const vaccine = vaccines?.find((item) => item.id == id);
 
   const vaccineInformCreate = useSelector((state) => state.vaccineInformCreate);
   const { createSuccess } = vaccineInformCreate;
 
   const vaccineDetails = useSelector((state) => state.vaccineInformList);
-  const { vaccineInforms, vaccine } = vaccineDetails;
+  const { vaccineInforms } = vaccineDetails;
 
   const vaccineInformDelete = useSelector((state) => state.vaccineInformDelete);
   const { deleteSuccess } = vaccineInformDelete;
 
-  const { id } = useParams();
+  const vaccineInformEdit = useSelector((state) => state.vaccineInformEdit);
+  const { editSuccess } = vaccineInformEdit;
 
   const showModal = () => {
     setOpen(true);
@@ -41,23 +58,50 @@ const AdminDetailVaccine = () => {
     setOpen(false);
   };
 
+  const onChangeTitleInform = (e) => {
+    setTitleInform(e.target.value);
+  };
+
+  const handleOnClick = () => {
+    setTitleInform('');
+    setContentInform('');
+    setModalTitle('Thêm thông tin chi tiết vắc xin');
+    setOkText('Thêm');
+    showModal();
+  };
+
   const handleOk = () => {
-    const vaccineInformTitle = vaccineInformTitleInput.current.input.value;
+    const vaccineInformTitle = vaccineInformTitleRef.current.input.value;
     const vaccineDetail = {
       title: vaccineInformTitle,
       content: contentInform,
       vaccineId: id
     };
-    dispatch(createVaccineDetail(vaccineDetail));
+
+    console.log("!okText.localeCompare('Thêm')", !okText.localeCompare('Thêm'));
+    if (!okText.localeCompare('Thêm')) {
+      setAction(VACCINE_INFORM_CREATE_REQUEST);
+      dispatch(createVaccineDetail(vaccineDetail));
+    } else {
+      setAction(VACCINE_INFORM_EDIT_REQUEST);
+      dispatch(editVaccineDetail({ vaccineDetail, informId }));
+    }
     hideModal();
   };
 
   const handleEditVaccineInform = (informId) => {
-    console.log('informId', informId);
+    setInformId(informId);
+    const vaccineInformItem = vaccineInforms.find((item) => item.id == informId);
+    setContentInform(vaccineInformItem.content);
+    setTitleInform(vaccineInformItem.title);
+    setModalTitle('Chỉnh sửa thông tin chi tiết vắc xin');
+    setOkText('Chỉnh sửa');
+    showModal();
   };
 
   const handleDeleteVaccineInform = (informId) => {
-    console.log('informId', informId);
+    setAction(VACCINE_INFORM_DELETE_REQUEST);
+    setInformId(informId);
     dispatch(deleteVaccineDetail(informId));
   };
 
@@ -67,7 +111,18 @@ const AdminDetailVaccine = () => {
     } else {
       navigate('/login');
     }
-  }, [userInfo, id, createSuccess, deleteSuccess]);
+  }, [userInfo, id, createSuccess, deleteSuccess, editSuccess]);
+
+  let message;
+  if (deleteSuccess && !action.localeCompare(VACCINE_INFORM_DELETE_REQUEST)) {
+    message = <Message description="Xóa thông tin vắc xin thành công!" type="success" />;
+  }
+  if (editSuccess && !action.localeCompare(VACCINE_INFORM_EDIT_REQUEST)) {
+    message = <Message description="Cập nhật thông tin vắc xin thành công!" type="success" />;
+  }
+  if (createSuccess && !action.localeCompare(VACCINE_INFORM_CREATE_REQUEST)) {
+    message = <Message description="Tạo thông tin vắc xin thành công!" type="success" />;
+  }
 
   return vaccineDetails.loading ? (
     <Loader />
@@ -75,6 +130,7 @@ const AdminDetailVaccine = () => {
     <Message description={vaccineDetails.error} />
   ) : (
     <>
+      {message}
       <div className="admin-detail-vaccine">
         <section className="section-admin-vaccine-base-inform">
           <div className="admin-vaccine-image">
@@ -89,15 +145,15 @@ const AdminDetailVaccine = () => {
               {vaccine?.origin}
             </p>
             <p className="admin-vaccine-price">{vaccine?.price}</p>
-            <p className="admin-vaccine-category">
+            {/* <p className="admin-vaccine-category">
               <span>Loại vắc xin: </span>
               {vaccine?.category}
-            </p>
+            </p> */}
           </div>
         </section>
         <section className="section-admin-vaccine-detail-inform">
           <h3 className="admin-inform-heading">Thông tin chi tiết vaccine</h3>
-          <button className="admin-add-inform-btn" onClick={showModal}>
+          <button className="admin-add-inform-btn" onClick={handleOnClick}>
             Thêm thông tin chi tiết
           </button>
           <List
@@ -143,19 +199,24 @@ const AdminDetailVaccine = () => {
       </div>
       <Modal
         className="modal-vaccine-inform"
-        title="Thêm thông tin chi tiết vắc xin"
+        title={modalTitle}
         open={open}
         onOk={handleOk}
         onCancel={hideModal}
-        okText="Thêm"
+        okText={okText}
         cancelText="Hủy"
         width={1000}>
-        <Input
-          ref={vaccineInformTitleInput}
-          placeholder="Tiêu đề thông tin vắc xin"
-          className="vaccinee-subject-input"
-        />
-        <TinyMceEditor contentInform={contentInform} setContentInform={setContentInform} />
+        <Form>
+          <Form.Item label="Tiêu đề thông tin vắc xin" className="vaccinee-subject-input">
+            <Input
+              ref={vaccineInformTitleRef}
+              placeholder="Tiêu đề thông tin vắc xin"
+              value={titleInform}
+              onChange={onChangeTitleInform}
+            />
+          </Form.Item>
+          <TinyMceEditor contentInform={contentInform} setContentInform={setContentInform} />
+        </Form>
       </Modal>
     </>
   );

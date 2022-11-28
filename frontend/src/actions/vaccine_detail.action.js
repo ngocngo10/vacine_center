@@ -11,7 +11,10 @@ import {
   VACCINE_INFORM_EDIT_FAIL,
   VACCINE_INFORM_DELETE_REQUEST,
   VACCINE_INFORM_DELETE_SUCCESS,
-  VACCINE_INFORM_DELETE_FAIL
+  VACCINE_INFORM_DELETE_FAIL,
+  VACCINE_INFORM_REQUEST,
+  VACCINE_INFORM_SUCCESS,
+  VACCINE_INFORM_FAIL
 } from '../constants/vaccine.constant';
 import { BASE_URL } from '../constants/base_url.constant';
 
@@ -124,7 +127,6 @@ export const getVaccineDetails = (vaccineId) => async (dispatch, getState) => {
       }
     };
     const url = `${BASE_URL}/api/vaccine-details?vaccineId=${vaccineId}`;
-    console.log('url', url);
 
     const { data } = await axios.get(url, config);
 
@@ -135,6 +137,28 @@ export const getVaccineDetails = (vaccineId) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: VACCINE_INFORM_LIST_FAIL,
+      payload: error.response?.data.error
+    });
+  }
+};
+
+export const getVaccineDetailItem = (informId) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: VACCINE_INFORM_REQUEST
+    });
+
+    const url = `${BASE_URL}/api/vaccine-details/${informId}`;
+
+    const { data } = await axios.get(url);
+
+    dispatch({
+      type: VACCINE_INFORM_SUCCESS,
+      payload: data
+    });
+  } catch (error) {
+    dispatch({
+      type: VACCINE_INFORM_FAIL,
       payload: error.response?.data.error
     });
   }

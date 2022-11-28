@@ -13,7 +13,7 @@ const TinyMceEditor = ({ contentInform, setContentInform }) => {
     <div className="ckeditor-wrapper">
       <CKEditor
         editor={ClassicEditor}
-        data=""
+        data={contentInform}
         config={{
           toolbar: [
             'heading',
