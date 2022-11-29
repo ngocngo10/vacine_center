@@ -16,6 +16,7 @@ import {
   VACCINE_EDIT_SUCCESS,
   VACCINE_EDIT_FAIL
 } from '../constants/vaccine.constant';
+import { logout } from './user.action';
 import { BASE_URL } from '../constants/base_url.constant';
 
 export const getVaccineList = (query) => async (dispatch) => {
@@ -77,6 +78,9 @@ export const deleteSingleVaccine = (vaccineId) => async (dispatch, getState) => 
       payload: data
     });
   } catch (error) {
+    if (error.response?.status == 401 || error.response?.status == 403) {
+      dispatch(logout());
+    }
     dispatch({
       type: SINGLE_PRODUCT_DELETE_FAIL,
       payload: error.response.data.error
@@ -111,6 +115,9 @@ export const deleteMultiVaccine = (ids) => async (dispatch, getState) => {
       payload: data
     });
   } catch (error) {
+    if (error.response?.status == 401 || error.response?.status == 403) {
+      dispatch(logout());
+    }
     dispatch({
       type: MULTI_PRODUCT_DELETE_FAIL,
       payload: error.response?.data.error
@@ -158,6 +165,9 @@ export const createVaccine = (vaccine) => async (dispatch, getState) => {
       payload: result
     });
   } catch (error) {
+    if (error.response?.status == 401 || error.response?.status == 403) {
+      dispatch(logout());
+    }
     dispatch({
       type: VACCINE_CREATE_FAIL,
       payload: error.response?.data.error
@@ -192,6 +202,9 @@ export const editVaccine = (vaccine) => async (dispatch, getState) => {
       payload: data
     });
   } catch (error) {
+    if (error.response?.status == 401 || error.response?.status == 403) {
+      dispatch(logout());
+    }
     dispatch({
       type: VACCINE_EDIT_FAIL,
       payload: error.response?.data.error

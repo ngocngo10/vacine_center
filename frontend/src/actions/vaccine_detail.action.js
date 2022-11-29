@@ -16,6 +16,7 @@ import {
   VACCINE_INFORM_SUCCESS,
   VACCINE_INFORM_FAIL
 } from '../constants/vaccine.constant';
+import { logout } from './user.action';
 import { BASE_URL } from '../constants/base_url.constant';
 
 export const createVaccineDetail = (vaccineDetail) => async (dispatch, getState) => {
@@ -43,6 +44,9 @@ export const createVaccineDetail = (vaccineDetail) => async (dispatch, getState)
       payload: data
     });
   } catch (error) {
+    if (error.response?.status == 401 || error.response?.status == 403) {
+      dispatch(logout());
+    }
     dispatch({
       type: VACCINE_INFORM_CREATE_FAIL,
       payload: error.response?.data.error
@@ -74,6 +78,9 @@ export const deleteVaccineDetail = (informId) => async (dispatch, getState) => {
       payload: data
     });
   } catch (error) {
+    if (error.response?.status == 401 || error.response?.status == 403) {
+      dispatch(logout());
+    }
     dispatch({
       type: VACCINE_INFORM_DELETE_FAIL,
       payload: error.response?.data.error
@@ -108,6 +115,9 @@ export const editVaccineDetail =
         payload: data
       });
     } catch (error) {
+      if (error.response?.status == 401 || error.response?.status == 403) {
+        dispatch(logout());
+      }
       dispatch({
         type: VACCINE_INFORM_EDIT_FAIL,
         payload: error.response?.data.error

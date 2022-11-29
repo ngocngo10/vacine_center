@@ -1,6 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Card, Form, Input, Row, Col, Select, Divider, Button, Image } from 'antd';
+import {
+  Card,
+  InputNumber,
+  Checkbox,
+  Form,
+  Input,
+  Row,
+  Col,
+  Select,
+  Divider,
+  Button,
+  Image
+} from 'antd';
 import { useParams } from 'react-router-dom';
 import { getCategoryList } from '../../actions/category.action';
 import './index.css';
@@ -86,6 +98,21 @@ const AdminUpdateVaccine = () => {
     }
   ];
 
+  const options = [
+    {
+      label: 'Apple',
+      value: 'Apple'
+    },
+    {
+      label: 'Pear',
+      value: 'Pear'
+    },
+    {
+      label: 'Orange',
+      value: 'Orange'
+    }
+  ];
+
   return (
     <Card title="Cập nhật Vắc xin" loading={false} className="add-vaccine-card">
       <Row justify="space-around">
@@ -106,7 +133,7 @@ const AdminUpdateVaccine = () => {
           <Form
             ref={formRef}
             className="add-form"
-            labelCol={{ span: 4 }}
+            labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             name="product-form"
             onFinish={handleSave}>
@@ -138,6 +165,18 @@ const AdminUpdateVaccine = () => {
               <Input />
             </Form.Item>
             <Form.Item
+              label="Số mũi theo phác đồ"
+              name="injectedNumberTotal"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập số mũi theo phác đồ!',
+                  whitespace: true
+                }
+              ]}>
+              <InputNumber min={1} max={10} />
+            </Form.Item>
+            <Form.Item
               label="Mô tả"
               name="description"
               rules={[
@@ -147,29 +186,44 @@ const AdminUpdateVaccine = () => {
                   whitespace: true
                 }
               ]}>
-              <TextArea rows={6} />
+              <TextArea rows={4} />
             </Form.Item>
             <Form.Item
-              label="Loại vắc xin"
+              label="Phòng bệnh"
               name="categoryId"
               rules={[
                 {
                   required: true,
-                  message: 'Vui lòng chọn loại vắc xin!',
-                  whitespace: true
+                  message: 'Vui lòng chọn loại bệnh phòng của vắc xin!'
                 }
               ]}>
-              <Select>
+              <Select placeholder="Chọn loại vắc xin">
                 {categories?.data.rows.map((item) => (
-                  <Option key={item.id} value={item.name}>
+                  <Option key={item.id} value={item.id}>
                     {item.name}
                   </Option>
                 ))}
               </Select>
             </Form.Item>
+            <Form.Item
+              label="Đối tượng"
+              name="doi-tuong"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng chọn đối tượng được dùng!'
+                }
+              ]}>
+              <Checkbox.Group options={options} />
+            </Form.Item>
             <Divider />
             <Row justify="center">
-              <Button type="primary" className="btn-cancel">
+              <Button
+                type="primary"
+                className="btn-cancel"
+                onClick={() => {
+                  navigate('/admin-home/vaccines');
+                }}>
                 Hủy
               </Button>
               <Button
@@ -178,13 +232,6 @@ const AdminUpdateVaccine = () => {
                 className="btn-add"
                 style={{ background: '#198754', border: '#198754' }}>
                 Cập nhật
-              </Button>
-              <Button
-                type="primary"
-                htmlType="reset"
-                className="btn-reset"
-                style={{ background: '#ffc107', border: '##ffc107' }}>
-                Reset
               </Button>
             </Row>
           </Form>

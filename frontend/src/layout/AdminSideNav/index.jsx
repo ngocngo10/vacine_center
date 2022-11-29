@@ -54,16 +54,6 @@ function AdminSideNav() {
             <span className="label">Profile</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="7">
-          <NavLink to="/sign-in">
-            <span className="label">Sign In</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="8">
-          <NavLink to="/sign-up">
-            <span className="label">Sign Up</span>
-          </NavLink>
-        </Menu.Item>
       </Menu>
     </>
   );

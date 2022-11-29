@@ -1,7 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../components/Loader';
-import { Card, Form, Input, Row, Col, Select, Divider, Button, Image } from 'antd';
+import {
+  Card,
+  InputNumber,
+  Checkbox,
+  Form,
+  Input,
+  Row,
+  Col,
+  Select,
+  Divider,
+  Button,
+  Image
+} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { getCategoryList } from '../../actions/category.action';
 import { createVaccine } from '../../actions/vaccine.action';
@@ -37,6 +49,7 @@ const AdminAddVaccine = () => {
 
   const handleAdd = (values) => {
     values.image = imageFile;
+    console.log(values, 'values');
     dispatch(createVaccine(values));
   };
 
@@ -47,6 +60,21 @@ const AdminAddVaccine = () => {
       navigate('/login');
     }
   }, [userInfo]);
+
+  const options = [
+    {
+      label: 'Apple',
+      value: 'Apple'
+    },
+    {
+      label: 'Pear',
+      value: 'Pear'
+    },
+    {
+      label: 'Orange',
+      value: 'Orange'
+    }
+  ];
 
   return loading ? (
     <Loader />
@@ -71,7 +99,7 @@ const AdminAddVaccine = () => {
         <Col span={12}>
           <Form
             className="add-form"
-            labelCol={{ span: 4 }}
+            labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             name="product-form"
             onFinish={handleAdd}>
@@ -104,15 +132,15 @@ const AdminAddVaccine = () => {
             </Form.Item>
             <Form.Item
               label="Số mũi theo phác đồ"
-              name=""
+              name="injectedNumberTotal"
               rules={[
                 {
                   required: true,
-                  message: 'Vui lòng nhập nguồn gốc vắc xin!',
+                  message: 'Vui lòng nhập số mũi theo phác đồ!',
                   whitespace: true
                 }
               ]}>
-              <Input />
+              <InputNumber min={1} max={10} />
             </Form.Item>
             <Form.Item
               label="Mô tả"
@@ -124,15 +152,15 @@ const AdminAddVaccine = () => {
                   whitespace: true
                 }
               ]}>
-              <TextArea rows={6} />
+              <TextArea rows={4} />
             </Form.Item>
             <Form.Item
-              label="Loại vắc xin"
+              label="Phòng bệnh"
               name="categoryId"
               rules={[
                 {
                   required: true,
-                  message: 'Vui lòng chọn loại vắc xin!'
+                  message: 'Vui lòng chọn loại bệnh phòng của vắc xin!'
                 }
               ]}>
               <Select placeholder="Chọn loại vắc xin">
@@ -142,6 +170,17 @@ const AdminAddVaccine = () => {
                   </Option>
                 ))}
               </Select>
+            </Form.Item>
+            <Form.Item
+              label="Đối tượng"
+              name="doi-tuong"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng chọn đối tượng được dùng!'
+                }
+              ]}>
+              <Checkbox.Group options={options} />
             </Form.Item>
             <Divider />
             <Row justify="center">
