@@ -16,7 +16,6 @@ module.exports = class VaccineService {
   async create(bodyRequest) {
     try {
       const { ageGroupIds, ...data } = bodyRequest;
-      console.log(data);
       const vaccine = await this.repository.create(data);
 
       if (ageGroupIds?.length) {
@@ -33,12 +32,19 @@ module.exports = class VaccineService {
   }
 
   async update(id, body) {
-    const findCondition = { id };
-    const updateData = {
-      ...body
-    };
+    const { ageGroupIds, ...updateData } = body;
     try {
-      await this.repository.update(findCondition, updateData);
+      await this.ageGroupVaccineRepo.model.destroy({
+        where: {
+          vaccineId: id,
+        }
+      });
+      const newsAgeGroupVaccines = ageGroupIds.map(item => ({
+        ageGroupId: item,
+        vaccineId: id
+      }))
+      await this.ageGroupVaccineRepo.model.bulkCreate(newsAgeGroupVaccines);
+      await this.repository.update(id, updateData);
       return;
     } catch (error) {
       throw new ErrorCreator(error.message, 500);
