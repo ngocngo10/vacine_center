@@ -36,14 +36,18 @@ module.exports = class VaccineService {
     try {
       await this.ageGroupVaccineRepo.model.destroy({
         where: {
-          vaccineId: id,
-        }
+          vaccineId: +id
+        },
+        force: true
       });
-      const newsAgeGroupVaccines = ageGroupIds.map(item => ({
+      console.log('ageGroupIds', ageGroupIds);
+      const newsAgeGroupVaccines = ageGroupIds.map((item) => ({
         ageGroupId: item,
-        vaccineId: id
-      }))
+        vaccineId: +id
+      }));
+      console.log(1, newsAgeGroupVaccines);
       await this.ageGroupVaccineRepo.model.bulkCreate(newsAgeGroupVaccines);
+      console.log(2);
       await this.repository.update(id, updateData);
       return;
     } catch (error) {

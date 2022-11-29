@@ -13,7 +13,10 @@ import {
   VACCINE_CREATE_FAIL,
   VACCINE_EDIT_REQUEST,
   VACCINE_EDIT_SUCCESS,
-  VACCINE_EDIT_FAIL
+  VACCINE_EDIT_FAIL,
+  VACCINE_REQUEST,
+  VACCINE_SUCCESS,
+  VACCINE_FAIL
 } from '../constants/vaccine.constant';
 
 const initialState = {
@@ -40,22 +43,21 @@ export const vaccineListReducer = (state = initialState, action) => {
   }
 };
 
-// export const vaccineDetailReducer = (state = {}, action) => {
-//   switch (action.type) {
-//     case VACCINE_DETAIL_REQUEST:
-//       return { ...state, loading: true };
-//     case VACCINE_DETAIL_SUCCESS:
-//       return {
-//         ...state,
-//         loading: false,
-//         vaccine: action.payload
-//       };
-//     case VACCINE_DETAIL_FAIL:
-//       return { ...state, loading: false, error: action.payload };
-//     default:
-//       return state;
-//   }
-// };
+export const vaccineReducer = (state = {}, action) => {
+  switch (action.type) {
+    case VACCINE_REQUEST:
+      return { loading: true };
+    case VACCINE_SUCCESS:
+      return {
+        loading: false,
+        vaccine: action.payload.vaccine
+      };
+    case VACCINE_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
 
 export const vaccineSingleDeleteReducer = (state = {}, action) => {
   switch (action.type) {

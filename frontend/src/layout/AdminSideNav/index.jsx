@@ -12,32 +12,28 @@ function AdminSideNav() {
     <>
       <h1 className="brand">MEDDICAL</h1>
       <hr />
-      <Menu them="dark" mode="inline" className="admin-menu" defaultSelectedKeys={['2']}>
+      <Menu them="dark" mode="inline" className="admin-menu" defaultSelectedKeys={['vaccines']}>
         <Menu.Item key="1" className="admin-menu__item">
           <NavLink to="/users">
-            <img className="icon" src="users-icon.svg" alt="Users Icon" />
             <span className="label">Người dùng</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="2">
-          <NavLink to="vaccines">
-            <img className="icon" src="vaccine-icon.svg" alt="Vaccine Icon" />
-            <span className="label">Vắc xin</span>
-          </NavLink>
-        </Menu.Item>
+        {/* <Menu.Item key="2"> */}
+        <Menu.SubMenu key="submenu-2" title="Vắc xin">
+          <Menu.Item key="vaccines">
+            <NavLink to="vaccines">Danh sách</NavLink>
+          </Menu.Item>
+          <Menu.Item key="add-vaccine">
+            <NavLink to="vaccines/add-vaccine">Thêm</NavLink>
+          </Menu.Item>
+        </Menu.SubMenu>
         <Menu.Item key="3">
           <NavLink to="/billing">
-            <img className="icon" src="categories-icon.svg" alt="Categories Icon" />
             <span className="label">Loại vắc xin</span>
           </NavLink>
         </Menu.Item>
         <Menu.Item key="4">
           <NavLink to="/rtl">
-            <span
-              className="icon"
-              style={{
-                background: page === 'rtl' ? color : ''
-              }}></span>
             <span className="label">RTL</span>
           </NavLink>
         </Menu.Item>

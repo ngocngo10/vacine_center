@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { Image } from 'antd';
+import Loader from '../../components/Loader';
 import Header from '../../components/table/Header';
 import useDataTable from '../../components/table/DataTable';
 import {
@@ -43,7 +44,7 @@ const AdminVaccinePage = () => {
       key: 'key'
     },
     {
-      title: 'Image',
+      title: 'Ảnh',
       dataIndex: 'image',
       key: 'image',
       render: (theImageURL) => (
@@ -127,7 +128,9 @@ const AdminVaccinePage = () => {
     handleChangePage: getVaccines
   });
 
-  return error ? (
+  return loading ? (
+    <Loader />
+  ) : error ? (
     <Message description={error} />
   ) : data.totalElements ? (
     <div className="vaccines-card">

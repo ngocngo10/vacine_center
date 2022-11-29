@@ -3,13 +3,14 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { userRegisterReducer, userLoginReducer } from './reducers/user.reducer';
-import { categoryListReducer } from './reducers/category.reducer';
+import { categoryListReducer, ageGroupsCategoryListReducer } from './reducers/category.reducer';
 import {
   vaccineListReducer,
   vaccineSingleDeleteReducer,
   vaccineMultiDeleteReducer,
   vaccineCreateReducer,
-  vaccineEditReducer
+  vaccineEditReducer,
+  vaccineReducer
 } from './reducers/vaccine.reducer';
 import {
   vaccineInformCreateReducer,
@@ -32,7 +33,9 @@ const reducer = combineReducers({
   vaccineInformCreate: vaccineInformCreateReducer,
   vaccineInformList: vaccineInformListReducer,
   vaccineInformDelete: vaccineInformDeleteReducer,
-  vaccineInformEdit: vaccineInformEditReducer
+  vaccineInformEdit: vaccineInformEditReducer,
+  ageGroupsCategoryList: ageGroupsCategoryListReducer,
+  vaccine: vaccineReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

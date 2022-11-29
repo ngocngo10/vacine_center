@@ -15,7 +15,7 @@ import {
   Image
 } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { getCategoryList } from '../../actions/category.action';
+import { getCategoryList, getAgeGroups } from '../../actions/category.action';
 import { createVaccine } from '../../actions/vaccine.action';
 import Message from '../../components/Message';
 import './index.css';
@@ -35,6 +35,9 @@ const AdminAddVaccine = () => {
   const categoryList = useSelector((state) => state.categoryList);
   const { loading, error, categories } = categoryList;
 
+  const ageGroupsCategoryList = useSelector((state) => state.ageGroupsCategoryList);
+  const { ageGroups } = ageGroupsCategoryList;
+
   const onChange = (e) => {
     let files = e.target.files;
     setImageFile(files[0]);
@@ -49,36 +52,21 @@ const AdminAddVaccine = () => {
 
   const handleAdd = (values) => {
     values.image = imageFile;
-    console.log(values, 'values');
-    // dispatch(createVaccine(values));
+    dispatch(createVaccine(values));
   };
 
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('admin')) {
       dispatch(getCategoryList());
+      dispatch(getAgeGroups());
     } else {
       navigate('/login');
     }
   }, [userInfo]);
 
-  const options = [
-    {
-      label: 'Apple',
-      value: 'Apple'
-    },
-    {
-      label: 'Pear',
-      value: 'Pear'
-    },
-    {
-      label: 'Orange',
-      value: 'Orange'
-    }
-  ];
-
-  return loading ? (
+  return userLogin.loading || categoryList.loading || ageGroupsCategoryList.loading ? (
     <Loader />
-  ) : error ? (
+  ) : userLogin.error || categoryList.error || ageGroupsCategoryList.error ? (
     <Message description={error} />
   ) : (
     <Card title="Thêm Vắc xin" loading={false} className="add-vaccine-card">
@@ -164,7 +152,7 @@ const AdminAddVaccine = () => {
                 }
               ]}>
               <Select placeholder="Chọn loại vắc xin">
-                {categories?.data.rows.map((item) => (
+                {categories?.map((item) => (
                   <Option key={item.id} value={item.id}>
                     {item.name}
                   </Option>
@@ -180,7 +168,9 @@ const AdminAddVaccine = () => {
                   message: 'Vui lòng chọn đối tượng được dùng!'
                 }
               ]}>
-              <Checkbox.Group options={options} />
+              <Checkbox.Group
+                options={ageGroups?.map((item) => ({ label: item.name, value: item.id }))}
+              />
             </Form.Item>
             <Divider />
             <Row justify="center">

@@ -16,8 +16,9 @@
   background-color: var(--color-primary);
   margin-top: 50px;
   border-right: none;
+  border-left: 2px solid white;
   font-family: 'WorkSans-Regular';
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.4;
   color: var(--color-third);
 }
@@ -40,8 +41,8 @@
   vertical-align: middle;
 }
 
-.ant-menu > .ant-menu-item-selected {
+/* .ant-menu > .ant-menu-item-selected {
   color: #000;
   border-radius: 10px;
   background-color: #fff !important;
-}
+} */
