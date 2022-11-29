@@ -122,7 +122,7 @@ const AdminVaccinePage = () => {
   } = useDataTable({
     columns: columns,
     dataSource: data,
-    updateEntityPath: `admin-home/update-vaccines`,
+    updateEntityPath: 'admin-home/vaccines/update-vaccine',
     handleDelete: handleDeleteSingleVaccine,
     handleChangePage: getVaccines
   });
@@ -133,7 +133,7 @@ const AdminVaccinePage = () => {
     <div className="vaccines-card">
       <>
         <Header
-          addNewPath="admin-home/add-vaccines"
+          addNewPath="admin-home/vaccines/add-vaccine"
           selectedRowKeys={selectedRowKeys}
           hasSelected={hasSelected}
           handleMultiDelete={handleDeleteMultiVaccine}

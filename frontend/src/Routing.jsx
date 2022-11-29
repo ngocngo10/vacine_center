@@ -22,8 +22,8 @@ const Routing = () => {
         <Route index element={<AdminVaccinePage />} />
         <Route path="vaccines" element={<AdminVaccinePage />} />
         <Route path="vaccines/:id" element={<AdminDetailVaccine />} />
-        <Route path="add-vaccines" element={<AdminAddVaccine />} />
-        <Route path="update-vaccines/:id" element={<AdminUpdateVaccine />} />
+        <Route path="vaccines/add-vaccine" element={<AdminAddVaccine />} />
+        <Route path="vaccines/update-vaccine/:id" element={<AdminUpdateVaccine />} />
       </Route>
     </Routes>
   );

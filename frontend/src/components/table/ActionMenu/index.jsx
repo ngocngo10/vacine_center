@@ -7,6 +7,8 @@ import './index.css';
 
 function useActionMenu({ selectedRow, updateEntityPath, handleDelete }) {
   const [open, setOpen] = useState(false);
+  const [actionEdit, setActionEdit] = useState(false);
+  const navigate = useNavigate();
 
   const showModal = () => {
     setOpen(true);
@@ -16,12 +18,11 @@ function useActionMenu({ selectedRow, updateEntityPath, handleDelete }) {
     setOpen(false);
   };
 
-  const navigate = useNavigate();
-
   const handleEdit = () => {
-    const updatePath = '/' + updateEntityPath + '/' + selectedRow?.key;
-    navigate(updatePath);
+    setActionEdit(true);
   };
+  const updatePath = '/' + updateEntityPath + '/' + selectedRow?.key;
+  if (actionEdit) navigate(updatePath);
 
   const handleDeleteSingle = () => {
     hideModal();

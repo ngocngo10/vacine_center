@@ -27,6 +27,7 @@ module.exports = class VaccineDetailService {
     const findOptions = {};
     let vaccine;
     const result = {};
+    console.log('reqQuery.vaccineId', reqQuery.vaccineId);
     if (reqQuery.vaccineId) {
       findOptions.where = {
         vaccineId: reqQuery.vaccineId

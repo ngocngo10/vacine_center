@@ -52,28 +52,6 @@ export const getVaccineList = (query) => async (dispatch) => {
   }
 };
 
-// export const getVaccineDetails = (vaccineId) => async (dispatch) => {
-//   try {
-//     dispatch({
-//       type: VACCINE_DETAIL_REQUEST
-//     });
-
-//     const url = `${BASE_URL}/api/vaccine-details?vaccineId=${vaccineId}`;
-
-//     const { data } = await axios.get(url);
-
-//     dispatch({
-//       type: VACCINE_DETAIL_SUCCESS,
-//       payload: data
-//     });
-//   } catch (error) {
-//     dispatch({
-//       type: VACCINE_DETAIL_FAIL,
-//       payload: error.response.data.error
-//     });
-//   }
-// };
-
 export const deleteSingleVaccine = (vaccineId) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -146,6 +124,20 @@ export const createVaccine = (vaccine) => async (dispatch, getState) => {
       type: VACCINE_CREATE_REQUEST
     });
 
+    const fileName = vaccine.image.name;
+    const fileType = vaccine.image.type;
+    const uploadUrl = `${BASE_URL}/api/upload/get-s3-signed-url?file-name=${fileName}&file-type=${fileType}&bucket-name=vaccines`;
+    const { data } = await axios.get(uploadUrl);
+    const sendData = { ...vaccine, image: data.url };
+
+    const uploadConfig = {
+      headers: {
+        'Content-Type': fileType
+      }
+    };
+
+    await axios.put(data.signedRequest, vaccine.image, uploadConfig);
+
     const {
       userLogin: { userInfo }
     } = getState();
@@ -154,17 +146,16 @@ export const createVaccine = (vaccine) => async (dispatch, getState) => {
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
         'Content-Type': 'application/json'
-      },
-      data: vaccine
+      }
     };
 
     const url = `${BASE_URL}/api/vaccines`;
 
-    const { data } = await axios.post(url, config);
+    const { result } = await axios.post(url, sendData, config);
 
     dispatch({
       type: VACCINE_CREATE_SUCCESS,
-      payload: data
+      payload: result
     });
   } catch (error) {
     dispatch({

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../components/Loader';
 import { Card, Form, Input, Row, Col, Select, Divider, Button, Image } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { getCategoryList } from '../../actions/category.action';
-import { getSignedRequest } from '../../actions/upload.action';
+import { createVaccine } from '../../actions/vaccine.action';
 import Message from '../../components/Message';
 import './index.css';
 
@@ -14,7 +14,8 @@ const { TextArea } = Input;
 const AdminAddVaccine = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [imageSrc, setImageSrc] = useState();
+  const [imageSrc, setImageSrc] = useState('');
+  const [imageFile, setImageFile] = useState();
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -24,22 +25,19 @@ const AdminAddVaccine = () => {
 
   const onChange = (e) => {
     let files = e.target.files;
-    console.log('files', files);
-    console.log(files[0]);
-    dispatch(getSignedRequest(files[0]));
+    setImageFile(files[0]);
     let reader = new FileReader();
 
     reader.onload = (e) => {
-      console.log(e.target.result);
       setImageSrc(e.target.result);
     };
 
     reader.readAsDataURL(files[0]);
   };
 
-  const handleSave = (values) => {
-    console.log('onFinish', values);
-    // call save API
+  const handleAdd = (values) => {
+    values.image = imageFile;
+    dispatch(createVaccine(values));
   };
 
   useEffect(() => {
@@ -76,7 +74,7 @@ const AdminAddVaccine = () => {
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 16 }}
             name="product-form"
-            onFinish={handleSave}>
+            onFinish={handleAdd}>
             <Form.Item
               label="Tên"
               name="name"
@@ -105,6 +103,18 @@ const AdminAddVaccine = () => {
               <Input />
             </Form.Item>
             <Form.Item
+              label="Số mũi theo phác đồ"
+              name=""
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập nguồn gốc vắc xin!',
+                  whitespace: true
+                }
+              ]}>
+              <Input />
+            </Form.Item>
+            <Form.Item
               label="Mô tả"
               name="description"
               rules={[
@@ -118,7 +128,7 @@ const AdminAddVaccine = () => {
             </Form.Item>
             <Form.Item
               label="Loại vắc xin"
-              name="category"
+              name="categoryId"
               rules={[
                 {
                   required: true,
@@ -135,7 +145,12 @@ const AdminAddVaccine = () => {
             </Form.Item>
             <Divider />
             <Row justify="center">
-              <Button type="primary" htmlType="submit" className="btn-cancel">
+              <Button
+                type="primary"
+                className="btn-cancel"
+                onClick={() => {
+                  navigate('/admin-home/vaccines');
+                }}>
                 Hủy
               </Button>
               <Button
