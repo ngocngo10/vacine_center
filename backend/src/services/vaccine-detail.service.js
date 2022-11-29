@@ -32,7 +32,9 @@ module.exports = class VaccineDetailService {
       findOptions.where = {
         vaccineId: reqQuery.vaccineId
       };
-      vaccine = await this.vaccineRepository.findOne(reqQuery.vaccineId);
+      vaccine = await this.vaccineRepository.findOne(reqQuery.vaccineId, [
+        'categories'
+      ]);
       result.vaccine = vaccine;
     }
     findOptions.order = [['id', 'ASC']];

@@ -16,7 +16,6 @@ async function validateToken(req, res, next) {
       };
       return next();
     }
-    console.log(decoded, "decoded");
 
     next(new ErrorCreator(constants.INVALID_TOKEN, 401));
   } catch (error) {

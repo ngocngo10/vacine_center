@@ -2,6 +2,10 @@ module.exports = (sequelize, Sequelize) => {
   const Vaccine = sequelize.define(
     'vaccines',
     {
+      categoryId: {
+        field: 'category_id',
+        type: Sequelize.INTEGER
+      },
       name: {
         type: Sequelize.STRING(5000)
       },

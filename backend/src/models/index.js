@@ -19,24 +19,33 @@ Patient = require('./patient.model')(sequelize, Sequelize);
 Appointment = require('./appointment.model')(sequelize, Sequelize);
 Vaccine = require('./vaccine.model')(sequelize, Sequelize);
 Category = require('./category.model')(sequelize, Sequelize);
-VaccineCategory = require('./vaccine-category.model')(sequelize, Sequelize);
+AgeGroup = require('./age-group.model')(sequelize, Sequelize);
 VaccineDetail = require('./vaccine-detail.model')(sequelize, Sequelize);
+AgeGroupVaccine = require('./age-group-vaccine.model')(sequelize, Sequelize);
 ScheduleConfig = require('./schedule-config.model')(sequelize, Sequelize);
 Schedule = require('./schedule.model')(sequelize, Sequelize);
 
 // define relations
-Category.hasMany(VaccineCategory, { as: 'vaccineCategories' });
-VaccineCategory.belongsTo(Category, {
+Category.hasMany(Vaccine, { as: 'vaccines' });
+Vaccine.belongsTo(Category, {
   foreignKey: 'category_id',
   as: 'category'
 });
-Vaccine.hasMany(VaccineCategory, { as: 'vaccineCategories' });
-VaccineCategory.belongsTo(Vaccine, {
+
+AgeGroup.hasMany(AgeGroupVaccine, { as: 'ageGroupVaccines' });
+AgeGroupVaccine.belongsTo(AgeGroup, {
+  foreignKey: 'age_group_id',
+  as: 'ageGroup'
+});
+
+Vaccine.hasMany(AgeGroupVaccine, { as: 'ageGroupVaccines' });
+AgeGroupVaccine.belongsTo(Vaccine, {
   foreignKey: 'vaccine_id',
   as: 'vaccine'
 });
-Vaccine.belongsToMany(Category, { through: VaccineCategory, as: 'categories' });
-Category.belongsToMany(Vaccine, { through: VaccineCategory, as: 'vaccines' });
+
+AgeGroup.belongsToMany(Vaccine, { as: 'vaccines', through: AgeGroupVaccine });
+Vaccine.belongsToMany(AgeGroup, { as: 'ageGroups', through: AgeGroupVaccine });
 
 Vaccine.hasMany(VaccineDetail, { as: 'vaccineDetails' });
 VaccineDetail.belongsTo(Vaccine, {
@@ -64,9 +73,10 @@ module.exports = {
   Patient,
   Appointment,
   Category,
-  VaccineCategory,
+  AgeGroup,
   VaccineDetail,
   Appointment,
+  AgeGroupVaccine,
   Schedule,
   ScheduleConfig
 };

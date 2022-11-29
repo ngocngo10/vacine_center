@@ -5,6 +5,7 @@ const VaccineService = require('./vaccince.service');
 const VaccineDetailService = require('./vaccine-detail.service');
 const PatientService = require('./patient.service');
 const ScheduleConfigService = require('./schedule-config.service');
+const AgeGroupService = require('./age-group.service');
 
 module.exports = {
   UserService,
@@ -13,5 +14,6 @@ module.exports = {
   VaccineService,
   VaccineDetailService,
   PatientService,
-  ScheduleConfigService
+  ScheduleConfigService,
+  AgeGroupService
 };

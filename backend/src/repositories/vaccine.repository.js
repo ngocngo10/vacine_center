@@ -10,13 +10,4 @@ module.exports = class VaccineRepository extends BaseRepository {
     this.vaccineeCategoryModel = VaccineCategory;
     this.model = Vaccine;
   }
-  async createVaccine(data, categoryId) {
-    const vaccine = await this.create(data);
-    const vaccineCategory = {
-      vaccineId: vaccine.id,
-      categoryId
-    };
-    await this.vaccineeCategoryModel.create(vaccineCategory);
-    return;
-  }
 };
