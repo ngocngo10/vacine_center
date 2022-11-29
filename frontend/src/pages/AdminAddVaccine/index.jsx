@@ -50,7 +50,7 @@ const AdminAddVaccine = () => {
   const handleAdd = (values) => {
     values.image = imageFile;
     console.log(values, 'values');
-    dispatch(createVaccine(values));
+    // dispatch(createVaccine(values));
   };
 
   useEffect(() => {
@@ -136,8 +136,8 @@ const AdminAddVaccine = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Vui lòng nhập số mũi theo phác đồ!',
-                  whitespace: true
+                  message: 'Vui lòng nhập số mũi theo phác đồ!'
+                  // whitespace: true
                 }
               ]}>
               <InputNumber min={1} max={10} />
@@ -173,7 +173,7 @@ const AdminAddVaccine = () => {
             </Form.Item>
             <Form.Item
               label="Đối tượng"
-              name="doi-tuong"
+              name="ageGroupIds"
               rules={[
                 {
                   required: true,
