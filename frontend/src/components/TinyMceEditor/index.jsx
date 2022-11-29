@@ -3,12 +3,17 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import './index.css';
 
-const TinyMceEditor = () => {
+const TinyMceEditor = ({ contentInform, setContentInform }) => {
+  const handleOnChange = (event, editor) => {
+    const data = editor.getData();
+    console.log({ event, editor, data });
+    setContentInform(data);
+  };
   return (
     <div className="ckeditor-wrapper">
       <CKEditor
         editor={ClassicEditor}
-        data="<p>Hello from CKEditor 5!</p>"
+        data={contentInform}
         config={{
           toolbar: [
             'heading',
@@ -64,23 +69,11 @@ const TinyMceEditor = () => {
             { name: 'document', items: ['Source'] }
           ]
         }}
-        onInit={(editor) => {
-          // You can store the "editor" and use when it is needed.
-          console.log('Editor is ready to use!', editor);
-          console.log('toolbar: ', Array.from(editor.ui.componentFactory.names()));
-          console.log(
-            'plugins: ',
-            ClassicEditor.builtinPlugins.map((plugin) => plugin.pluginName)
-          );
-        }}
         onReady={(editor) => {
           // You can store the "editor" and use when it is needed.
           console.log('Editor is ready to use!', editor);
         }}
-        onChange={(event, editor) => {
-          const data = editor.getData();
-          console.log({ event, editor, data });
-        }}
+        onChange={handleOnChange}
         onBlur={(event, editor) => {
           console.log('Blur.', editor);
         }}

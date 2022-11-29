@@ -66,7 +66,13 @@ export const login = (phoneNumber, password) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
-      payload: error.response.data.error
+      payload: error.response?.data.error
     });
   }
+};
+
+export const logout = () => (dispatch) => {
+  localStorage.removeItem('userInfo');
+  dispatch({ type: USER_LOGOUT });
+  document.location.href = '/login';
 };

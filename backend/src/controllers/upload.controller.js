@@ -4,8 +4,10 @@ aws.config.region = 'ap-southeast-1';
 
 function getS3SignedURL(req, res) {
   const s3 = new aws.S3({
+    apiVersion: '2006-03-01',
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: 'ap-southeast-1'
   });
   const fileName = new Date().valueOf() + req.query['file-name'];
   const fileType = req.query['file-type'];
@@ -13,7 +15,7 @@ function getS3SignedURL(req, res) {
   const s3Params = {
     Bucket: S3_BUCKET + '/' + bucketName,
     Key: fileName,
-    Expires: 60,
+    Expires: 60 * 5,
     ContentType: fileType,
     ACL: 'public-read'
   };

@@ -5,7 +5,7 @@ import Header from '../../components/Header';
 import Message from '../../components/Message';
 import VaccineInformItem from '../../components/VaccineInformItem';
 import Container from '../../layout/Container';
-import { getVaccineDetails } from '../../actions/vaccine.action';
+import { getVaccineDetails } from '../../actions/vaccine_detail.action';
 import './index.css';
 
 const VaccineDetailPage = () => {

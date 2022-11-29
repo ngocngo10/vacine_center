@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { Image } from 'antd';
+import Loader from '../../components/Loader';
 import Header from '../../components/table/Header';
 import useDataTable from '../../components/table/DataTable';
 import {
@@ -43,7 +44,7 @@ const AdminVaccinePage = () => {
       key: 'key'
     },
     {
-      title: 'Image',
+      title: 'Ảnh',
       dataIndex: 'image',
       key: 'image',
       render: (theImageURL) => (
@@ -90,7 +91,7 @@ const AdminVaccinePage = () => {
     image: vaccine.image,
     name: vaccine.name,
     price: vaccine.price,
-    category: vaccine.category,
+    // category: vaccine.categories.name,
     origin: vaccine.origin,
     qty: 34
   }));
@@ -122,18 +123,20 @@ const AdminVaccinePage = () => {
   } = useDataTable({
     columns: columns,
     dataSource: data,
-    updateEntityPath: `admin-home/update-vaccines`,
+    updateEntityPath: 'admin-home/vaccines/update-vaccine',
     handleDelete: handleDeleteSingleVaccine,
     handleChangePage: getVaccines
   });
 
-  return error ? (
+  return loading ? (
+    <Loader />
+  ) : error ? (
     <Message description={error} />
   ) : data.totalElements ? (
     <div className="vaccines-card">
       <>
         <Header
-          addNewPath="admin-home/add-vaccines"
+          addNewPath="admin-home/vaccines/add-vaccine"
           selectedRowKeys={selectedRowKeys}
           hasSelected={hasSelected}
           handleMultiDelete={handleDeleteMultiVaccine}

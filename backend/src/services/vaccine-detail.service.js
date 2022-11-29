@@ -27,13 +27,12 @@ module.exports = class VaccineDetailService {
     const findOptions = {};
     let vaccine;
     const result = {};
+    console.log('reqQuery.vaccineId', reqQuery.vaccineId);
     if (reqQuery.vaccineId) {
       findOptions.where = {
         vaccineId: reqQuery.vaccineId
       };
-      vaccine = await this.vaccineRepository.findOne(reqQuery.vaccineId, [
-        'categories'
-      ]);
+      vaccine = await this.vaccineRepository.findOne(reqQuery.vaccineId, ['category']);
       result.vaccine = vaccine;
     }
     findOptions.order = [['id', 'ASC']];

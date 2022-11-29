@@ -1,7 +1,8 @@
 .message {
-  width: 500px;
+  width: fit-content;
   position: absolute;
   z-index: 2;
+  float: right;
   right: 20px;
-  top: 30px;
+  top: 20px;
 }

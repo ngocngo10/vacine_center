@@ -1,9 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../components/Loader';
-import { Card, Form, Input, Row, Col, Select, Divider, Button, Image } from 'antd';
-import { getCategoryList } from '../../actions/category.action';
-import { getSignedRequest } from '../../actions/upload.action';
+import {
+  Card,
+  InputNumber,
+  Checkbox,
+  Form,
+  Input,
+  Row,
+  Col,
+  Select,
+  Divider,
+  Button,
+  Image
+} from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { getCategoryList, getAgeGroups } from '../../actions/category.action';
+import { createVaccine } from '../../actions/vaccine.action';
 import Message from '../../components/Message';
 import './index.css';
 
@@ -11,46 +24,49 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const AdminAddVaccine = () => {
-  const [imageSrc, setImageSrc] = useState();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [imageSrc, setImageSrc] = useState('');
+  const [imageFile, setImageFile] = useState();
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const dispatch = useDispatch();
   const categoryList = useSelector((state) => state.categoryList);
   const { loading, error, categories } = categoryList;
 
+  const ageGroupsCategoryList = useSelector((state) => state.ageGroupsCategoryList);
+  const { ageGroups } = ageGroupsCategoryList;
+
   const onChange = (e) => {
     let files = e.target.files;
-    console.log('files', files);
-    console.log(files[0]);
-    dispatch(getSignedRequest(files[0]));
+    setImageFile(files[0]);
     let reader = new FileReader();
 
     reader.onload = (e) => {
-      console.log(e.target.result);
       setImageSrc(e.target.result);
     };
 
     reader.readAsDataURL(files[0]);
   };
 
-  const handleSave = (values) => {
-    console.log('onFinish', values);
-    // call save API
+  const handleAdd = (values) => {
+    values.image = imageFile;
+    dispatch(createVaccine(values));
   };
 
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('admin')) {
       dispatch(getCategoryList());
+      dispatch(getAgeGroups());
     } else {
       navigate('/login');
     }
   }, [userInfo]);
 
-  return loading ? (
+  return userLogin.loading || categoryList.loading || ageGroupsCategoryList.loading ? (
     <Loader />
-  ) : error ? (
+  ) : userLogin.error || categoryList.error || ageGroupsCategoryList.error ? (
     <Message description={error} />
   ) : (
     <Card title="Thêm Vắc xin" loading={false} className="add-vaccine-card">
@@ -71,10 +87,10 @@ const AdminAddVaccine = () => {
         <Col span={12}>
           <Form
             className="add-form"
-            labelCol={{ span: 4 }}
+            labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             name="product-form"
-            onFinish={handleSave}>
+            onFinish={handleAdd}>
             <Form.Item
               label="Tên"
               name="name"
@@ -103,6 +119,18 @@ const AdminAddVaccine = () => {
               <Input />
             </Form.Item>
             <Form.Item
+              label="Số mũi theo phác đồ"
+              name="injectedNumberTotal"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập số mũi theo phác đồ!'
+                  // whitespace: true
+                }
+              ]}>
+              <InputNumber min={1} max={10} />
+            </Form.Item>
+            <Form.Item
               label="Mô tả"
               name="description"
               rules={[
@@ -112,28 +140,46 @@ const AdminAddVaccine = () => {
                   whitespace: true
                 }
               ]}>
-              <TextArea rows={6} />
+              <TextArea rows={4} />
             </Form.Item>
             <Form.Item
-              label="Loại vắc xin"
-              name="category"
+              label="Phòng bệnh"
+              name="categoryId"
               rules={[
                 {
                   required: true,
-                  message: 'Vui lòng chọn loại vắc xin!'
+                  message: 'Vui lòng chọn loại bệnh phòng của vắc xin!'
                 }
               ]}>
               <Select placeholder="Chọn loại vắc xin">
-                {categories?.data.rows.map((item) => (
+                {categories?.map((item) => (
                   <Option key={item.id} value={item.id}>
                     {item.name}
                   </Option>
                 ))}
               </Select>
             </Form.Item>
+            <Form.Item
+              label="Đối tượng"
+              name="ageGroupIds"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng chọn đối tượng được dùng!'
+                }
+              ]}>
+              <Checkbox.Group
+                options={ageGroups?.map((item) => ({ label: item.name, value: item.id }))}
+              />
+            </Form.Item>
             <Divider />
             <Row justify="center">
-              <Button type="primary" htmlType="submit" className="btn-cancel">
+              <Button
+                type="primary"
+                className="btn-cancel"
+                onClick={() => {
+                  navigate('/admin-home/vaccines');
+                }}>
                 Hủy
               </Button>
               <Button

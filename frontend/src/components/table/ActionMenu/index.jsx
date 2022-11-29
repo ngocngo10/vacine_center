@@ -1,4 +1,5 @@
 import { Button, Modal } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +7,8 @@ import './index.css';
 
 function useActionMenu({ selectedRow, updateEntityPath, handleDelete }) {
   const [open, setOpen] = useState(false);
+  const [actionEdit, setActionEdit] = useState(false);
+  const navigate = useNavigate();
 
   const showModal = () => {
     setOpen(true);
@@ -15,12 +18,11 @@ function useActionMenu({ selectedRow, updateEntityPath, handleDelete }) {
     setOpen(false);
   };
 
-  const navigate = useNavigate();
-
   const handleEdit = () => {
-    const updatePath = '/' + updateEntityPath + '/' + selectedRow?.key;
-    navigate(updatePath);
+    setActionEdit(true);
   };
+  const updatePath = '/' + updateEntityPath + '/' + selectedRow?.key;
+  if (actionEdit) navigate(updatePath);
 
   const handleDeleteSingle = () => {
     hideModal();
@@ -31,13 +33,13 @@ function useActionMenu({ selectedRow, updateEntityPath, handleDelete }) {
     <>
       <span>
         <Button type="primary" danger style={{ float: 'right' }} onClick={showModal}>
-          Xóa
+          <DeleteOutlined />
         </Button>
         <Button
           type="primary"
           onClick={handleEdit}
           style={{ background: '#ffc107', border: '#ffc107' }}>
-          Cập nhật
+          <EditOutlined />
         </Button>
         <Modal
           mask={false}

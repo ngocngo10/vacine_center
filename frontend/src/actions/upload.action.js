@@ -11,26 +11,17 @@ export const getSignedRequest = (file) => async (dispatch) => {
     const fileType = file.type;
     const url = `${BASE_URL}/api/upload/get-s3-signed-url?file-name=${fileName}&file-type=${fileType}&bucket-name=vaccines`;
     console.log('url', url);
-
     const { data } = await axios.get(url);
+
     console.log('getSignedRequest', data);
     console.log('file type', fileType);
+
     const config = {
+      // withCredentials: true,
       headers: {
         'Content-Type': fileType
-        // 'x-amz-acl': 'public-read'
       }
     };
-
-    // const requestOptions = {
-    //   method: 'PUT',
-    //   headers: {
-    //     'Content-Type': fileType
-    //     'Access-Control-Allow-Origin': 'http://127.0.0.1:5173'
-    //   },
-    //   body: file
-    // };
-    // await fetch(data.signedRequest, requestOptions);
 
     await axios.put(data.signedRequest, file, config);
 
