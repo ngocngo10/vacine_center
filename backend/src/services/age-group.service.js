@@ -28,4 +28,13 @@ module.exports = class AgeGroupService {
   async delete(id) {
     return await this.repository.delete(id);
   }
+
+  async deleteAgeGroup(ids) {
+  try {
+    await this.repository.deleteMulti(ids);
+    return res.json({ message: 'Deleted.' });
+  } catch (error) {
+    next(error);
+  }
+}
 };
