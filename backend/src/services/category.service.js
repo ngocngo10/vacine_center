@@ -28,6 +28,13 @@ module.exports = class CategoryService {
     if (reqQuery.orderBy) {
       findOptions.order = [reqQuery.orderBy, reqQuery.orderType || 'DESC'];
     }
+    if (reqQuery.name) {
+      findOptions.where = {
+        name: {
+          [Op.iLike]: `%${reqQuery.name}%`
+        }
+      };
+    }
     if (reqQuery.categoryGroup === 'AGE') {
       return await this.ageGroupRepository.find(findOptions);
     }
@@ -40,5 +47,9 @@ module.exports = class CategoryService {
 
   async deleteCategory(id) {
     return await this.repository.delete(id);
+  }
+
+  async deleteMulti(ids) {
+    return await this.repository.deleteMulti(ids)
   }
 };
