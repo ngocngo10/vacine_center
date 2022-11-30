@@ -41,17 +41,25 @@ async function update(req, res, next) {
 
 async function deleteAgeGroup(req, res, next) {
   try {
-    await ageGroupService.deleteCategory(req.params.id);
+    await ageGroupService.delete(req.params.id);
     return res.json({ message: 'Deleted.' });
   } catch (error) {
     next(error);
   }
 }
-
+async function deleteMulti(req, res, next) {
+  try {
+    await ageGroupService.deleteMulti(req.body.ids);
+    return res.json({ message: 'Deleted.' });
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
   create,
   find,
   findOne,
   update,
-  deleteAgeGroup
+  deleteAgeGroup,
+  deleteMulti
 };
