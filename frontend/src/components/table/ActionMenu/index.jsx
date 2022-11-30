@@ -21,6 +21,7 @@ function useActionMenu({ selectedRow, updateEntityPath, handleDelete }) {
   const handleEdit = () => {
     setActionEdit(true);
   };
+
   const updatePath = '/' + updateEntityPath + '/' + selectedRow?.key;
   if (actionEdit) navigate(updatePath);
 
@@ -32,7 +33,7 @@ function useActionMenu({ selectedRow, updateEntityPath, handleDelete }) {
   const actionColumnView = (
     <>
       <span>
-        <Button type="primary" danger style={{ float: 'right' }} onClick={showModal}>
+        <Button type="primary" danger style={{ margin: '10px' }} onClick={showModal}>
           <DeleteOutlined />
         </Button>
         <Button

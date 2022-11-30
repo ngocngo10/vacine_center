@@ -50,9 +50,14 @@ const userInfoFromStorage = localStorage.getItem('userInfo')
 const vaccineListFromStorage = localStorage.getItem('vaccines')
   ? JSON.parse(localStorage.getItem('vaccines'))
   : null;
+
+const diseaseCategoriesFromStorage = localStorage.getItem('disease-categories')
+  ? JSON.parse(localStorage.getItem('disease-categories'))
+  : null;
 const initialState = {
   userLogin: { userInfo: userInfoFromStorage },
-  vaccineList: { vaccines: vaccineListFromStorage }
+  vaccineList: { vaccines: vaccineListFromStorage },
+  categoryList: { categories: diseaseCategoriesFromStorage }
 };
 
 const middleware = [thunk];

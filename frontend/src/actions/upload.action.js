@@ -27,7 +27,7 @@ export const getSignedRequest = (file) => async (dispatch) => {
 
     dispatch({
       type: UPLOAD_SUCCESS,
-      payload: data
+      payload: data.url
     });
   } catch (error) {
     console.log('error', error);

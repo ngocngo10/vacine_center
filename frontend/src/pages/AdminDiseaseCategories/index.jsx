@@ -1,17 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
-import { Image } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { Image, Modal, Form, Card, Row, Col, Input, Divider, Button } from 'antd';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import Header from '../../components/table/Header';
 import useDataTable from '../../components/table/DataTable';
 import { getCategoryList, deleteCategory } from '../../actions/category.action';
+import { getSignedRequest } from '../../actions/upload.action';
 import './index.css';
 
 const AdminDiseaseCategories = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [open, setOpen] = useState(false);
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -21,6 +24,16 @@ const AdminDiseaseCategories = () => {
 
   const categoryDelete = useSelector((state) => state.categoryDelete);
   const { deleteSuccess } = categoryDelete;
+
+  const upload = useSelector((state) => state.upload);
+  const { imageUrl } = upload;
+
+  const showModal = () => {
+    setOpen(true);
+  };
+  const hideModal = () => {
+    setOpen(false);
+  };
 
   const handleDeleteSingleCategory = (id) => {
     dispatch(deleteCategory(id));
@@ -36,6 +49,10 @@ const AdminDiseaseCategories = () => {
 
   const handleOnSearch = (name) => {
     // dispatch(getVaccineList({ name, perPage: 10 }));
+  };
+
+  const handleOk = () => {
+    hideModal();
   };
 
   const columns = [
@@ -83,8 +100,9 @@ const AdminDiseaseCategories = () => {
   } = useDataTable({
     columns: columns,
     dataSource: data,
-    updateEntityPath: 'admin-home/vaccines/update-vaccine',
+    updateEntityPath: 'admin-home/disease-categories/update',
     handleDelete: handleDeleteSingleCategory
+
     // handleChangePage: getVaccines
   });
 
@@ -101,18 +119,20 @@ const AdminDiseaseCategories = () => {
   ) : error ? (
     <Message description={error} />
   ) : data.totalElements ? (
-    <div className="categories-card">
-      <>
-        <Header
-          addNewPath="admin-home/vaccines/add-vaccine"
-          selectedRowKeys={selectedRowKeys}
-          hasSelected={hasSelected}
-          handleMultiDelete={handleDeleteMultiVaccine}
-          handleSearch={handleOnSearch}
-        />
-        <DataTable />
-      </>
-    </div>
+    <>
+      <div className="categories-card">
+        <>
+          <Header
+            addNewPath="admin-home/vaccines/add-vaccine"
+            selectedRowKeys={selectedRowKeys}
+            hasSelected={hasSelected}
+            handleMultiDelete={handleDeleteMultiVaccine}
+            handleSearch={handleOnSearch}
+          />
+          <DataTable />
+        </>
+      </div>
+    </>
   ) : (
     <div className="empty-record">No records</div>
   );

@@ -240,7 +240,6 @@ export const editVaccine = (vaccine) => async (dispatch, getState) => {
     };
 
     const url = `${BASE_URL}/api/vaccines/${vaccine.id}`;
-    console.log('vaccine1', sendData);
 
     const { result } = await axios.put(url, sendData, config);
 

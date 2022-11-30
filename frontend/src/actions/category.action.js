@@ -8,9 +8,16 @@ import {
   AGE_GROUPS_CATEGORY_FAIL,
   CATEGORY_DELETE_REQUEST,
   CATEGORY_DELETE_SUCCESS,
-  CATEGORY_DELETE_FAIL
+  CATEGORY_DELETE_FAIL,
+  CATEGORY_EDIT_REQUEST,
+  CATEGORY_EDIT_SUCCESS,
+  CATEGORY_EDIT_FAIL,
+  CATEGORY_CREATE_REQUEST,
+  CATEGORY_CREATE_SUCCESS,
+  CATEGORY_CREATE_FAIL
 } from '../constants/category.constant';
 import { BASE_URL } from '../constants/base_url.constant';
+import { useHref } from 'react-router-dom';
 
 export const getCategoryList = () => async (dispatch) => {
   try {
@@ -32,6 +39,8 @@ export const getCategoryList = () => async (dispatch) => {
       type: CATEGORY_LIST_SUCCESS,
       payload: data
     });
+
+    localStorage.setItem('disease-categories', JSON.stringify(data.rows));
   } catch (error) {
     dispatch({
       type: CATEGORY_LIST_FAIL,
@@ -40,15 +49,25 @@ export const getCategoryList = () => async (dispatch) => {
   }
 };
 
-export const deleteCategory = (id) => async (dispatch) => {
+export const deleteCategory = (id) => async (dispatch, getState) => {
   try {
     dispatch({
       type: CATEGORY_DELETE_REQUEST
     });
 
+    const {
+      userLogin: { userInfo }
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    };
+
     const url = `${BASE_URL}/api/categories/${id}`;
 
-    const { data } = await axios.delete(url);
+    const { data } = await axios.delete(url, config);
 
     dispatch({
       type: CATEGORY_DELETE_SUCCESS,
@@ -60,6 +79,44 @@ export const deleteCategory = (id) => async (dispatch) => {
     }
     dispatch({
       type: CATEGORY_DELETE_FAIL,
+      payload: error.response ? error.response.data.error : error.message
+    });
+  }
+};
+
+export const editCategory = (category) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: CATEGORY_EDIT_REQUEST
+    });
+
+    const {
+      userLogin: { userInfo }
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const url = `${BASE_URL}/api/categories/${category.id}`;
+
+    const { data } = await axios.put(url, category, config);
+
+    dispatch({
+      type: CATEGORY_EDIT_SUCCESS,
+      payload: data
+    });
+
+    window.location.href = '/admin-home/disease-categories';
+  } catch (error) {
+    if (error.response?.status == 401 || error.response?.status == 403) {
+      dispatch(logout());
+    }
+    dispatch({
+      type: CATEGORY_EDIT_FAIL,
       payload: error.response ? error.response.data.error : error.message
     });
   }
