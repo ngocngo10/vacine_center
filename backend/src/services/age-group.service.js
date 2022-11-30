@@ -17,8 +17,24 @@ module.exports = class AgeGroupService {
     return;
   }
 
-  async find() {
-    return await this.repository.find();
+  async find(reqQuery) {
+    const findOptions = {};
+    if (reqQuery.page) {
+      findOptions.limit = +reqQuery.perPage || 10;
+      findOptions.offset = (+reqQuery.page - 1) * findOptions.limit;
+    }
+
+    if (reqQuery.orderBy) {
+      findOptions.order = [reqQuery.orderBy, reqQuery.orderType || 'DESC'];
+    }
+    if (reqQuery.name) {
+      findOptions.where = {
+        name: {
+          [Op.iLike]: `%${reqQuery.name}%`
+        }
+      };
+    }
+    return await this.repository.find(findOptions);
   }
 
   async findOne(id) {
