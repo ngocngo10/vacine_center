@@ -19,13 +19,27 @@ import {
 import { BASE_URL } from '../constants/base_url.constant';
 import { useHref } from 'react-router-dom';
 
-export const getCategoryList = () => async (dispatch) => {
+export const getCategoryList = (query) => async (dispatch) => {
   try {
     dispatch({
       type: CATEGORY_LIST_REQUEST
     });
 
-    const url = `${BASE_URL}/api/categories`;
+    const reqQuery = { ...query, perPage: query.perPage || 9, page: query.page };
+
+    const queries = [];
+    for (let key in reqQuery) {
+      if (reqQuery[key]) {
+        queries.push(`${key}=${reqQuery[key]}`);
+      }
+    }
+    const queryString = queries.join('&');
+
+    const url = queryString
+      ? `${BASE_URL}/api/categories?${queryString}`
+      : `${BASE_URL}/api/categories`;
+
+    // const url = `${BASE_URL}/api/categories`;
 
     const { data } = await axios.get(url);
     // const carouselCategories = [];
