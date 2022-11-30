@@ -1,13 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Image, Modal, Form, Card, Row, Col, Input, Divider, Button } from 'antd';
+import { Image } from 'antd';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import Header from '../../components/table/Header';
 import useDataTable from '../../components/table/DataTable';
-import { getCategoryList, deleteCategory } from '../../actions/category.action';
-import { getSignedRequest } from '../../actions/upload.action';
+import {
+  getCategoryList,
+  deleteCategory,
+  deleteMultiCategory
+} from '../../actions/category.action';
 import './index.css';
 
 const AdminDiseaseCategories = () => {
@@ -25,6 +28,9 @@ const AdminDiseaseCategories = () => {
   const categoryDelete = useSelector((state) => state.categoryDelete);
   const { deleteSuccess } = categoryDelete;
 
+  const multiCategoryDelete = useSelector((state) => state.multiCategoryDelete);
+  const { deleteMultiSuccess } = multiCategoryDelete;
+
   const upload = useSelector((state) => state.upload);
   const { imageUrl } = upload;
 
@@ -40,15 +46,15 @@ const AdminDiseaseCategories = () => {
   };
 
   const handleDeleteMultiVaccine = (ids) => {
-    // dispatch(deleteMultiVaccine(ids));
+    dispatch(deleteMultiCategory(ids));
   };
 
-  const getVaccines = (page) => {
-    // dispatch(getVaccineList({ perPage: 10, page: page }));
+  const getCategories = (page) => {
+    dispatch(getCategoryList({ perPage: 10, page: page }));
   };
 
   const handleOnSearch = (name) => {
-    // dispatch(getVaccineList({ name, perPage: 10 }));
+    dispatch(getCategoryList({ name, perPage: 10 }));
   };
 
   const handleOk = () => {
@@ -101,24 +107,23 @@ const AdminDiseaseCategories = () => {
     columns: columns,
     dataSource: data,
     updateEntityPath: 'admin-home/disease-categories/update',
-    handleDelete: handleDeleteSingleCategory
-
-    // handleChangePage: getVaccines
+    handleDelete: handleDeleteSingleCategory,
+    handleChangePage: getCategories
   });
 
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('admin')) {
-      dispatch(getCategoryList());
+      dispatch(getCategoryList({ perPage: 10 }));
     } else {
       navigate('/login');
     }
-  }, [userInfo, deleteSuccess]);
+  }, [userInfo, deleteSuccess, deleteMultiSuccess]);
 
   return loading ? (
     <Loader />
   ) : error ? (
     <Message description={error} />
-  ) : data.totalElements ? (
+  ) : (
     <>
       <div className="categories-card">
         <>
@@ -133,8 +138,6 @@ const AdminDiseaseCategories = () => {
         </>
       </div>
     </>
-  ) : (
-    <div className="empty-record">No records</div>
   );
 };
 

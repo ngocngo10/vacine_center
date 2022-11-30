@@ -15,6 +15,7 @@ import {
 } from 'antd';
 import { useParams } from 'react-router-dom';
 import Loader from '../../components/Loader';
+import Message from '../../components/Message';
 import { getCategoryList, getAgeGroups } from '../../actions/category.action';
 import { getVaccine, editVaccine } from '../../actions/vaccine.action';
 import './index.css';
@@ -65,7 +66,7 @@ const AdminUpdateVaccine = () => {
 
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('admin')) {
-      dispatch(getCategoryList());
+      dispatch(getCategoryList({}));
       dispatch(getAgeGroups());
       dispatch(getVaccine(id));
     } else {

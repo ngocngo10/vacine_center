@@ -132,7 +132,7 @@ const AdminVaccinePage = () => {
     <Loader />
   ) : error ? (
     <Message description={error} />
-  ) : data.totalElements ? (
+  ) : (
     <div className="vaccines-card">
       <>
         <Header
@@ -145,8 +145,6 @@ const AdminVaccinePage = () => {
         <DataTable />
       </>
     </div>
-  ) : (
-    <div className="empty-vaccine-list">No records</div>
   );
 };
 

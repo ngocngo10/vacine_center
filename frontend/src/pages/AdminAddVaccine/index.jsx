@@ -57,7 +57,7 @@ const AdminAddVaccine = () => {
 
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('admin')) {
-      dispatch(getCategoryList());
+      dispatch(getCategoryList({}));
       dispatch(getAgeGroups());
     } else {
       navigate('/login');

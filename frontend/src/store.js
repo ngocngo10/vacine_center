@@ -7,7 +7,8 @@ import {
   categoryListReducer,
   ageGroupsCategoryListReducer,
   categoryDeleteReducer,
-  categoryCreateReducer
+  categoryCreateReducer,
+  multiCategoryDeleteReducer
 } from './reducers/category.reducer';
 import {
   vaccineListReducer,
@@ -42,7 +43,8 @@ const reducer = combineReducers({
   ageGroupsCategoryList: ageGroupsCategoryListReducer,
   vaccine: vaccineReducer,
   categoryDelete: categoryDeleteReducer,
-  categoryCreate: categoryCreateReducer
+  categoryCreate: categoryCreateReducer,
+  multiCategoryDelete: multiCategoryDeleteReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

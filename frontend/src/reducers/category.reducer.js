@@ -13,7 +13,10 @@ import {
   CATEGORY_EDIT_FAIL,
   CATEGORY_CREATE_REQUEST,
   CATEGORY_CREATE_SUCCESS,
-  CATEGORY_CREATE_FAIL
+  CATEGORY_CREATE_FAIL,
+  MULTI_CATEGORY_DELETE_REQUEST,
+  MULTI_CATEGORY_DELETE_SUCCESS,
+  MULTI_CATEGORY_DELETE_FAIL
 } from '../constants/category.constant';
 
 export const categoryListReducer = (state = {}, action) => {
@@ -44,6 +47,22 @@ export const categoryDeleteReducer = (state = {}, action) => {
         deleteSuccess: true
       };
     case CATEGORY_DELETE_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const multiCategoryDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case MULTI_CATEGORY_DELETE_REQUEST:
+      return { loading: true };
+    case MULTI_CATEGORY_DELETE_SUCCESS:
+      return {
+        loading: false,
+        deleteMultiSuccess: true
+      };
+    case MULTI_CATEGORY_DELETE_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

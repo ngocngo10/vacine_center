@@ -14,10 +14,13 @@ import {
   CATEGORY_EDIT_FAIL,
   CATEGORY_CREATE_REQUEST,
   CATEGORY_CREATE_SUCCESS,
-  CATEGORY_CREATE_FAIL
+  CATEGORY_CREATE_FAIL,
+  MULTI_CATEGORY_DELETE_REQUEST,
+  MULTI_CATEGORY_DELETE_SUCCESS,
+  MULTI_CATEGORY_DELETE_FAIL
 } from '../constants/category.constant';
+import { logout } from './user.action';
 import { BASE_URL } from '../constants/base_url.constant';
-import { useHref } from 'react-router-dom';
 
 export const getCategoryList = (query) => async (dispatch) => {
   try {
@@ -25,7 +28,7 @@ export const getCategoryList = (query) => async (dispatch) => {
       type: CATEGORY_LIST_REQUEST
     });
 
-    const reqQuery = { ...query, perPage: query.perPage || 9, page: query.page };
+    const reqQuery = { ...query };
 
     const queries = [];
     for (let key in reqQuery) {
@@ -58,6 +61,42 @@ export const getCategoryList = (query) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: CATEGORY_LIST_FAIL,
+      payload: error.response ? error.response.data.error : error.message
+    });
+  }
+};
+
+export const deleteMultiCategory = (ids) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: MULTI_CATEGORY_DELETE_REQUEST
+    });
+
+    const {
+      userLogin: { userInfo }
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`
+      },
+      data: { ids }
+    };
+
+    const url = `${BASE_URL}/api/categories`;
+
+    const { data } = await axios.delete(url, config);
+
+    dispatch({
+      type: MULTI_CATEGORY_DELETE_SUCCESS,
+      payload: data
+    });
+  } catch (error) {
+    if (error.response?.status == 401 || error.response?.status == 403) {
+      dispatch(logout());
+    }
+    dispatch({
+      type: MULTI_CATEGORY_DELETE_FAIL,
       payload: error.response ? error.response.data.error : error.message
     });
   }
