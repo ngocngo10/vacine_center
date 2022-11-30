@@ -16,7 +16,19 @@ import {
   CATEGORY_CREATE_FAIL,
   MULTI_CATEGORY_DELETE_REQUEST,
   MULTI_CATEGORY_DELETE_SUCCESS,
-  MULTI_CATEGORY_DELETE_FAIL
+  MULTI_CATEGORY_DELETE_FAIL,
+  AGE_GROUPS_DELETE_REQUEST,
+  AGE_GROUPS_DELETE_SUCCESS,
+  AGE_GROUPS_DELETE_FAIL,
+  MULTI_AGE_GROUPS_DELETE_REQUEST,
+  MULTI_AGE_GROUPS_DELETE_SUCCESS,
+  MULTI_AGE_GROUPS_DELETE_FAIL,
+  AGE_GROUPS_EDIT_REQUEST,
+  AGE_GROUPS_EDIT_SUCCESS,
+  AGE_GROUPS_EDIT_FAIL,
+  AGE_GROUPS_CREATE_REQUEST,
+  AGE_GROUPS_CREATE_SUCCESS,
+  AGE_GROUPS_CREATE_FAIL
 } from '../constants/category.constant';
 
 export const categoryListReducer = (state = {}, action) => {
@@ -106,8 +118,72 @@ export const ageGroupsCategoryListReducer = (state = {}, action) => {
     case AGE_GROUPS_CATEGORY_REQUEST:
       return { loading: true };
     case AGE_GROUPS_CATEGORY_SUCCESS:
-      return { loading: false, ageGroups: action.payload };
+      return { loading: false, ageGroups: action.payload.rows, totalItem: action.payload.count };
     case AGE_GROUPS_CATEGORY_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const ageGroupsDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case AGE_GROUPS_DELETE_REQUEST:
+      return { loading: true };
+    case AGE_GROUPS_DELETE_SUCCESS:
+      return {
+        loading: false,
+        deleteSuccess: true
+      };
+    case AGE_GROUPS_DELETE_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const multiAgeGroupsDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case MULTI_AGE_GROUPS_DELETE_REQUEST:
+      return { loading: true };
+    case MULTI_AGE_GROUPS_DELETE_SUCCESS:
+      return {
+        loading: false,
+        deleteMultiSuccess: true
+      };
+    case MULTI_AGE_GROUPS_DELETE_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const ageGroupsEditReducer = (state = {}, action) => {
+  switch (action.type) {
+    case AGE_GROUPS_EDIT_REQUEST:
+      return { loading: true };
+    case AGE_GROUPS_EDIT_SUCCESS:
+      return {
+        loading: false,
+        editSuccess: true
+      };
+    case AGE_GROUPS_EDIT_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const ageGroupsCreateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case AGE_GROUPS_CREATE_REQUEST:
+      return { loading: true };
+    case AGE_GROUPS_CREATE_SUCCESS:
+      return {
+        loading: false,
+        createSuccess: true
+      };
+    case AGE_GROUPS_CREATE_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

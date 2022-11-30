@@ -5,10 +5,14 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { userRegisterReducer, userLoginReducer } from './reducers/user.reducer';
 import {
   categoryListReducer,
-  ageGroupsCategoryListReducer,
   categoryDeleteReducer,
   categoryCreateReducer,
-  multiCategoryDeleteReducer
+  multiCategoryDeleteReducer,
+  ageGroupsCategoryListReducer,
+  ageGroupsDeleteReducer,
+  multiAgeGroupsDeleteReducer,
+  ageGroupsEditReducer,
+  ageGroupsCreateReducer
 } from './reducers/category.reducer';
 import {
   vaccineListReducer,
@@ -40,11 +44,16 @@ const reducer = combineReducers({
   vaccineInformList: vaccineInformListReducer,
   vaccineInformDelete: vaccineInformDeleteReducer,
   vaccineInformEdit: vaccineInformEditReducer,
-  ageGroupsCategoryList: ageGroupsCategoryListReducer,
   vaccine: vaccineReducer,
   categoryDelete: categoryDeleteReducer,
   categoryCreate: categoryCreateReducer,
-  multiCategoryDelete: multiCategoryDeleteReducer
+  multiCategoryDelete: multiCategoryDeleteReducer,
+
+  ageGroupsCategoryList: ageGroupsCategoryListReducer,
+  ageGroupsDelete: ageGroupsDeleteReducer,
+  multiAgeGroupsDelete: multiAgeGroupsDeleteReducer,
+  ageGroupsEdit: ageGroupsEditReducer,
+  ageGroupsCreate: ageGroupsCreateReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

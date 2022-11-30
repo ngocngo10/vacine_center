@@ -109,7 +109,7 @@ module.exports = class VaccineService {
     }
   }
 
-  async deleteMultiVaccine(vaccineIds) {
+  async deleteMulti(vaccineIds) {
     try {
       await this.repository.model.destroy({
         where: {

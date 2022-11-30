@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { getSignedRequest } from '../../actions/upload.action';
 import './index.css';
 
-const FormCategory = ({ cardTitle, okText, category, backURL, handleAction }) => {
+const FormCategory = ({ cardTitle, okText, label, category, backURL, handleAction }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formRef = useRef();
@@ -55,7 +55,7 @@ const FormCategory = ({ cardTitle, okText, category, backURL, handleAction }) =>
             name="product-form"
             onFinish={onFinish}>
             <Form.Item
-              label="Phòng  bệnh"
+              label={label}
               name="name"
               rules={[
                 {
@@ -74,7 +74,7 @@ const FormCategory = ({ cardTitle, okText, category, backURL, handleAction }) =>
                 type="primary"
                 className="btn-cancel"
                 onClick={() => {
-                  navigate({ backURL });
+                  navigate(backURL);
                 }}>
                 Hủy
               </Button>

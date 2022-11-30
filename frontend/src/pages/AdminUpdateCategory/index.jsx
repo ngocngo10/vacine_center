@@ -22,9 +22,10 @@ const AdminUpdateCategory = () => {
   ) : (
     <FormCategory
       cardTitle="Cập nhật loại bệnh"
+      label="Loại bệnh"
       okText="Cập nhật"
       category={category}
-      backURL="admin-home/disease-categories"
+      backURL="/admin-home/disease-categories"
       handleAction={editCategory}
     />
   );
