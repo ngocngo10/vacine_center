@@ -47,11 +47,19 @@ async function deleteCategory(req, res, next) {
     next(error);
   }
 }
-
+async function deleteMulti(req, res, next) {
+  try {
+    await categoryService.deleteMulti(req.body.ids);
+    return res.json({ message: 'Deleted.' });
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
   create,
   find,
   findOne,
   update,
-  deleteCategory
+  deleteCategory,
+  deleteMulti
 };

@@ -40,14 +40,11 @@ module.exports = class VaccineService {
         },
         force: true
       });
-      console.log('ageGroupIds', ageGroupIds);
       const newsAgeGroupVaccines = ageGroupIds.map((item) => ({
         ageGroupId: item,
         vaccineId: +id
       }));
-      console.log(1, newsAgeGroupVaccines);
       await this.ageGroupVaccineRepo.model.bulkCreate(newsAgeGroupVaccines);
-      console.log(2);
       await this.repository.update(id, updateData);
       return;
     } catch (error) {
@@ -106,6 +103,19 @@ module.exports = class VaccineService {
   async deleteVaccine(id) {
     try {
       await this.repository.delete(id);
+      return;
+    } catch (error) {
+      throw new ErrorCreator(error.message, 500);
+    }
+  }
+
+  async deleteMultiVaccine(vaccineIds) {
+    try {
+      await this.repository.model.destroy({
+        where: {
+          id: [vaccineIds]
+        }
+      });
       return;
     } catch (error) {
       throw new ErrorCreator(error.message, 500);

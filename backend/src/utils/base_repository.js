@@ -31,4 +31,12 @@ module.exports = class BaseRepository {
     if (!instance) throw new ErrorCreator('Not Found', 404);
     return await instance.destroy();
   }
+
+  async deleteMulti(ids) {
+    return await this.model.destroy({
+      where: {
+        id: ids
+      }
+    })
+  }
 };
