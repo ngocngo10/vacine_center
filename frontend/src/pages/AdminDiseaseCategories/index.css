@@ -1,0 +1,13 @@
+.categories-card {
+  background-color: white;
+  padding: 20px 150px;
+  border-radius: 10px;
+  font-family: 'WorkSans-Regular';
+}
+.categories__image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  object-fit: cover;
+  background-color: var(--color-primary);
+}

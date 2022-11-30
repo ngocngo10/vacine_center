@@ -3,7 +3,11 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { userRegisterReducer, userLoginReducer } from './reducers/user.reducer';
-import { categoryListReducer, ageGroupsCategoryListReducer } from './reducers/category.reducer';
+import {
+  categoryListReducer,
+  ageGroupsCategoryListReducer,
+  categoryDeleteReducer
+} from './reducers/category.reducer';
 import {
   vaccineListReducer,
   vaccineSingleDeleteReducer,
@@ -35,7 +39,8 @@ const reducer = combineReducers({
   vaccineInformDelete: vaccineInformDeleteReducer,
   vaccineInformEdit: vaccineInformEditReducer,
   ageGroupsCategoryList: ageGroupsCategoryListReducer,
-  vaccine: vaccineReducer
+  vaccine: vaccineReducer,
+  categoryDelete: categoryDeleteReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

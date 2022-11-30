@@ -33,7 +33,7 @@ export const getSignedRequest = (file) => async (dispatch) => {
     console.log('error', error);
     dispatch({
       type: UPLOAD_FAIL,
-      payload: error.response?.data.error
+      payload: error.response ? error.response.data.error : error.message
     });
   }
 };

@@ -25,7 +25,7 @@ function useDataTable({ columns, dataSource, updateEntityPath, handleDelete, han
     }
   };
 
-  dataSource.content.forEach((item) => (item.index = item.index + currentPage * 10));
+  dataSource.content?.forEach((item) => (item.index = item.index + currentPage * 10));
 
   const updatedColumns = [
     ...columns,

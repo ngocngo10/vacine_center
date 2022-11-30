@@ -27,9 +27,17 @@ function AdminSideNav() {
             <NavLink to="vaccines/add-vaccine">Thêm</NavLink>
           </Menu.Item>
         </Menu.SubMenu>
+        <Menu.SubMenu key="submenu-3" title="Loại vắc xin">
+          <Menu.Item key="disease-categories">
+            <NavLink to="disease-categories">Phòng bệnh</NavLink>
+          </Menu.Item>
+          <Menu.Item key="age-groups-categories">
+            <NavLink to="age-groups">Đối tượng</NavLink>
+          </Menu.Item>
+        </Menu.SubMenu>
         <Menu.Item key="3">
           <NavLink to="/billing">
-            <span className="label">Loại vắc xin</span>
+            <span className="label">Loại vkkkkkkkkk</span>
           </NavLink>
         </Menu.Item>
         <Menu.Item key="4">

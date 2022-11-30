@@ -38,7 +38,7 @@ export const register = (values) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_REGISTER_FAIL,
-      payload: error.response.data.error
+      payload: error.response ? error.response.data.error : error.message
     });
   }
 };
@@ -66,7 +66,7 @@ export const login = (phoneNumber, password) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
-      payload: error.response?.data.error
+      payload: error.response ? error.response.data.error : error.message
     });
   }
 };

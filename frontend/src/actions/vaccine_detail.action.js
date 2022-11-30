@@ -49,7 +49,7 @@ export const createVaccineDetail = (vaccineDetail) => async (dispatch, getState)
     }
     dispatch({
       type: VACCINE_INFORM_CREATE_FAIL,
-      payload: error.response?.data.error
+      payload: error.response ? error.response.data.error : error.message
     });
   }
 };
@@ -83,7 +83,7 @@ export const deleteVaccineDetail = (informId) => async (dispatch, getState) => {
     }
     dispatch({
       type: VACCINE_INFORM_DELETE_FAIL,
-      payload: error.response?.data.error
+      payload: error.response ? error.response.data.error : error.message
     });
   }
 };
@@ -120,7 +120,7 @@ export const editVaccineDetail =
       }
       dispatch({
         type: VACCINE_INFORM_EDIT_FAIL,
-        payload: error.response?.data.error
+        payload: error.response ? error.response.data.error : error.message
       });
     }
   };
@@ -147,7 +147,7 @@ export const getVaccineDetails = (vaccineId) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: VACCINE_INFORM_LIST_FAIL,
-      payload: error.response?.data.error
+      payload: error.response ? error.response.data.error : error.message
     });
   }
 };
@@ -169,7 +169,7 @@ export const getVaccineDetailItem = (informId) => async (dispatch, getState) => 
   } catch (error) {
     dispatch({
       type: VACCINE_INFORM_FAIL,
-      payload: error.response?.data.error
+      payload: error.response ? error.response.data.error : error.message
     });
   }
 };

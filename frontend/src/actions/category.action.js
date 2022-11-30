@@ -5,7 +5,10 @@ import {
   CATEGORY_LIST_FAIL,
   AGE_GROUPS_CATEGORY_REQUEST,
   AGE_GROUPS_CATEGORY_SUCCESS,
-  AGE_GROUPS_CATEGORY_FAIL
+  AGE_GROUPS_CATEGORY_FAIL,
+  CATEGORY_DELETE_REQUEST,
+  CATEGORY_DELETE_SUCCESS,
+  CATEGORY_DELETE_FAIL
 } from '../constants/category.constant';
 import { BASE_URL } from '../constants/base_url.constant';
 
@@ -27,12 +30,37 @@ export const getCategoryList = () => async (dispatch) => {
 
     dispatch({
       type: CATEGORY_LIST_SUCCESS,
-      payload: data.rows
+      payload: data
     });
   } catch (error) {
     dispatch({
       type: CATEGORY_LIST_FAIL,
-      payload: error.response?.data.error
+      payload: error.response ? error.response.data.error : error.message
+    });
+  }
+};
+
+export const deleteCategory = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: CATEGORY_DELETE_REQUEST
+    });
+
+    const url = `${BASE_URL}/api/categories/${id}`;
+
+    const { data } = await axios.delete(url);
+
+    dispatch({
+      type: CATEGORY_DELETE_SUCCESS,
+      payload: data
+    });
+  } catch (error) {
+    if (error.response?.status == 401 || error.response?.status == 403) {
+      dispatch(logout());
+    }
+    dispatch({
+      type: CATEGORY_DELETE_FAIL,
+      payload: error.response ? error.response.data.error : error.message
     });
   }
 };
@@ -54,7 +82,7 @@ export const getAgeGroups = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: AGE_GROUPS_CATEGORY_FAIL,
-      payload: error.response?.data.error
+      payload: error.response ? error.response.data.error : error.message
     });
   }
 };
