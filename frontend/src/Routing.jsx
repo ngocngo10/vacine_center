@@ -12,6 +12,7 @@ import AdminDetailVaccine from './pages/AdminDetailVaccine';
 
 import AdminDiseaseCategories from './pages/AdminDiseaseCategories';
 import AdminUpdateCategory from './pages/AdminUpdateCategory';
+import AdminAddCategory from './pages/AdminAddCategory';
 
 const Routing = () => {
   return (
@@ -29,6 +30,7 @@ const Routing = () => {
         <Route path="vaccines/update-vaccine/:id" element={<AdminUpdateVaccine />} />
         <Route path="disease-categories" element={<AdminDiseaseCategories />} />
         <Route path="disease-categories/update/:id" element={<AdminUpdateCategory />} />
+        <Route path="disease-categories/add" element={<AdminAddCategory />} />
       </Route>
     </Routes>
   );

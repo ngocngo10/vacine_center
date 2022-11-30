@@ -122,6 +122,44 @@ export const editCategory = (category) => async (dispatch, getState) => {
   }
 };
 
+export const createCategory = (category) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: CATEGORY_CREATE_REQUEST
+    });
+
+    const {
+      userLogin: { userInfo }
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const url = `${BASE_URL}/api/categories`;
+
+    const { data } = await axios.post(url, category, config);
+
+    dispatch({
+      type: CATEGORY_CREATE_SUCCESS,
+      payload: data
+    });
+
+    window.location.href = '/admin-home/disease-categories';
+  } catch (error) {
+    if (error.response?.status == 401 || error.response?.status == 403) {
+      dispatch(logout());
+    }
+    dispatch({
+      type: CATEGORY_CREATE_FAIL,
+      payload: error.response ? error.response.data.error : error.message
+    });
+  }
+};
+
 export const getAgeGroups = () => async (dispatch) => {
   try {
     dispatch({

@@ -66,6 +66,22 @@ export const categoryEditReducer = (state = {}, action) => {
   }
 };
 
+export const categoryCreateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case CATEGORY_CREATE_REQUEST:
+      return { loading: true };
+    case CATEGORY_CREATE_SUCCESS:
+      return {
+        loading: false,
+        createSuccess: true
+      };
+    case CATEGORY_CREATE_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
 export const ageGroupsCategoryListReducer = (state = {}, action) => {
   switch (action.type) {
     case AGE_GROUPS_CATEGORY_REQUEST:

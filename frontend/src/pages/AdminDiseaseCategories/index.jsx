@@ -123,7 +123,7 @@ const AdminDiseaseCategories = () => {
       <div className="categories-card">
         <>
           <Header
-            addNewPath="admin-home/vaccines/add-vaccine"
+            addNewPath="admin-home/disease-categories/add"
             selectedRowKeys={selectedRowKeys}
             hasSelected={hasSelected}
             handleMultiDelete={handleDeleteMultiVaccine}

@@ -1,0 +1,18 @@
+.category-card {
+  background-color: var(--color-fourth);
+  border-radius: 10px;
+}
+
+.preview-category-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.custom-file-input--category {
+  margin: 10px 0px 0px -55px;
+}
+
+.category-form {
+  padding-top: 60px;
+}
