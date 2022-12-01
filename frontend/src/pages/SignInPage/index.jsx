@@ -6,7 +6,6 @@ import { Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import Container from '../../layout/Container';
 import Message from '../../components/Message';
-import Header from '../../components/Header';
 import { login } from '../../actions/user.action';
 import './index.css';
 
@@ -31,7 +30,6 @@ const SignInPage = () => {
   };
   return (
     <>
-      <Header />
       <main>
         <Container>
           {error && <Message description={error} />}

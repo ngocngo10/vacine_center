@@ -7,7 +7,6 @@ import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import patterns from '../../constants/pattern.constant';
 import { register } from '../../actions/user.action';
-import Header from '../../components/Header';
 import 'antd/dist/antd.css';
 import './index.css';
 
@@ -48,7 +47,6 @@ const SignUpPage = () => {
 
   return (
     <>
-      <Header />
       <main className="sign-up-main">
         <Container>
           {error && <Message description={error} />}

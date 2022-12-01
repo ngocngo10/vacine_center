@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import Header from '../../components/Header';
 import Message from '../../components/Message';
 import VaccineInformItem from '../../components/VaccineInformItem';
 import Container from '../../layout/Container';
@@ -111,7 +110,6 @@ const VaccineDetailPage = () => {
   ) : (
     vaccine && (
       <>
-        <Header />
         <main className="main-page">
           <Container>
             <nav className="path-nav">

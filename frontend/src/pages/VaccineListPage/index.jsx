@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 const { Search } = Input;
 import { Link } from 'react-router-dom';
 import Container from '../../layout/Container';
-import Header from '../../components/Header';
 import VaccineCategoryCarousel from '../../components/VaccineCategoryCarousel';
 import 'antd/dist/antd.css';
 import './index.css';
@@ -32,7 +31,6 @@ const VaccineListPage = () => {
 
   return (
     <>
-      <Header />
       <main className="main-page">
         <section className="section-slideshow">
           <Container>

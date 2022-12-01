@@ -18,13 +18,18 @@ import AdminAgeGroupsPage from './pages/AdminAgeGroupsPage';
 import AdminUpdateGroupPage from './pages/AdminUpdateAgeGroupPage';
 import AdminAddAgeGroupPage from './pages/AdminAddAgeGroupPage';
 
+import Main from './components/Main';
 const Routing = () => {
   return (
     <Routes>
-      <Route exact path="/register" element={<SignUpPage />} />
-      <Route exact path="/login" element={<SignInPage />} />
-      <Route path="/vaccine-list" element={<VaccineListPage />} />
-      <Route path="/vaccine-detail/:vaccineId" element={<VaccineDetailPage />} />
+      <Route exact path="/" element={<Main />}>
+        <Route index element={<SignInPage />} />
+        <Route exact path="register" element={<SignUpPage />} />
+        <Route exact path="login" element={<SignInPage />} />
+        <Route path="vaccine-list" element={<VaccineListPage />} />
+        <Route path="vaccine-detail/:vaccineId" element={<VaccineDetailPage />} />
+      </Route>
+
       {/* <Route path="/admin-home" element={<AdminMain />} /> */}
       <Route exact path="/admin-home" element={<AdminMain />}>
         <Route index element={<AdminVaccinePage />} />
