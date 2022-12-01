@@ -27,13 +27,13 @@ export const getSignedRequest = (file) => async (dispatch) => {
 
     dispatch({
       type: UPLOAD_SUCCESS,
-      payload: data
+      payload: data.url
     });
   } catch (error) {
     console.log('error', error);
     dispatch({
       type: UPLOAD_FAIL,
-      payload: error.response?.data.error
+      payload: error.response ? error.response.data.error : error.message
     });
   }
 };

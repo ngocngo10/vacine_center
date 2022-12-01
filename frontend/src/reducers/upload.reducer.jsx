@@ -5,7 +5,7 @@ export const uploadReducer = (state = {}, action) => {
     case UPLOAD_REQUEST:
       return { ...state, loading: true };
     case UPLOAD_SUCCESS:
-      return { ...state, loading: false, uploadSuccess: action.payload };
+      return { ...state, loading: false, imageUrl: action.payload };
     case UPLOAD_FAIL:
       return { ...state, loading: false, error: action.payload };
     default:

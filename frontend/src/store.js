@@ -3,7 +3,17 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { userRegisterReducer, userLoginReducer } from './reducers/user.reducer';
-import { categoryListReducer, ageGroupsCategoryListReducer } from './reducers/category.reducer';
+import {
+  categoryListReducer,
+  categoryDeleteReducer,
+  categoryCreateReducer,
+  multiCategoryDeleteReducer,
+  ageGroupsCategoryListReducer,
+  ageGroupsDeleteReducer,
+  multiAgeGroupsDeleteReducer,
+  ageGroupsEditReducer,
+  ageGroupsCreateReducer
+} from './reducers/category.reducer';
 import {
   vaccineListReducer,
   vaccineSingleDeleteReducer,
@@ -34,8 +44,16 @@ const reducer = combineReducers({
   vaccineInformList: vaccineInformListReducer,
   vaccineInformDelete: vaccineInformDeleteReducer,
   vaccineInformEdit: vaccineInformEditReducer,
+  vaccine: vaccineReducer,
+  categoryDelete: categoryDeleteReducer,
+  categoryCreate: categoryCreateReducer,
+  multiCategoryDelete: multiCategoryDeleteReducer,
+
   ageGroupsCategoryList: ageGroupsCategoryListReducer,
-  vaccine: vaccineReducer
+  ageGroupsDelete: ageGroupsDeleteReducer,
+  multiAgeGroupsDelete: multiAgeGroupsDeleteReducer,
+  ageGroupsEdit: ageGroupsEditReducer,
+  ageGroupsCreate: ageGroupsCreateReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
@@ -45,9 +63,14 @@ const userInfoFromStorage = localStorage.getItem('userInfo')
 const vaccineListFromStorage = localStorage.getItem('vaccines')
   ? JSON.parse(localStorage.getItem('vaccines'))
   : null;
+
+const diseaseCategoriesFromStorage = localStorage.getItem('disease-categories')
+  ? JSON.parse(localStorage.getItem('disease-categories'))
+  : null;
 const initialState = {
   userLogin: { userInfo: userInfoFromStorage },
-  vaccineList: { vaccines: vaccineListFromStorage }
+  vaccineList: { vaccines: vaccineListFromStorage },
+  categoryList: { categories: diseaseCategoriesFromStorage }
 };
 
 const middleware = [thunk];

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Menu, Button } from 'antd';
 import { UserSwitchOutlined } from '@ant-design/icons';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, Link } from 'react-router-dom';
 import './index.css';
 
 function AdminSideNav() {
@@ -27,9 +27,17 @@ function AdminSideNav() {
             <NavLink to="vaccines/add-vaccine">Thêm</NavLink>
           </Menu.Item>
         </Menu.SubMenu>
+        <Menu.SubMenu key="submenu-3" title="Loại vắc xin">
+          <Menu.Item key="disease-categories">
+            <NavLink to="disease-categories">Phòng bệnh</NavLink>
+          </Menu.Item>
+          <Menu.Item key="age-groups-categories">
+            <NavLink to="age-groups-categories">Độ tuổi</NavLink>
+          </Menu.Item>
+        </Menu.SubMenu>
         <Menu.Item key="3">
           <NavLink to="/billing">
-            <span className="label">Loại vắc xin</span>
+            <span className="label">Loại vkkkkkkkkk</span>
           </NavLink>
         </Menu.Item>
         <Menu.Item key="4">

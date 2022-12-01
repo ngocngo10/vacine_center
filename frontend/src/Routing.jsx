@@ -10,6 +10,14 @@ import AdminAddVaccine from './pages/AdminAddVaccine';
 import AdminUpdateVaccine from './pages/AdminUpdateVaccine';
 import AdminDetailVaccine from './pages/AdminDetailVaccine';
 
+import AdminDiseaseCategories from './pages/AdminDiseaseCategories';
+import AdminUpdateCategory from './pages/AdminUpdateCategory';
+import AdminAddCategory from './pages/AdminAddCategory';
+
+import AdminAgeGroupsPage from './pages/AdminAgeGroupsPage';
+import AdminUpdateGroupPage from './pages/AdminUpdateAgeGroupPage';
+import AdminAddAgeGroupPage from './pages/AdminAddAgeGroupPage';
+
 const Routing = () => {
   return (
     <Routes>
@@ -24,6 +32,13 @@ const Routing = () => {
         <Route path="vaccines/:id" element={<AdminDetailVaccine />} />
         <Route path="vaccines/add-vaccine" element={<AdminAddVaccine />} />
         <Route path="vaccines/update-vaccine/:id" element={<AdminUpdateVaccine />} />
+        <Route path="disease-categories" element={<AdminDiseaseCategories />} />
+        <Route path="disease-categories/update/:id" element={<AdminUpdateCategory />} />
+        <Route path="disease-categories/add" element={<AdminAddCategory />} />
+
+        <Route path="age-groups-categories" element={<AdminAgeGroupsPage />} />
+        <Route path="age-groups-categories/update/:id" element={<AdminUpdateGroupPage />} />
+        <Route path="age-groups-categories/add" element={<AdminAddAgeGroupPage />} />
       </Route>
     </Routes>
   );

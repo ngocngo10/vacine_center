@@ -15,6 +15,7 @@ import {
 } from 'antd';
 import { useParams } from 'react-router-dom';
 import Loader from '../../components/Loader';
+import Message from '../../components/Message';
 import { getCategoryList, getAgeGroups } from '../../actions/category.action';
 import { getVaccine, editVaccine } from '../../actions/vaccine.action';
 import './index.css';
@@ -65,7 +66,7 @@ const AdminUpdateVaccine = () => {
 
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('admin')) {
-      dispatch(getCategoryList());
+      dispatch(getCategoryList({}));
       dispatch(getAgeGroups());
       dispatch(getVaccine(id));
     } else {
@@ -93,7 +94,8 @@ const AdminUpdateVaccine = () => {
   ) : userLogin.error || categoryList.error || ageGroupsCategoryList.error || vaccineItem.error ? (
     <Message description={error} />
   ) : (
-    <Card title="Cập nhật Vắc xin" loading={false} className="add-vaccine-card">
+    <Card loading={false} className="add-vaccine-card">
+      <h2 className="page-title">Cập nhật vắc xin</h2>
       <Row justify="space-around">
         <Col span={6}>
           <Image

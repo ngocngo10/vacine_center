@@ -48,9 +48,9 @@ module.exports = class AgeGroupService {
   async deleteMulti(ids) {
     try {
       await this.repository.deleteMulti(ids);
-      return res.json({ message: 'Deleted.' });
+      return;
     } catch (error) {
-      next(error);
+      throw error;
     }
   }
 };

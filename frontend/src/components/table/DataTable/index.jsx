@@ -16,7 +16,6 @@ function useDataTable({ columns, dataSource, updateEntityPath, handleDelete, han
     handleDelete
   });
 
-  console.log('selectedRow---', selectedRow?.key);
   const hasSelected = selectedRowKeys.length > 0;
   const rowSelection = {
     selectedRowKeys,
@@ -25,7 +24,7 @@ function useDataTable({ columns, dataSource, updateEntityPath, handleDelete, han
     }
   };
 
-  dataSource.content.forEach((item) => (item.index = item.index + currentPage * 10));
+  dataSource.content?.forEach((item) => (item.index = item.index + currentPage * 10));
 
   const updatedColumns = [
     ...columns,
