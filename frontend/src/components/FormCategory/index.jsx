@@ -31,7 +31,8 @@ const FormCategory = ({ cardTitle, okText, label, category, backURL, handleActio
     });
   }, [category]);
   return (
-    <Card title={cardTitle} loading={false} className="category-card">
+    <Card loading={false} className="category-card">
+      <h2 className="page-title">{cardTitle}</h2>
       <Row justify="space-around">
         <Col span={3}>
           <Image

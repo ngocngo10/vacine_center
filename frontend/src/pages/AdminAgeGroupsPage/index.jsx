@@ -119,6 +119,7 @@ const AdminAgeGroupsPage = () => {
     <>
       <div className="categories-card">
         <>
+          <h2 className="page-title">Danh sách các độ tuổi</h2>
           <Header
             addNewPath="admin-home/age-groups-categories/add"
             selectedRowKeys={selectedRowKeys}

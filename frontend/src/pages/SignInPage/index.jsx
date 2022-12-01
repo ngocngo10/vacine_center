@@ -36,7 +36,7 @@ const SignInPage = () => {
         <Container>
           {error && <Message description={error} />}
           <div className="login-card">
-            <h3 className="login-form-title">Đăng nhập</h3>
+            <h2 className="login-form-title">Đăng nhập</h2>
             <Form name="login-form" className="login-form" onFinish={onFinish}>
               <Form.Item
                 name="phoneNumber"

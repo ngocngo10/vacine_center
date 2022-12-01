@@ -40,7 +40,7 @@ const AdminHeader = () => {
   ];
   return (
     <>
-      <h2 className="title">Quản lí người dùng</h2>
+      <h2 className="title"></h2>
       <Dropdown menu={{ items }}>
         <div className="avatar">
           <span>{userInfo.user.name}</span>

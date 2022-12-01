@@ -135,6 +135,7 @@ const AdminVaccinePage = () => {
   ) : (
     <div className="vaccines-card">
       <>
+        <h2 className="page-title">Danh sách vắc xin</h2>
         <Header
           addNewPath="admin-home/vaccines/add-vaccine"
           selectedRowKeys={selectedRowKeys}

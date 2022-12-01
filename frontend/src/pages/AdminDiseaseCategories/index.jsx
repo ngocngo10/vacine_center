@@ -127,6 +127,7 @@ const AdminDiseaseCategories = () => {
     <>
       <div className="categories-card">
         <>
+          <h2 className="page-title">Danh sách các loại bệnh</h2>
           <Header
             addNewPath="admin-home/disease-categories/add"
             selectedRowKeys={selectedRowKeys}

@@ -94,7 +94,8 @@ const AdminUpdateVaccine = () => {
   ) : userLogin.error || categoryList.error || ageGroupsCategoryList.error || vaccineItem.error ? (
     <Message description={error} />
   ) : (
-    <Card title="Cập nhật Vắc xin" loading={false} className="add-vaccine-card">
+    <Card loading={false} className="add-vaccine-card">
+      <h2 className="page-title">Cập nhật vắc xin</h2>
       <Row justify="space-around">
         <Col span={6}>
           <Image
