@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Pagination } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
+import { Empty } from 'antd';
 import Message from '../Message';
+import Loader from '../Loader';
 import VaccineItem from '../VaccineItem';
 import { getVaccineList } from '../../actions/vaccine.action';
 import 'antd/dist/antd.css';
@@ -18,39 +20,9 @@ const VaccineList = () => {
     setCurrent(page);
   };
 
-  // const error = null;
-  // const vaccines = [
-  //   {
-  //     id: 1,
-  //     image: 'https://vnvc.vn/wp-content/uploads/2017/04/SYNFLORIX.jpg',
-  //     name: 'Vắc xin SYNFLORIX (Bỉ) phòng các bệnh do phế cầu khuẩn d ddd dddd ddd dddd ddd ddd ddd',
-  //     description:
-  //       'Vắc xin Synflorix phòng tránh 10 chủng vi khuẩn phế cầu (Streptococcus pneumoniae) gây các bệnh như: Hội chứng nhiễm trùng, viêm màng não, viêm phổi, nhiễm khuẩn huyết và viêm tai giữa cấp,…'
-  //   },
-  //   {
-  //     id: 2,
-  //     image: 'https://vnvc.vn/wp-content/uploads/2019/11/prevenar.jpg',
-  //     name: 'Vắc xin SYNFLORIX (Bỉ) phòng các bệnh do phế cầu khuẩn',
-  //     description:
-  //       'Vắc xin Synflorix phòng tránh 10 chủng vi khuẩn phế cầu (Streptococcus pneumoniae) gây các bệnh như: Hội chứng nhiễm trùng, viêm màng não, viêm phổi, nhiễm khuẩn huyết và viêm tai giữa cấp,…'
-  //   },
-  //   {
-  //     id: 3,
-  //     image: 'https://vnvc.vn/wp-content/uploads/2019/11/prevenar.jpg',
-  //     name: 'Vắc xin SYNFLORIX (Bỉ) phòng các bệnh do phế cầu khuẩn',
-  //     description:
-  //       'Vắc xin Synflorix phòng tránh 10 chủng vi khuẩn phế cầu (Streptococcus pneumoniae) gây các bệnh như: Hội chứng nhiễm trùng, viêm màng não, viêm phổi, nhiễm khuẩn huyết và viêm tai giữa cấp,…'
-  //   },
-  //   {
-  //     id: 4,
-  //     image: 'https://vnvc.vn/wp-content/uploads/2019/11/prevenar.jpg',
-  //     name: 'Vắc xin SYNFLORIX (Bỉ) phòng các bệnh do phế cầu khuẩn',
-  //     description:
-  //       'Vắc xin Synflorix phòng tránh 10 chủng vi khuẩn phế cầu (Streptococcus pneumoniae) gây các bệnh như: Hội chứng nhiễm trùng, viêm màng não, viêm phổi, nhiễm khuẩn huyết và viêm tai giữa cấp,…'
-  //   }
-  // ];
-
-  return error ? (
+  return loading ? (
+    <Loader />
+  ) : error ? (
     <Message description={error} />
   ) : vaccines.length ? (
     <>
@@ -64,13 +36,13 @@ const VaccineList = () => {
         className="page-pagination"
         current={current}
         onChange={onChangePage}
-        pageSize={6}
+        pageSize={9}
         total={totalItem}
         hideOnSinglePage
       />
     </>
   ) : (
-    <div className="empty-vaccine-list">No records</div>
+    <Empty />
   );
 };
 
