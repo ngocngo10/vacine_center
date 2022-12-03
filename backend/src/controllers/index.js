@@ -7,6 +7,8 @@ const PatientController = require('./patient.controller');
 const ScheduleConfig = require('./schedule-config.controller');
 const UploadController = require('./upload.controller');
 const AgeGroupController = require('./age-group.controller');
+const AppointmentController = require('./appointment.controller');
+const ScheduleController = require('./schedule.controller');
 
 module.exports = {
   AuthController,
@@ -16,5 +18,7 @@ module.exports = {
   PatientController,
   ScheduleConfig,
   UploadController,
-  AgeGroupController
+  AgeGroupController,
+  AppointmentController,
+  ScheduleController
 };
