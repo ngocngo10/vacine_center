@@ -16,7 +16,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       appointmentDuration: {
         field: 'appointment_duration',
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT
       },
       participantNumber: {
         field: 'participant_number',
