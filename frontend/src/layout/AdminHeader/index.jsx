@@ -22,6 +22,7 @@ const AdminHeader = () => {
         <Link
           to="/login"
           onClick={(e) => {
+            e.preventDefault();
             handleLogout(e);
           }}>
           Đăng xuất
@@ -35,7 +36,28 @@ const AdminHeader = () => {
           }}
         />
       ),
-      className: 'dropdown-logout'
+      className: 'dropdown-account__item'
+    },
+    {
+      label: (
+        <Link
+          to=""
+          onClick={(e) => {
+            e.preventDefault();
+            handleLogout(e);
+          }}>
+          Tài khoản
+        </Link>
+      ),
+      key: 'profile',
+      icon: (
+        <LogoutOutlined
+          style={{
+            fontSize: '20px'
+          }}
+        />
+      ),
+      className: 'dropdown-account__item'
     }
   ];
   return (
