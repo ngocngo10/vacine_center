@@ -21,6 +21,10 @@ module.exports = (sequelize, Sequelize) => {
       participantNumber: {
         field: 'participant_number',
         type: Sequelize.INTEGER
+      },
+      applyFrom: {
+        field: 'apply_from',
+        type: Sequelize.DATE
       }
     },
     {

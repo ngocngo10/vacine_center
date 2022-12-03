@@ -3,24 +3,24 @@ module.exports = (sequelize, Sequelize) => {
     'appointments',
     {
       patientId: {
-        name: 'patient_id',
+        field: 'patient_id',
         type: Sequelize.INTEGER
       },
-      vaccineId: {
-        name: 'vaccine_id',
+      doctorId: {
+        field: 'doctor_id',
         type: Sequelize.INTEGER
-      },
-      injectedTime: {
-        name: 'injected_time',
-        type: Sequelize.DATE
       },
       scheduleId: {
-        name: 'scheduleId',
+        field: 'schedule_id',
         type: Sequelize.INTEGER
       },
       isConfirmed: {
-        name: 'is_confirmed',
+        field: 'is_confirmed',
         type: Sequelize.BOOLEAN
+      },
+      baseContent: {
+        field: 'base_content',
+        type: Sequelize.TEXT
       }
     },
     {

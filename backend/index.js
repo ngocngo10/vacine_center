@@ -16,6 +16,9 @@ const patientRouter = require("./src/routes/patient");
 const scheduleConfigRoute = require('./src/routes/schedule-config');
 const uploadRouter = require('./src/routes/upload');
 const ageGroupRouter = require('./src/routes/age-group');
+const appointmentRouter = require('./src/routes/appointment');
+const scheduleRouter = require('./src/routes/schedule');
+
 
 // var usersRouter = require('./src/routes/users');
 
@@ -47,7 +50,10 @@ app.use("/api/vaccine-details", vaccineDetailRouter);
 app.use('/api/patients', patientRouter);
 app.use('/api/schedule-configs', scheduleConfigRoute);
 app.use('/api/upload', uploadRouter);
-app.use('/api/age-groups', ageGroupRouter)
+app.use('/api/age-groups', ageGroupRouter);
+app.use('/api/schedule', scheduleRouter);
+app.use('/api/appointments', appointmentRouter);
+
 // app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
