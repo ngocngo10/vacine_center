@@ -8,4 +8,7 @@ module.exports = class ScheduleConfigRepository extends BaseRepository {
     super();
     this.model = ScheduleConfig;
   }
+  async find() {
+    return (await this.model.findAll())[0];
+  }
 };
