@@ -11,8 +11,8 @@ const VaccineCategoryCarousel = ({ categories }) => {
 
   const carouselCategories = [];
   let index = 0;
-  while (carouselCategories.length < categories.length / 6.0) {
-    carouselCategories.push(categories.slice(index, index + 6));
+  while (carouselCategories.length < categories?.length / 6.0) {
+    carouselCategories.push(categories?.slice(index, index + 6));
     index = index + 6;
   }
 

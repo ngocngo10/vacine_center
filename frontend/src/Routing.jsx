@@ -18,6 +18,8 @@ import AdminAgeGroupsPage from './pages/AdminAgeGroupsPage';
 import AdminUpdateGroupPage from './pages/AdminUpdateAgeGroupPage';
 import AdminAddAgeGroupPage from './pages/AdminAddAgeGroupPage';
 
+import AdminScheduleConfig from './pages/AdminScheduleConfig';
+
 import Main from './components/Main';
 const Routing = () => {
   return (
@@ -37,6 +39,7 @@ const Routing = () => {
         <Route path="vaccines/:id" element={<AdminDetailVaccine />} />
         <Route path="vaccines/add-vaccine" element={<AdminAddVaccine />} />
         <Route path="vaccines/update-vaccine/:id" element={<AdminUpdateVaccine />} />
+
         <Route path="disease-categories" element={<AdminDiseaseCategories />} />
         <Route path="disease-categories/update/:id" element={<AdminUpdateCategory />} />
         <Route path="disease-categories/add" element={<AdminAddCategory />} />
@@ -44,6 +47,8 @@ const Routing = () => {
         <Route path="age-groups-categories" element={<AdminAgeGroupsPage />} />
         <Route path="age-groups-categories/update/:id" element={<AdminUpdateGroupPage />} />
         <Route path="age-groups-categories/add" element={<AdminAddAgeGroupPage />} />
+
+        <Route path="appointment-schedule/config" element={<AdminScheduleConfig />} />
       </Route>
     </Routes>
   );

@@ -17,19 +17,3 @@
   font-size: 28px;
   color: var(--color-third);
 }
-
-.dropdown-logout {
-  background-color: var(--color-primary);
-  color: var(--color-third);
-  font-family: 'WorkSans-Regular';
-  line-height: 1.4;
-  font-size: 16px;
-}
-
-.dropdown-logout:hover {
-  background-color: var(--color-primary);
-  color: var(--color-third);
-  font-family: 'WorkSans-Regular';
-  line-height: 1.4;
-  font-size: 16px;
-}

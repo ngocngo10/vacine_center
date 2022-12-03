@@ -24,7 +24,7 @@ const VaccineList = () => {
     <Loader />
   ) : error ? (
     <Message description={error} />
-  ) : vaccines.length ? (
+  ) : vaccines?.length ? (
     <>
       <ul className="vaccine-list">
         {vaccines.map((vaccine) => (

@@ -1,7 +1,6 @@
-import { useState } from 'react';
-import { Menu, Button } from 'antd';
-import { UserSwitchOutlined } from '@ant-design/icons';
-import { NavLink, useLocation, Link } from 'react-router-dom';
+import { Menu } from 'antd';
+import { UserSwitchOutlined, FieldTimeOutlined } from '@ant-design/icons';
+import { NavLink, useLocation } from 'react-router-dom';
 import './index.css';
 
 function AdminSideNav() {
@@ -35,11 +34,17 @@ function AdminSideNav() {
             <NavLink to="age-groups-categories">Độ tuổi</NavLink>
           </Menu.Item>
         </Menu.SubMenu>
-        <Menu.Item key="3">
-          <NavLink to="/billing">
-            <span className="label">Loại vkkkkkkkkk</span>
-          </NavLink>
-        </Menu.Item>
+        <Menu.SubMenu
+          key="submenu-4"
+          title="Lịch hẹn"
+          icon=<FieldTimeOutlined style={{ fontSize: '20px' }} />>
+          <Menu.Item key="appointment-schedule">
+            <NavLink to="appointment-schedule">Danh sách lịch hẹn</NavLink>
+          </Menu.Item>
+          <Menu.Item key="appointment-schedule-config">
+            <NavLink to="appointment-schedule/config">Cài đặt lịch hẹn</NavLink>
+          </Menu.Item>
+        </Menu.SubMenu>
         <Menu.Item key="4">
           <NavLink to="/rtl">
             <span className="label">RTL</span>

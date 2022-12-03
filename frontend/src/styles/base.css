@@ -17,3 +17,14 @@ a {
   display: -webkit-box;
   -webkit-box-orient: vertical;
 }
+
+.dropdown-account__item {
+  border-left: 4px solid var(--color-primary);
+  border-bottom: 1px solid #e9ecef;
+  margin-bottom: 1px;
+  color: var(--color-fifth);
+  background-color: var(--color-third);
+  font-family: 'WorkSans-Regular';
+  line-height: 1.4;
+  font-size: 16px;
+}

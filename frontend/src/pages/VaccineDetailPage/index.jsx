@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import Message from '../../components/Message';
+import Loader from '../../components/Loader';
 import VaccineInformItem from '../../components/VaccineInformItem';
 import Container from '../../layout/Container';
 import { getVaccineDetails } from '../../actions/vaccine_detail.action';
@@ -96,8 +97,8 @@ const VaccineDetailPage = () => {
   ];
 
   const dispatch = useDispatch();
-  const vaccineDetail = useSelector((state) => state.vaccineDetail);
-  const { loading, error, vaccine } = vaccineDetail;
+  const vaccineInformList = useSelector((state) => state.vaccineInformList);
+  const { error, vaccine, vaccineInforms, loading } = vaccineInformList;
 
   const { vaccineId } = useParams();
 
@@ -105,7 +106,9 @@ const VaccineDetailPage = () => {
     dispatch(getVaccineDetails(vaccineId));
   }, []);
 
-  return error ? (
+  return loading ? (
+    <Loader />
+  ) : error ? (
     <Message description={error} />
   ) : (
     vaccine && (
@@ -127,12 +130,12 @@ const VaccineDetailPage = () => {
             </nav>
             <section className="section-vaccine-base-inform">
               <div className="vaccine-image">
-                <img src={vaccine.vaccine.image} alt="vaccine-image" />
+                <img src={vaccine.image} alt="vaccine-image" />
               </div>
               <div className="vaccine-base-inform">
-                <h2 className="vaccine-name">{vaccine.vaccine.name}</h2>
+                <h2 className="vaccine-name">{vaccine.name}</h2>
                 <hr />
-                <p className="vaccine-des">{vaccine.vaccine.description}</p>
+                <p className="vaccine-des">{vaccine.description}</p>
                 <p className="vaccine_price">{/* 3.890.000₫ <del>3.590.000₫ </del> */}</p>
               </div>
             </section>
@@ -141,8 +144,8 @@ const VaccineDetailPage = () => {
                 <div className="vaccine-detail-card">
                   <aside className="sidebar">
                     <ul className="sidebar-list">
-                      {vaccine.vaccineDetails.length &&
-                        vaccine.vaccineDetails.map((informItem, index) => (
+                      {vaccineInforms?.length &&
+                        vaccineInforms.map((informItem, index) => (
                           <li key={informItem.id} className="sidebar-item">
                             <a href={`#inform-${informItem.id}`}>{`${index + 1}. ${
                               informItem.title
@@ -154,8 +157,8 @@ const VaccineDetailPage = () => {
                   <div className="vaccine-detail-inform">
                     <h3 className="inform-heading">Thông tin chi tiết vaccine</h3>
                     <ul className="inform-list">
-                      {vaccine.vaccineDetails.length &&
-                        vaccine.vaccineDetails.map((informItem, index) => (
+                      {vaccineInforms?.length &&
+                        vaccineInforms.map((informItem, index) => (
                           <VaccineInformItem
                             id={index + 1}
                             key={informItem.id}
