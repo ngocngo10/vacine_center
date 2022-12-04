@@ -4,15 +4,15 @@ module.exports = (sequelize, Sequelize) => {
     {
       startAt: {
         field: 'start_at',
-        type: Sequelize.FLOAT
+        type: Sequelize.TIME
       },
       endTime: {
         field: 'end_at',
-        type: Sequelize.FLOAT
+        type: Sequelize.TIME
       },
       restTime: {
         field: 'rest_at',
-        type: Sequelize.FLOAT
+        type: Sequelize.TIME
       },
       appointmentDuration: {
         field: 'appointment_duration',

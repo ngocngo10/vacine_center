@@ -1,52 +1,65 @@
-const createError = require("http-errors");
-const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const logger = require("morgan");
-const cors = require("cors");
-const log = require("loglevel");
-require("dotenv").config();
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors');
+const cron = require('cron');
+const log = require('loglevel');
+var moment = require('moment-timezone');
+require('dotenv').config();
 
-const indexRouter = require("./src/routes/index");
-const authRouter = require("./src/routes/auth");
-const categoryRouter = require("./src/routes/category");
-const vaccineRouter = require("./src/routes/vaccine");
-const vaccineDetailRouter = require("./src/routes/vaccine-detail");
-const patientRouter = require("./src/routes/patient");
+const indexRouter = require('./src/routes/index');
+const authRouter = require('./src/routes/auth');
+const categoryRouter = require('./src/routes/category');
+const vaccineRouter = require('./src/routes/vaccine');
+const vaccineDetailRouter = require('./src/routes/vaccine-detail');
+const patientRouter = require('./src/routes/patient');
 const scheduleConfigRoute = require('./src/routes/schedule-config');
 const uploadRouter = require('./src/routes/upload');
 const ageGroupRouter = require('./src/routes/age-group');
 const appointmentRouter = require('./src/routes/appointment');
 const scheduleRouter = require('./src/routes/schedule');
-
+const jobs = require('./src/jobs/create-schedule.job');
 
 // var usersRouter = require('./src/routes/users');
 
 var app = express();
 var corsOptions = {
-  origin: "http://127.0.0.1:5173",
+  origin: 'http://127.0.0.1:5173',
 };
 app.use(cors(corsOptions));
-app.use(logger("dev"));
+app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-const db = require("./src/models");
+const db = require('./src/models');
 db.sequelize
   .sync()
   .then(() => {
-    console.log("Synced db.");
+    console.log('Synced db.');
+    const job = new cron.CronJob(
+      '00 00 1 * * *',
+      function() {
+        const date = moment().tz('Asia/Ho_Chi_Minh').startOf('day');
+        const endDate = moment().tz('Asia/Ho_Chi_Minh').endOf('month').startOf('day');
+        jobs.createSchedules(date, endDate);
+      },
+      null,
+      true,
+      'Asia/Ho_Chi_Minh');
+    job.start();
   })
   .catch((err) => {
-    console.log("Failed to sync db: " + err.message);
+    console.log('Failed to sync db: ' + err.message);
   });
 
-app.use("/", indexRouter);
-app.use("/auth", authRouter);
-app.use("/api/categories", categoryRouter);
-app.use("/api/vaccines", vaccineRouter);
-app.use("/api/vaccine-details", vaccineDetailRouter);
+app.use('/', indexRouter);
+app.use('/auth', authRouter);
+app.use('/api/categories', categoryRouter);
+app.use('/api/vaccines', vaccineRouter);
+app.use('/api/vaccine-details', vaccineDetailRouter);
 app.use('/api/patients', patientRouter);
 app.use('/api/schedule-configs', scheduleConfigRoute);
 app.use('/api/upload', uploadRouter);
@@ -65,12 +78,12 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
   log.error(err);
 
   if (!err.status) {
     res.status(500);
-    return res.json({ error: "Internal Server Error." });
+    return res.json({ error: 'Internal Server Error.' });
   } else {
     res.status(err.status);
     return res.json({ error: err.message });
