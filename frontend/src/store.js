@@ -28,7 +28,14 @@ import {
   vaccineInformDeleteReducer,
   vaccineInformEditReducer
 } from './reducers/vaccine_detail.reducer';
+
 import { uploadReducer } from './reducers/upload.reducer';
+
+import {
+  scheduleConfigCreateReducer,
+  scheduleConfigsReducer,
+  scheduleConfigEditReducer
+} from './reducers/schedule_config.reducer';
 
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
@@ -53,7 +60,11 @@ const reducer = combineReducers({
   ageGroupsDelete: ageGroupsDeleteReducer,
   multiAgeGroupsDelete: multiAgeGroupsDeleteReducer,
   ageGroupsEdit: ageGroupsEditReducer,
-  ageGroupsCreate: ageGroupsCreateReducer
+  ageGroupsCreate: ageGroupsCreateReducer,
+
+  scheduleConfigCreate: scheduleConfigCreateReducer,
+  scheduleConfigs: scheduleConfigsReducer,
+  scheduleConfigEdit: scheduleConfigEditReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

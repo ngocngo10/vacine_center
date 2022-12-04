@@ -37,7 +37,7 @@ function AdminSideNav() {
         <Menu.SubMenu
           key="submenu-4"
           title="Lịch hẹn"
-          icon=<FieldTimeOutlined style={{ fontSize: '20px' }} />>
+          icon={<FieldTimeOutlined style={{ fontSize: '20px' }} />}>
           <Menu.Item key="appointment-schedule">
             <NavLink to="appointment-schedule">Danh sách lịch hẹn</NavLink>
           </Menu.Item>

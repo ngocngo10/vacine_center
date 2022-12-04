@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { InputNumber, Button, Form, Row, Col, Select, Divider, TimePicker, DatePicker } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
+import './index.css';
 
-const FormConfig = ({ appointmentConfig, handleAdd, okText, handleCancel }) => {
+const FormConfig = ({ appointmentConfig, handleOnSubmit, okText, handleCancel }) => {
+  const navigate = useNavigate();
   const format = 'HH:mm';
+  const formRef = useRef(null);
 
   const onFinish = (values) => {
-    console.log('values', values);
+    values.startAt = moment(values.startAt).format('HH:mm');
+    values.endTime = moment(values.endTime).format('HH:mm');
+    values.restTime = moment(values.restTime).format('HH:mm');
+    values.applyFrom = moment(values.applyFrom).format('YYYY/MM/DD');
+    handleOnSubmit(values);
+  };
+
+  const handleCancelBtn = () => {
+    if (handleCancel) {
+      handleCancel();
+    } else {
+      navigate(0);
+    }
   };
 
   let disabled;
@@ -13,8 +30,22 @@ const FormConfig = ({ appointmentConfig, handleAdd, okText, handleCancel }) => {
     disabled = true;
   } else disabled = false;
 
+  useEffect(() => {
+    if (appointmentConfig) {
+      formRef.current?.setFieldsValue({
+        startAt: moment(appointmentConfig?.startAt, format),
+        endTime: moment(appointmentConfig?.endTime, format),
+        restTime: moment(appointmentConfig?.restTime, format),
+        participantNumber: appointmentConfig?.participantNumber,
+        appointmentDuration: appointmentConfig?.appointmentDuration,
+        applyFrom: moment(appointmentConfig?.applyFrom)
+      });
+    }
+  }, [appointmentConfig]);
+
   return (
     <Form
+      ref={formRef}
       layout="vertical"
       className="appointment-config-form"
       labelCol={{
@@ -51,10 +82,12 @@ const FormConfig = ({ appointmentConfig, handleAdd, okText, handleCancel }) => {
               ({ getFieldValue }) => ({
                 validator(_, endTime) {
                   const startAt = getFieldValue('startAt');
-                  if (!endTime || endTime.diff(startAt) > 0) {
+                  if (!endTime || endTime.diff(startAt.startOf('minute'), 'minutes') > 8 * 60) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(new Error('Giờ kết thúc phải lớn hơn giờ bắt đầu!'));
+                  return Promise.reject(
+                    new Error('Giờ kết thúc phải trễ nhiều hơn 8 tiếng so giờ bắt đầu!')
+                  );
                 }
               })
             ]}
@@ -81,7 +114,8 @@ const FormConfig = ({ appointmentConfig, handleAdd, okText, handleCancel }) => {
                     !restTime ||
                     !startAt ||
                     !endTime ||
-                    (restTime.diff(startAt) > 0 && endTime.diff(restTime) > 0)
+                    (restTime.diff(startAt.startOf('minute'), 'minutes') > 0 &&
+                      endTime.diff(restTime.startOf('minute'), 'minutes') > 0)
                   ) {
                     return Promise.resolve();
                   }
@@ -114,7 +148,7 @@ const FormConfig = ({ appointmentConfig, handleAdd, okText, handleCancel }) => {
         <Col span={10}>
           <Form.Item
             label="Thời lượng mỗi khung giờ"
-            name="appointment_duration"
+            name="appointmentDuration"
             rules={[
               {
                 required: true,
@@ -122,9 +156,9 @@ const FormConfig = ({ appointmentConfig, handleAdd, okText, handleCancel }) => {
               },
               ({ getFieldValue }) => ({
                 validator(_, appointment_duration) {
-                  const startAt = getFieldValue('startAt');
-                  const restTime = getFieldValue('restTime');
-                  const endTime = getFieldValue('endTime');
+                  const startAt = getFieldValue('startAt').startOf('minute');
+                  const restTime = getFieldValue('restTime').startOf('minute');
+                  const endTime = getFieldValue('endTime').startOf('minute');
                   if (
                     !appointment_duration ||
                     !startAt ||
@@ -176,22 +210,32 @@ const FormConfig = ({ appointmentConfig, handleAdd, okText, handleCancel }) => {
         <Col span={10}>
           <Form.Item
             label="Áp dụng từ ngày"
-            name="apply_from"
+            name="applyFrom"
             rules={[
               {
                 required: true,
                 message: 'Vui lòng nhập ngày bắt đầu áp dụng!'
-              }
+              },
+              ({ getFieldValue }) => ({
+                validator(_, applyFrom) {
+                  if (!applyFrom || applyFrom.diff(moment().startOf('day'), 'days') > 14) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error('Ngày áp dụng phải lớn hơn 14 ngày so với ngày cài đặt!')
+                  );
+                }
+              })
             ]}
             labelAlign="left">
-            <DatePicker />
+            <DatePicker format="YYYY/MM/DD" />
           </Form.Item>
         </Col>
       </Row>
       <Row justify="center">
-        {(appointmentConfig?.index === 1 || handleAdd) && (
+        {(appointmentConfig?.index === 1 || handleCancel) && (
           <>
-            <Button type="primary" className="btn-cancel" onClick={handleCancel}>
+            <Button type="primary" className="btn-cancel" onClick={handleCancelBtn}>
               Hủy
             </Button>
             <Button

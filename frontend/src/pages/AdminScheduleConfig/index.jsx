@@ -1,32 +1,31 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../components/Loader';
-import {
-  Card,
-  InputNumber,
-  Checkbox,
-  Form,
-  Input,
-  Row,
-  Col,
-  Select,
-  Divider,
-  Button,
-  Image,
-  TimePicker,
-  DatePicker,
-  Modal
-} from 'antd';
+import Message from '../../components/Message';
+import { Card, Row, Col, Divider, Button, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import FormConfig from '../../components/FormConfig';
+import {
+  getScheduleConfigs,
+  createScheduleConfig,
+  editScheduleConfig
+} from '../../actions/schedule_config.action';
 import './index.css';
 
 const AdminScheduleConfig = () => {
-  const formRef = useRef();
-  const format = 'HH:mm';
+  const dispatch = useDispatch();
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
-  const appointmentConfigs = [1, 2];
+  const scheduleConfigs = useSelector((state) => state.scheduleConfigs);
+  const { scheduleConfigList, error, loading } = scheduleConfigs;
+
+  const scheduleConfigCreate = useSelector((state) => state.scheduleConfigCreate);
+  const { createSuccess } = scheduleConfigCreate;
+
+  const scheduleConfigEdit = useSelector((state) => state.scheduleConfigEdit);
+  const { editSuccess } = scheduleConfigEdit;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
@@ -39,21 +38,58 @@ const AdminScheduleConfig = () => {
     setIsModalOpen(false);
   };
 
-  return (
+  const handleAdd = (scheduleConfig) => {
+    dispatch(createScheduleConfig(scheduleConfig));
+    handleCancel();
+  };
+
+  let id;
+  if (scheduleConfigList) {
+    id = scheduleConfigList[1]?.id;
+  }
+  const handleEdit = (scheduleConfig) => {
+    dispatch(editScheduleConfig({ scheduleConfig, id }));
+    handleCancel();
+  };
+
+  useEffect(() => {
+    if (userInfo && userInfo.user.roles.includes('admin')) {
+      dispatch(getScheduleConfigs());
+    } else {
+      navigate('/login');
+    }
+  }, [userInfo, createSuccess]);
+
+  return loading ? (
+    <Loader />
+  ) : error || scheduleConfigCreate.error || scheduleConfigEdit.error ? (
+    <Message
+      description={`${error ? error : ''} ${
+        scheduleConfigCreate.error ? scheduleConfigCreate.error : ''
+      } ${scheduleConfigEdit.error ? scheduleConfigEdit.error : ''}`}
+    />
+  ) : (
     <>
+      {(createSuccess || editSuccess) && (
+        <Message description="Cài đặt lịch thành công" type="success" />
+      )}
       <Card loading={false} className="appointment-schedule-card">
         <h2 className="page-title">Cài đặt khung giờ hẹn</h2>
-        {appointmentConfigs?.length &&
-          appointmentConfigs.map((item, index) => (
-            <Row justify="center">
+        {scheduleConfigList?.length &&
+          scheduleConfigList.map((item, index) => (
+            <Row justify="center" key={item.id}>
               <Col span={14}>
-                <FormConfig appointmentConfig={{ ...item, index: index }} okText="Cập nhật" />
+                <FormConfig
+                  appointmentConfig={{ ...item, index: index }}
+                  okText="Cập nhật"
+                  handleOnSubmit={handleEdit}
+                />
                 <Divider />
               </Col>
             </Row>
           ))}
 
-        {appointmentConfigs?.length < 2 && (
+        {scheduleConfigList?.length < 2 && (
           <Row justify="center">
             <Col>
               <Button type="primary" className="btn-cancel" onClick={showModal}>
@@ -71,7 +107,7 @@ const AdminScheduleConfig = () => {
         width={800}
         cancelButtonProps={{ style: { display: 'none' } }}
         okButtonProps={{ style: { display: 'none' } }}>
-        <FormConfig handleAdd={handleCancel} okText="Thêm" handleCancel={handleCancel} />
+        <FormConfig handleOnSubmit={handleAdd} okText="Thêm" handleCancel={handleCancel} />
       </Modal>
     </>
   );
