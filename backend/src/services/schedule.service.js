@@ -1,4 +1,5 @@
 const { ScheduleRepository } = require('../repositories');
+const moment = require('moment-timezone');
 
 module.exports = class ScheduleService {
   constructor() {
@@ -20,12 +21,22 @@ module.exports = class ScheduleService {
   async find(reqQuery) {
     const findOptions = {};
     if (reqQuery.page) {
-      findOptions.limit = +reqQuery.perPage || 10;
+      findOptions.limit = +reqQuery.perPage || 20;
       findOptions.offset = (+reqQuery.page - 1) * findOptions.limit;
     }
 
     if (reqQuery.orderBy) {
-      findOptions.order = [reqQuery.orderBy, reqQuery.orderType || 'DESC'];
+      findOptions.order = [['caseNumber', 'ASC']];
+    }
+    const now = moment().format('YYYY-MM-DD');
+    if (reqQuery.day) {
+      findOptions.where = {
+        day: reqQuery.day
+      }
+    } else {
+      findOptions.where = {
+        day: now
+      }
     }
 
     return await this.repository.find(findOptions);

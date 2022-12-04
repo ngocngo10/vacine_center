@@ -42,12 +42,9 @@ db.sequelize
     const job = new cron.CronJob(
       '00 00 1 * * *',
       function() {
-        const date = moment().tz('Asia/Ho_Chi_Minh');
-        const nextMonth = moment().tz('Asia/Ho_Chi_Minh').add(1, 'month');
-        while (date < nextMonth) {
-          jobs.createSchedules(date.format('YYYY-MM-DD'));
-          date.add(1, 'day');
-        }
+        const date = moment().tz('Asia/Ho_Chi_Minh').startOf('day');
+        const endDate = moment().tz('Asia/Ho_Chi_Minh').endOf('month').startOf('day');
+        jobs.createSchedules(date, endDate);
       },
       null,
       true,
