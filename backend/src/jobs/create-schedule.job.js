@@ -1,11 +1,31 @@
 const { ScheduleConfigRepository } = require('../repositories');
 const { ScheduleRepository } = require('../repositories');
 
-async function createSchedules(date) {
-  const repository = new ScheduleRepository();  
-  const scheduleConfigRepository = new ScheduleConfigRepository();
-  const scheduleConfig = await scheduleConfigRepository.find();
-  const morningTime = scheduleConfig.restTime - scheduleConfig.startAt;
+function toHour(str) {
+  const arr = str.split(':');
+  if (arr.length == 2) arr.push('00');
+  const [hour, min, sec] = str.split(':');
+  return +hour + +min / 60 + +sec / 3600;
+}
+function hourToString(hourFloat) {
+  const hour = hourFloat - (hourFloat % 1);
+  const minute = Math.floor(hourFloat * 60 - hour * 60);
+  const sec = hourFloat * 3600 - minute * 60;
+  return [hour, minute, sec].map(item => ('0' + item).slice(-2)).join(':');
+}
+function addMinuteToStringHour(str, minute) {
+  const hour = toHour(str) + minute / 60;
+  return hourToString(hour);
+}
+
+async function createDailySchedules(date, db) {
+  const {
+    repository,
+    scheduleConfigRepository
+  } = db;  
+  const scheduleConfigs = await scheduleConfigRepository.find();
+  const scheduleConfig = scheduleConfigs[1] || scheduleConfigs[0];
+  const morningTime = toHour(scheduleConfig.restTime) - toHour(scheduleConfig.startAt);
   let time = scheduleConfig.startAt;
   let index = 0;
   const schedules = [];
@@ -19,9 +39,10 @@ async function createSchedules(date) {
       registerParticipantNumber: 0
     });
     index++;
-    time += scheduleConfig.appointmentDuration;
+    time = addMinuteToStringHour(time, scheduleConfig.appointmentDuration);
   }
-  time = scheduleConfig.endTime - (8 - morningTime);
+  startAfternoonHour = toHour(scheduleConfig.endTime) - (8 - morningTime);
+  time = hourToString(startAfternoonHour);
   while (time < scheduleConfig.endTime) {
     schedules.push({
       day: date,
@@ -32,22 +53,23 @@ async function createSchedules(date) {
       registerParticipantNumber: 0
     });
     index++;
-    time += scheduleConfig.appointmentDuration;
+    time = addMinuteToStringHour(time, scheduleConfig.appointmentDuration);
   }
   await repository.model.bulkCreate(schedules);
 }
-function toHour(timeStr) {
-  if (!timeStr.includes(":")) return parseFloat(timeStr);
-  const [hour, min, secs] = timeStr.split(":");
-  return Math.round((+hour + +min / 60 + +secs / 3600) * 1000) / 1000;
-}
-function toTime(hourFloat) {
-  const hour = hourFloat - (hourFloat % 1);
-  const minFloat = (hourFloat % 1) * 60;
-  const secFloat = (minFloat) % 1;
-  const mins = Math.floor(minFloat);
-  const secs = Math.round(secFloat * 60);
-  return [hour, mins, secs].join(':');
+
+async function createSchedules(fromDate, toDate) {
+  const repository = new ScheduleRepository();
+  const scheduleConfigRepository = new ScheduleConfigRepository();
+  const db = {
+    repository,
+    scheduleConfigRepository
+  }
+  let timer = fromDate.clone()
+  while (toDate.diff(timer, 'days') > -1) {
+    await createDailySchedules(timer.format('YYYY-MM-DD'), db);
+    timer.add(1, 'days');
+  }
 }
 module.exports = {
   createSchedules

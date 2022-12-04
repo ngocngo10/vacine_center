@@ -23,7 +23,7 @@ services:
       - "POSTGRES_PASSWORD=password"
     volumes:
       - ./backend/configs/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./backend/postgres/:/var/lib/postgresql/data
+      # - ./backend/postgres/:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     restart: unless-stopped

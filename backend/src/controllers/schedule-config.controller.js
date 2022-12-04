@@ -3,10 +3,6 @@ const ErrorCreator = require('../utils/error_creator');
 const scheduleConfigService = new ScheduleConfigService();
 async function create(req, res, next) {
   try {
-    const check = await scheduleConfigService.findOne();
-    if (check) {
-      throw new ErrorCreator('Config is existed', 400);
-    }
     await scheduleConfigService.create(req.body);
     return res.json({
       message: 'Schedule config is created successfully'
@@ -18,7 +14,7 @@ async function create(req, res, next) {
 
 async function findOne(req, res, next) {
   try {
-    const scheduleConfig = await scheduleConfigService.findOne();
+    const scheduleConfig = await scheduleConfigService.find();
     return res.json({ scheduleConfig });
   } catch (error) {
     next(error);
