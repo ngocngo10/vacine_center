@@ -65,6 +65,13 @@ Appointment.belongsTo(Schedule, {
   as: 'schedule'
 });
 
+User.hasMany(Appointment, { as: 'appointments' });
+Appointment.belongsTo(User, {
+  foreignKey: 'user_id',
+  as: 'user'
+});
+
+
 module.exports = {
   Sequelize,
   sequelize,
