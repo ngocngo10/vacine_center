@@ -2,7 +2,8 @@
   width: 100%;
   height: 500px;
   background-size: cover;
-  background-image: url('./bgr-vaccine-categories.jpg');
+  /* background-image: url('./bgr-vaccine-categories.jpg'); */
+  background-image: url('https://vnvc.vn/wp-content/themes/wg/images/header_thong_tin_san_pham_vacxin.jpg');
 }
 
 .slideshow-nav {

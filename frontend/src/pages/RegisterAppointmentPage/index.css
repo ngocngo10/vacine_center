@@ -1,0 +1,73 @@
+.appointment-register-page {
+  /* background: #f2f3f7; */
+}
+.appointment-register-title {
+  margin-top: 20px;
+}
+
+.appointment-register-form {
+  padding: 20px 0px 50px;
+}
+
+.appointment-register-form h4 {
+  margin: 20px 0px;
+  font-size: 20px;
+  line-height: 1.4;
+  font-family: 'WorkSans-Medium';
+  color: var(--color-primary);
+}
+
+.register-appointment-btn {
+  text-transform: uppercase;
+  font-family: 'WorkSans-Medium';
+  font-size: 20px;
+  line-height: 1.4;
+  border-radius: 20px;
+}
+
+.appointment-shift-card {
+  background-color: var(--color-primary);
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin: 10px 0px;
+  width: fit-content;
+
+  font-family: 'WorkSans-Regular';
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--color-third);
+  text-align: center;
+}
+
+.appointment-shift-tag {
+  font-family: 'WorkSans-Regular';
+  font-size: 16px;
+  line-height: 1.4;
+  padding: 5px 10px;
+}
+
+.text--card-title {
+  -webkit-line-clamp: 2; /* number of lines to show */
+  line-clamp: 2;
+  font-family: 'WorkSans-Medium';
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--color-primary);
+}
+
+.text--card-desc {
+  -webkit-line-clamp: 3; /* number of lines to show */
+  line-clamp: 3;
+  font-family: 'WorkSans-Regular';
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.vaccine-image-cover {
+  padding-inline: 5px;
+}
+
+.selected-vaccines-card {
+  display: flex;
+  flex-wrap: wrap;
+}

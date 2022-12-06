@@ -22,6 +22,15 @@ a {
   -webkit-box-orient: vertical;
 }
 
+.page-title {
+  font-family: 'Yeseva One';
+  font-size: 48px;
+  line-height: 55px;
+  color: var(--color-primary);
+  text-align: center;
+  padding: 15px;
+}
+
 .dropdown-account__item {
   border-left: 4px solid var(--color-primary);
   border-bottom: 1px solid #e9ecef;

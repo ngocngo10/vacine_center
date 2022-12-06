@@ -20,16 +20,21 @@ import AdminAddAgeGroupPage from './pages/AdminAddAgeGroupPage';
 
 import AdminScheduleConfig from './pages/AdminScheduleConfig';
 
+import RegisterAppointmentPage from './pages/RegisterAppointmentPage';
+import HomePage from './pages/HomePage';
+
 import Main from './components/Main';
 const Routing = () => {
   return (
     <Routes>
       <Route exact path="/" element={<Main />}>
-        <Route index element={<SignInPage />} />
+        <Route index element={<HomePage />} />
         <Route exact path="register" element={<SignUpPage />} />
         <Route exact path="login" element={<SignInPage />} />
         <Route path="vaccine-list" element={<VaccineListPage />} />
         <Route path="vaccine-detail/:vaccineId" element={<VaccineDetailPage />} />
+
+        <Route path="register-appointment" element={<RegisterAppointmentPage />} />
       </Route>
 
       {/* <Route path="/admin-home" element={<AdminMain />} /> */}
