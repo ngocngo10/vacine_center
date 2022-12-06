@@ -24,11 +24,11 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const AdminUpdateVaccine = () => {
-  const [imageSrc, setImageSrc] = useState('');
-  const formRef = useRef(null);
-  const [imageFile, setImageFile] = useState();
   const { id } = useParams();
   const dispatch = useDispatch();
+  const formRef = useRef(null);
+  const [imageSrc, setImageSrc] = useState('');
+  const [imageFile, setImageFile] = useState();
 
   const vaccineList = useSelector((state) => state.vaccineList);
   const { vaccines } = vaccineList;
