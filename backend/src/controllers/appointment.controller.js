@@ -14,8 +14,13 @@ async function create(req, res, next) {
 
 async function find(req, res, next) {
   try {
-    const schedules = await appointmentService.find(req.query);
-    return res.json(schedules);
+    if (req.user?.roles?.includes('user')) {
+      const schedules = await appointmentService.find(req.query, req.user.id);
+      return res.json(schedules);
+    } else {
+      const schedules = await appointmentService.find(req.query);
+      return res.json(schedules);
+    }
   } catch (error) {
     next(error);
   }
