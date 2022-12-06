@@ -1,6 +1,20 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Form, Input, Select, Col, Row, Divider, DatePicker, Button, Tag, Radio, Card } from 'antd';
+import {
+  Form,
+  Input,
+  Select,
+  Col,
+  Row,
+  Divider,
+  DatePicker,
+  Button,
+  Tag,
+  Radio,
+  Card,
+  Result
+} from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { AlertOutlined, CloseOutlined } from '@ant-design/icons';
 import Container from '../../layout/Container';
 import Message from '../../components/Message';
@@ -15,6 +29,7 @@ import './index.css';
 const { CheckableTag } = Tag;
 const { Meta } = Card;
 const RegisterAppointmentPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [districts, setDistricts] = useState();
   const [wards, setWards] = useState();
@@ -181,481 +196,508 @@ const RegisterAppointmentPage = () => {
     <>
       <div className="appointment-register-page">
         <Container>
-          <h2 className="page-title appointment-register-title">Đăng kí hẹn giờ tiêm vắc xin</h2>
           <Row justify="center">
             <Col span={24}>
-              <Form
-                onFinish={onFinish}
-                ref={formRef}
-                className="appointment-register-form"
-                labelCol={{
-                  span: 12
-                }}
-                wrapperCol={{ span: 12 }}
-                labelWrap
-                name="appointment-register-form"
-                labelAlign="left">
-                <Row justify="center">
-                  <Col span={18}>
+              {appointmentCreate?.error && <Message description={error} />}
+              {createSuccess ? (
+                <Result
+                  status="success"
+                  title="ĐĂNG KÝ THÀNH CÔNG!"
+                  subTitle="Quý khách đã đăng kí thông tin tiêm chủng thành công. Việc đăng kí thông tin đầy đủ sẽ giúp Quý khách tiết kiệm thời gian khi làm thủ tục tại quầy lễ tân. Kính mời quí khách đến Trung tâm MEDDICAL để được phục vụ và xin vui lòng đến đúng khung giờ qui định. Rất mong được đón tiếp Quý khách .Trân trọng."
+                  extra={[
+                    <Button type="primary" onClick={() => navigate('/')}>
+                      Quay về trang trủ
+                    </Button>
+                  ]}
+                />
+              ) : (
+                <>
+                  <h2 className="page-title appointment-register-title">
+                    Đăng kí hẹn giờ tiêm vắc xin
+                  </h2>
+                  <Form
+                    onFinish={onFinish}
+                    ref={formRef}
+                    className="appointment-register-form"
+                    labelCol={{
+                      span: 12
+                    }}
+                    wrapperCol={{ span: 12 }}
+                    labelWrap
+                    name="appointment-register-form"
+                    labelAlign="left">
                     <Row justify="center">
-                      <Col span={24}>
-                        <h4>THÔNG TIN NGƯỜI TIÊM</h4>
-                      </Col>
-                    </Row>
-                    <Row justify="space-between">
-                      <Col span={11}>
-                        <Form.Item
-                          label="Họ và tên người tiêm"
-                          name="patientName"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Vui lòng nhập họ và tên người tiêm!'
-                            }
-                          ]}
-                          labelCol={{
-                            span: 24
-                          }}
-                          wrapperCol={{ span: 24 }}>
-                          <Input />
-                        </Form.Item>
-                      </Col>
-                      <Col span={11}>
-                        <Form.Item
-                          label="Ngày tháng năm sinh người tiêm"
-                          name="birthday"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Vui lòng chọn ngày tháng năm sinh người tiêm!'
-                            }
-                          ]}
-                          labelCol={{
-                            span: 24
-                          }}
-                          wrapperCol={{ span: 24 }}>
-                          <DatePicker
-                            placeholder="Ngày/Tháng/Năm"
-                            format="DD-MM-YYYY"
-                            style={{ width: '100%' }}
-                          />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row justify="space-between">
-                      <Col span={11}>
-                        <Form.Item
-                          label="Giới tính"
-                          name="gender"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Vui lòng chọn giới tính người tiêm!'
-                            }
-                          ]}
-                          labelCol={{
-                            span: 24
-                          }}
-                          wrapperCol={{ span: 24 }}>
-                          <Select
-                            options={[
-                              {
-                                value: 'male',
-                                label: 'Nam'
-                              },
-                              {
-                                value: 'female',
-                                label: 'Nữ'
-                              }
-                            ]}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={11}>
-                        <Form.Item
-                          label="Số điện thoại người tiêm (nếu có)"
-                          name="phoneNumber"
-                          labelCol={{
-                            span: 24
-                          }}
-                          wrapperCol={{ span: 24 }}>
-                          <Input />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row justify="space-between">
-                      <Col span={7}>
-                        <Form.Item
-                          label="Tỉnh thành"
-                          name="province"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Vui lòng chọn tỉnh thành!'
-                            }
-                          ]}
-                          labelCol={{
-                            span: 24
-                          }}
-                          wrapperCol={{ span: 24 }}>
-                          <Select
-                            onChange={handleChangeProvince}
-                            placeholder="Chọn"
-                            options={provinceOptions}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={7}>
-                        <Form.Item
-                          label="Quận huyện"
-                          name="district"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Vui lòng chọn quận huyện!'
-                            }
-                          ]}
-                          labelCol={{
-                            span: 24
-                          }}
-                          wrapperCol={{ span: 24 }}>
-                          <Select
-                            onChange={handleChangeDistrict}
-                            options={districtOptions}
-                            placeholder="Chọn tỉnh thành trước"
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={7}>
-                        <Form.Item
-                          label="Phường xã"
-                          name="ward"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Vui lòng chọn phường xã!'
-                            }
-                          ]}
-                          labelCol={{
-                            span: 24
-                          }}
-                          wrapperCol={{ span: 24 }}>
-                          <Select options={wardOptions} placeholder="Chọn phường xã trước" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={24}>
-                        <Form.Item
-                          label="Số nhà, tên đường"
-                          name="street"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Vui lòng nhập địa chỉ liên hệ!'
-                            }
-                          ]}
-                          labelCol={{
-                            span: 24
-                          }}
-                          wrapperCol={{ span: 24 }}>
-                          <Input />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row justify="center">
-                      <Col span={24}>
-                        <h4>THÔNG TIN NGƯỜI LIÊN HỆ</h4>
-                      </Col>
-                    </Row>
-                    <Row justify="space-between">
-                      <Col span={24}>
-                        <Form.Item
-                          label="Họ và tên người liên hệ"
-                          name="representativeName"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Vui lòng nhập họ và tên người liên hệ!'
-                            }
-                          ]}
-                          labelCol={{
-                            span: 24
-                          }}
-                          wrapperCol={{ span: 24 }}>
-                          <Input disabled />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row justify="space-between">
-                      <Col span={11}>
-                        <Form.Item
-                          label="Mối quan hệ với người tiêm"
-                          name="relative"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Vui lòng chọn mối quan hệ với người tiêm!'
-                            }
-                          ]}
-                          labelCol={{
-                            span: 24
-                          }}
-                          wrapperCol={{ span: 24 }}>
-                          <Select options={relativeOptions} />
-                        </Form.Item>
-                      </Col>
-                      <Col span={11}>
-                        <Form.Item
-                          label="Số điện thoại người liên hệ "
-                          name="representativePhoneNumber"
-                          labelCol={{
-                            span: 24
-                          }}
-                          wrapperCol={{ span: 24 }}
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Vui lòng chọn số điện thoại người liên hệ!'
-                            }
-                          ]}>
-                          <Input />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row justify="center">
-                      <Col span={24}>
-                        <h4>THÔNG TIN DỊCH VỤ</h4>
-                      </Col>
-                    </Row>
-                    <Row justify="space-between">
-                      <Col span={24}>
-                        <Form.Item
-                          label="Loại vắc xin muốn đăng ký"
-                          name="listType"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Vui lòng chọn loại vắc xin muốn đăng kí! '
-                            }
-                          ]}
-                          labelCol={{
-                            span: 7
-                          }}
-                          wrapperCol={{ span: 11 }}>
-                          <Radio.Group onChange={onChangeRadio}>
-                            <Radio.Button value="1">Vắc xin gói </Radio.Button>
-                            <Radio.Button value="2">Vắc xin lẻ</Radio.Button>
-                          </Radio.Group>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row justify="space-between">
-                      <Col span={24}>
-                        <Form.Item
-                          label="Chọn vắc xin hoặc gói vắc xin"
-                          name="wishList"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Vui lòng chọn vắc xin ! '
-                            }
-                          ]}
-                          labelCol={{
-                            span: 24
-                          }}
-                          wrapperCol={{ span: 24 }}>
-                          <Row justify="space-between">
-                            <Col span={16}>
+                      <Col span={18}>
+                        <Row justify="center">
+                          <Col span={24}>
+                            <h4>THÔNG TIN NGƯỜI TIÊM</h4>
+                          </Col>
+                        </Row>
+                        <Row justify="space-between">
+                          <Col span={11}>
+                            <Form.Item
+                              label="Họ và tên người tiêm"
+                              name="patientName"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng nhập họ và tên người tiêm!'
+                                }
+                              ]}
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 24 }}>
+                              <Input />
+                            </Form.Item>
+                          </Col>
+                          <Col span={11}>
+                            <Form.Item
+                              label="Ngày tháng năm sinh người tiêm"
+                              name="birthday"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng chọn ngày tháng năm sinh người tiêm!'
+                                }
+                              ]}
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 24 }}>
+                              <DatePicker
+                                disabledDate={(current) => {
+                                  let customDate = moment().format('YYYY-MM-DD');
+                                  return current.diff(moment().startOf('day'), 'days') > 0;
+                                }}
+                                placeholder="Ngày/Tháng/Năm"
+                                format="DD-MM-YYYY"
+                                style={{ width: '100%' }}
+                              />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Row justify="space-between">
+                          <Col span={11}>
+                            <Form.Item
+                              label="Giới tính"
+                              name="gender"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng chọn giới tính người tiêm!'
+                                }
+                              ]}
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 24 }}>
                               <Select
-                                showSearch
-                                placeholder="Chọn loại vắc xin trước"
-                                onChange={onChangeVaccine}
-                                onSearch={onSearchVaccine}
-                                filterOption={(input, option) =>
-                                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                options={[
+                                  {
+                                    value: 'male',
+                                    label: 'Nam'
+                                  },
+                                  {
+                                    value: 'female',
+                                    label: 'Nữ'
+                                  }
+                                ]}
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col span={11}>
+                            <Form.Item
+                              label="Số điện thoại người tiêm (nếu có)"
+                              name="phoneNumber"
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 24 }}>
+                              <Input />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Row justify="space-between">
+                          <Col span={7}>
+                            <Form.Item
+                              label="Tỉnh thành"
+                              name="province"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng chọn tỉnh thành!'
                                 }
-                                options={vaccineOptions}
+                              ]}
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 24 }}>
+                              <Select
+                                onChange={handleChangeProvince}
+                                placeholder="Chọn"
+                                options={provinceOptions}
                               />
-                            </Col>
-                            <Col span={6}>
-                              <Button
-                                type="primary"
-                                style={{ background: '#1f2b6c', border: '#1f2b6c' }}
-                                onClick={handleAddVaccine}>
-                                Thêm vắc xin
-                              </Button>
-                            </Col>
-                          </Row>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row justify="start">
-                      <Col span={24}>
-                        {selectedVaccines.map((item) => (
-                          <Card
-                            key={item.id}
-                            extra={
-                              <CloseOutlined
-                                onClick={() => handleRemoveVaccine(item.id)}
-                                className="card-icon"
-                                style={{ cursor: 'pointer' }}
-                              />
-                            }
-                            hoverable
-                            style={{
-                              width: 300
-                            }}
-                            cover={
-                              <img
-                                className="vaccine-image-cover"
-                                alt="vaccine-image"
-                                src={item.image}
-                              />
-                            }>
-                            <Meta
-                              description={
-                                <>
-                                  <h5 className="text text--card-title">{item.name}</h5>
-                                  <p className="text text--card-desc">{item.description}</p>
-                                </>
-                              }
-                            />
-                          </Card>
-                        ))}
-                      </Col>
-                    </Row>
-                    <Row justify="space-between">
-                      <Col span={24}>
-                        <Form.Item
-                          label="Ngày mong muốn tiêm (Chỉ được hẹn trước trong vòng 2 tuần)"
-                          name="desiredDate"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Vui lòng chọn ngày mong muốn tiêm! '
-                            },
-                            ({ getFieldValue }) => ({
-                              validator(_, value) {
-                                if (
-                                  !value ||
-                                  (value.diff(moment().startOf('day'), 'days') <= 14 &&
-                                    value.diff(moment().startOf('day'), 'days') >= 1)
-                                ) {
-                                  return Promise.resolve();
+                            </Form.Item>
+                          </Col>
+                          <Col span={7}>
+                            <Form.Item
+                              label="Quận huyện"
+                              name="district"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng chọn quận huyện!'
                                 }
-                                return Promise.reject(
-                                  new Error(
-                                    'Vui lòng chọn ngày mong muốn tiêm trước 1 ngày và trong vòng 2 tuần!'
-                                  )
-                                );
-                              }
-                            })
-                          ]}
-                          labelCol={{
-                            span: 24
-                          }}
-                          wrapperCol={{ span: 11 }}>
-                          <DatePicker
-                            disabledDate={(current) => {
-                              let customDate = moment().format('YYYY-MM-DD');
-                              return (
-                                current.diff(moment().startOf('day'), 'days') > 14 ||
-                                current.diff(moment().startOf('day'), 'days') < 1
-                              );
-                            }}
-                            placeholder="Ngày/Tháng/Năm"
-                            format="DD-MM-YYYY"
-                            style={{ width: '100%' }}
-                            onChange={handleChangeDay}
-                          />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row justify="space-between">
-                      <Col span={24}>
-                        <Form.Item
-                          label="Chọn thời gian (Các ô màu đỏ đã có lịch hẹn). Lưu ý: Không thực hiện hẹn giờ khám chữa bệnh vào các ngày lễ, tết."
-                          name="scheduleId"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Vui lòng chọn thời gian mong muốn tiêm! '
-                            }
-                          ]}
-                          labelCol={{
-                            span: 24
-                          }}
-                          wrapperCol={{ span: 24 }}>
-                          <Input hidden />
-                          <div className="appointment-shift-card">
-                            {scheduleOnDay?.loading ? (
-                              <Loader />
-                            ) : error ? (
-                              <Message />
-                            ) : !scheduleArr ? (
-                              <p>
-                                <AlertOutlined
-                                  style={{ color: 'red', fontSize: '25px', margin: '5px' }}
-                                />
-                                Thời gian cụ thể để chọn chỉ hiển thị nếu đã chọn ngày
-                              </p>
-                            ) : (
-                              scheduleArr?.length &&
-                              scheduleArr.map((item, index) =>
-                                item.registerParticipantNumber === item.totalParticipant ? (
-                                  <Tag
-                                    key={item.id}
-                                    className="appointment-shift-tag"
-                                    style={{
-                                      margin: '10px',
-                                      border: ' 2px solid #ff4d4f',
-                                      color: '#fcfefe',
-                                      backgroundColor: '#1f2b6c'
-                                    }}>
-                                    {`${item.startAt} - ${item.endAt}`}
-                                  </Tag>
+                              ]}
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 24 }}>
+                              <Select
+                                onChange={handleChangeDistrict}
+                                options={districtOptions}
+                                placeholder="Chọn tỉnh thành trước"
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col span={7}>
+                            <Form.Item
+                              label="Phường xã"
+                              name="ward"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng chọn phường xã!'
+                                }
+                              ]}
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 24 }}>
+                              <Select options={wardOptions} placeholder="Chọn phường xã trước" />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col span={24}>
+                            <Form.Item
+                              label="Số nhà, tên đường"
+                              name="street"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng nhập địa chỉ liên hệ!'
+                                }
+                              ]}
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 24 }}>
+                              <Input />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Row justify="center">
+                          <Col span={24}>
+                            <h4>THÔNG TIN NGƯỜI LIÊN HỆ</h4>
+                          </Col>
+                        </Row>
+                        <Row justify="space-between">
+                          <Col span={24}>
+                            <Form.Item
+                              label="Họ và tên người liên hệ"
+                              name="representativeName"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng nhập họ và tên người liên hệ!'
+                                }
+                              ]}
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 24 }}>
+                              <Input disabled />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Row justify="space-between">
+                          <Col span={11}>
+                            <Form.Item
+                              label="Mối quan hệ với người tiêm"
+                              name="relative"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng chọn mối quan hệ với người tiêm!'
+                                }
+                              ]}
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 24 }}>
+                              <Select options={relativeOptions} />
+                            </Form.Item>
+                          </Col>
+                          <Col span={11}>
+                            <Form.Item
+                              label="Số điện thoại người liên hệ "
+                              name="representativePhoneNumber"
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 24 }}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng chọn số điện thoại người liên hệ!'
+                                }
+                              ]}>
+                              <Input />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Row justify="center">
+                          <Col span={24}>
+                            <h4>THÔNG TIN DỊCH VỤ</h4>
+                          </Col>
+                        </Row>
+                        <Row justify="space-between">
+                          <Col span={24}>
+                            <Form.Item
+                              label="Loại vắc xin muốn đăng ký"
+                              name="listType"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng chọn loại vắc xin muốn đăng kí! '
+                                }
+                              ]}
+                              labelCol={{
+                                span: 7
+                              }}
+                              wrapperCol={{ span: 11 }}>
+                              <Radio.Group onChange={onChangeRadio}>
+                                <Radio.Button value="1">Vắc xin gói </Radio.Button>
+                                <Radio.Button value="2">Vắc xin lẻ</Radio.Button>
+                              </Radio.Group>
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Row justify="space-between">
+                          <Col span={24}>
+                            <Form.Item
+                              label="Chọn vắc xin hoặc gói vắc xin"
+                              name="wishList"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng chọn vắc xin ! '
+                                }
+                              ]}
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 24 }}>
+                              <Row justify="space-between">
+                                <Col span={16}>
+                                  <Select
+                                    showSearch
+                                    placeholder="Chọn loại vắc xin trước"
+                                    onChange={onChangeVaccine}
+                                    onSearch={onSearchVaccine}
+                                    filterOption={(input, option) =>
+                                      (option?.label ?? '')
+                                        .toLowerCase()
+                                        .includes(input.toLowerCase())
+                                    }
+                                    options={vaccineOptions}
+                                  />
+                                </Col>
+                                <Col span={6}>
+                                  <Button
+                                    type="primary"
+                                    style={{ background: '#1f2b6c', border: '#1f2b6c' }}
+                                    onClick={handleAddVaccine}>
+                                    Thêm vắc xin
+                                  </Button>
+                                </Col>
+                              </Row>
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Row justify="space-between">
+                          <Col span={24}>
+                            <div className="selected-vaccines-card">
+                              {selectedVaccines.map((item) => (
+                                <Card
+                                  key={item.id}
+                                  extra={
+                                    <CloseOutlined
+                                      onClick={() => handleRemoveVaccine(item.id)}
+                                      className="card-icon"
+                                      style={{ cursor: 'pointer' }}
+                                    />
+                                  }
+                                  hoverable
+                                  style={{
+                                    width: 300,
+                                    margin: 10
+                                  }}
+                                  cover={
+                                    <img
+                                      className="vaccine-image-cover"
+                                      alt="vaccine-image"
+                                      src={item.image}
+                                    />
+                                  }>
+                                  <Meta
+                                    description={
+                                      <>
+                                        <h5 className="text text--card-title">{item.name}</h5>
+                                        <p className="text text--card-desc">{item.description}</p>
+                                      </>
+                                    }
+                                  />
+                                </Card>
+                              ))}
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row justify="space-between">
+                          <Col span={24}>
+                            <Form.Item
+                              label="Ngày mong muốn tiêm (Chỉ được hẹn trước trong vòng 2 tuần)"
+                              name="desiredDate"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng chọn ngày mong muốn tiêm! '
+                                },
+                                ({ getFieldValue }) => ({
+                                  validator(_, value) {
+                                    if (
+                                      !value ||
+                                      (value.diff(moment().startOf('day'), 'days') <= 14 &&
+                                        value.diff(moment().startOf('day'), 'days') >= 1)
+                                    ) {
+                                      return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                      new Error(
+                                        'Vui lòng chọn ngày mong muốn tiêm trước 1 ngày và trong vòng 2 tuần!'
+                                      )
+                                    );
+                                  }
+                                })
+                              ]}
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 11 }}>
+                              <DatePicker
+                                disabledDate={(current) => {
+                                  let customDate = moment().format('YYYY-MM-DD');
+                                  return (
+                                    current.diff(moment().startOf('day'), 'days') > 14 ||
+                                    current.diff(moment().startOf('day'), 'days') < 1
+                                  );
+                                }}
+                                placeholder="Ngày/Tháng/Năm"
+                                format="DD-MM-YYYY"
+                                style={{ width: '100%' }}
+                                onChange={handleChangeDay}
+                              />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Row justify="space-between">
+                          <Col span={24}>
+                            <Form.Item
+                              label="Chọn thời gian (Các ô màu đỏ đã có lịch hẹn). Lưu ý: Không thực hiện hẹn giờ khám chữa bệnh vào các ngày lễ, tết."
+                              name="scheduleId"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng chọn thời gian mong muốn tiêm! '
+                                }
+                              ]}
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 24 }}>
+                              <Input hidden />
+                              <div className="appointment-shift-card">
+                                {scheduleOnDay?.loading ? (
+                                  <Loader />
+                                ) : error ? (
+                                  <Message />
+                                ) : !scheduleArr ? (
+                                  <p>
+                                    <AlertOutlined
+                                      style={{ color: 'red', fontSize: '25px', margin: '5px' }}
+                                    />
+                                    Thời gian cụ thể để chọn chỉ hiển thị nếu đã chọn ngày
+                                  </p>
                                 ) : (
-                                  <CheckableTag
-                                    className="appointment-shift-tag"
-                                    style={{
-                                      margin: '10px',
-                                      border: ' 2px solid #87d068',
-                                      color: '#fcfefe'
-                                    }}
-                                    key={item.id}
-                                    checked={item.id === selectedTag?.id}
-                                    onChange={(checked) => handleChangeTag(item, checked)}>
-                                    {`${item.startAt} - ${item.endAt}`}
-                                  </CheckableTag>
-                                )
-                              )
-                            )}
-                          </div>
-                        </Form.Item>
+                                  scheduleArr?.length &&
+                                  scheduleArr.map((item, index) =>
+                                    item.registerParticipantNumber === item.totalParticipant ? (
+                                      <Tag
+                                        key={item.id}
+                                        className="appointment-shift-tag"
+                                        style={{
+                                          margin: '10px',
+                                          border: ' 2px solid #ff4d4f',
+                                          color: '#fcfefe',
+                                          backgroundColor: '#1f2b6c'
+                                        }}>
+                                        {`${item.startAt} - ${item.endAt}`}
+                                      </Tag>
+                                    ) : (
+                                      <CheckableTag
+                                        className="appointment-shift-tag"
+                                        style={{
+                                          margin: '10px',
+                                          border: ' 2px solid #87d068',
+                                          color: '#fcfefe'
+                                        }}
+                                        key={item.id}
+                                        checked={item.id === selectedTag?.id}
+                                        onChange={(checked) => handleChangeTag(item, checked)}>
+                                        {`${item.startAt} - ${item.endAt}`}
+                                      </CheckableTag>
+                                    )
+                                  )
+                                )}
+                              </div>
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Divider />
+                        <Row justify="center">
+                          <Col>
+                            <Button
+                              type="primary"
+                              htmlType="submit"
+                              style={{
+                                background: '#bfd2f8',
+                                border: '#bfd2f8',
+                                color: '#1f2b6c',
+                                width: '200px',
+                                height: '40px'
+                              }}
+                              className="register-appointment-btn">
+                              Gửi đăng kí
+                            </Button>
+                          </Col>
+                        </Row>
                       </Col>
                     </Row>
-                    <Divider />
-                    <Row justify="center">
-                      <Col>
-                        <Button
-                          type="primary"
-                          htmlType="submit"
-                          style={{
-                            background: '#bfd2f8',
-                            border: '#bfd2f8',
-                            color: '#1f2b6c',
-                            width: '200px',
-                            height: '40px'
-                          }}
-                          className="register-appointment-btn">
-                          Gửi đăng kí
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
-              </Form>
+                  </Form>
+                </>
+              )}
             </Col>
           </Row>
         </Container>

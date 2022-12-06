@@ -153,10 +153,11 @@
   font-size: 18px;
   line-height: 1.4;
   border-radius: 20px;
-  color: var(--color-primary);
+  /* color: var(--color-primary); */
 }
 
 .user-info {
+  display: flex;
   margin: auto 0;
 }
 

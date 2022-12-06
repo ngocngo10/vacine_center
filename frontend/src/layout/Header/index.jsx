@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Avatar, Button, Dropdown } from 'antd';
 import 'antd/dist/antd.css';
-import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import {
+  UserOutlined,
+  LogoutOutlined,
+  ScheduleOutlined,
+  CalendarOutlined
+} from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import Container from '../../layout/Container';
 import { logout } from '../../actions/user.action';
@@ -103,21 +108,21 @@ const Header = () => {
           <div className="header-nav-card">
             <ul className="header-menu">
               <li className="header-menu__item">
-                <a href="#" className="header-menu-item__link">
+                <Link to="/" className="header-menu-item__link">
                   Trang chủ
-                </a>
+                </Link>
               </li>
               <li className="header-menu__item">
-                <a href="#" className="header-menu-item__link">
-                  Giới thiệu
-                </a>
+                <Link to="/vaccine-list" className="header-menu-item__link">
+                  Thông tin vắc xin
+                </Link>
               </li>
-              <li className="header-menu__item">
-                <a href="#" className="header-menu-item__link">
+              <Link className="header-menu__item">
+                <a to="#" className="header-menu-item__link">
                   Gói tiêm
                 </a>
-              </li>
-              <li className="header-menu__item">
+              </Link>
+              {/* <li className="header-menu__item">
                 <a href="#" className="header-menu-item__link">
                   Cẩm nang
                 </a>
@@ -133,24 +138,35 @@ const Header = () => {
                     </a>
                   </li>
                 </ul>
-              </li>
+              </li> */}
             </ul>
             <div className="header-user-action">
               <Button
                 type="primary"
                 className="appointment-register-btn"
-                style={{ background: '#bfd2f8', border: '#bfd2f8' }}
+                style={{ background: '#52de97', border: '#52de97', color: '#1f2b6c' }}
                 onClick={() => navigate('/register-appointment')}>
+                <CalendarOutlined />
                 Đăng kí tiêm
               </Button>
               <div className="user-info">
                 {userInfo ? (
-                  <Dropdown menu={{ items }}>
-                    <div>
-                      <span className="user-info__name">{userInfo.user.name}</span>
-                      <Avatar size="large" icon={<UserOutlined />} />
-                    </div>
-                  </Dropdown>
+                  <>
+                    <Button
+                      type="primary"
+                      className="appointment-register-btn"
+                      style={{ background: '#ffc107', border: '#ffc107', color: '#1f2b6c' }}
+                      onClick={() => navigate('/register-appointment')}>
+                      <ScheduleOutlined />
+                      Lịch sử tiêm
+                    </Button>
+                    <Dropdown menu={{ items }}>
+                      <div>
+                        <span className="user-info__name">{userInfo.user.name}</span>
+                        <Avatar size="large" icon={<UserOutlined />} />
+                      </div>
+                    </Dropdown>
+                  </>
                 ) : (
                   <Button
                     type="primary"

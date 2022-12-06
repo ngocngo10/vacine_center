@@ -9,8 +9,8 @@ module.exports = class AppointmentService {
   async create(data) {
     const createData = {
       ...data,
-      wishList: JSON.parse(data.wishList)
-    }
+      wishList: data.wishList
+    };
     await this.repository.create(createData);
     const schedule = await this.scheduleRepository.findOne(data.scheduleId);
     schedule.registerParticipantNumber += 1;
@@ -73,6 +73,6 @@ module.exports = class AppointmentService {
   }
 
   async deleteMulti(ids) {
-    return await this.repository.deleteMulti(ids)
+    return await this.repository.deleteMulti(ids);
   }
 };

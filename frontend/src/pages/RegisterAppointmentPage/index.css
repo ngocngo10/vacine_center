@@ -66,3 +66,8 @@
 .vaccine-image-cover {
   padding-inline: 5px;
 }
+
+.selected-vaccines-card {
+  display: flex;
+  flex-wrap: wrap;
+}

@@ -40,7 +40,6 @@ const VaccineListPage = () => {
   };
 
   useEffect(() => {
-    console.log('vaccine list page');
     dispatch(getCategoryList({}));
     dispatch(getAgeGroups({}));
     dispatch(getVaccineList({ perPage: 9 }));
