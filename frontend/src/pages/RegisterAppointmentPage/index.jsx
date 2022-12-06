@@ -8,6 +8,7 @@ import Loader from '../../components/Loader';
 import { getProvinceList } from '../../actions/province.action';
 import { getScheduleOnDay } from '../../actions/schedule.action';
 import { getVaccineList } from '../../actions/vaccine.action';
+import { createAppointment } from '../../actions/appointment.action';
 import moment from 'moment';
 import './index.css';
 
@@ -32,7 +33,13 @@ const RegisterAppointmentPage = () => {
   const vaccineList = useSelector((state) => state.vaccineList);
   const { vaccines } = vaccineList;
 
-  const scheduleArr = schedules?.map((item) => ({
+  const appointmentCreate = useSelector((state) => state.appointmentCreate);
+  const { createSuccess } = appointmentCreate;
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  let scheduleArr = schedules?.map((item) => ({
     ...item,
     startAt: moment(moment(item.startAt, 'HH:mm')).format('HH:mm'),
     endAt: moment(moment(item.startAt, 'HH:mm'))
@@ -112,7 +119,9 @@ const RegisterAppointmentPage = () => {
   const onChangeRadio = (e) => {
     if (e.target.value == 2) {
       dispatch(getVaccineList({}));
-      setVaccineOptions(vaccines.map((item) => ({ label: item.name, value: item.id })));
+      setVaccineOptions(
+        vaccines.map((item) => ({ label: item.name, value: item.id, key: item.id }))
+      );
     } else {
       setVaccineOptions([]);
     }
@@ -134,9 +143,39 @@ const RegisterAppointmentPage = () => {
     if (vaccine) setSelectedVaccines(selectedVaccines.concat(vaccine));
   };
 
+  const [selectedTag, setSelectedTag] = useState();
+  const handleChangeTag = (tag, checked) => {
+    setSelectedTag(tag);
+    formRef.current?.setFieldsValue({
+      scheduleId: tag.id
+    });
+  };
+
+  const onFinish = (values) => {
+    values.gender = values.gender === 'male';
+    values.wishList = values.wishList.map((item) => item.name);
+    values.birthday = values.birthday.format('YYYY-MM-DD');
+    values.desiredDate = values.desiredDate.format('YYYY-MM-DD');
+    console.log('values', values);
+    dispatch(createAppointment(values));
+  };
+
   useEffect(() => {
-    dispatch(getProvinceList());
-  }, []);
+    if (userInfo && userInfo.user.roles.includes('user')) {
+      dispatch(getProvinceList());
+      formRef.current?.setFieldsValue({
+        representativeName: userInfo.user.name
+      });
+    } else {
+      navigate('/login');
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    formRef.current?.setFieldsValue({
+      wishList: selectedVaccines
+    });
+  }, [selectedVaccines]);
 
   return (
     <>
@@ -146,6 +185,7 @@ const RegisterAppointmentPage = () => {
           <Row justify="center">
             <Col span={24}>
               <Form
+                onFinish={onFinish}
                 ref={formRef}
                 className="appointment-register-form"
                 labelCol={{
@@ -166,7 +206,7 @@ const RegisterAppointmentPage = () => {
                       <Col span={11}>
                         <Form.Item
                           label="Họ và tên người tiêm"
-                          name="d"
+                          name="patientName"
                           rules={[
                             {
                               required: true,
@@ -183,7 +223,7 @@ const RegisterAppointmentPage = () => {
                       <Col span={11}>
                         <Form.Item
                           label="Ngày tháng năm sinh người tiêm"
-                          name="f"
+                          name="birthday"
                           rules={[
                             {
                               required: true,
@@ -206,7 +246,7 @@ const RegisterAppointmentPage = () => {
                       <Col span={11}>
                         <Form.Item
                           label="Giới tính"
-                          name=""
+                          name="gender"
                           rules={[
                             {
                               required: true,
@@ -220,11 +260,11 @@ const RegisterAppointmentPage = () => {
                           <Select
                             options={[
                               {
-                                value: 'Nam',
+                                value: 'male',
                                 label: 'Nam'
                               },
                               {
-                                value: 'Nữ',
+                                value: 'female',
                                 label: 'Nữ'
                               }
                             ]}
@@ -234,7 +274,7 @@ const RegisterAppointmentPage = () => {
                       <Col span={11}>
                         <Form.Item
                           label="Số điện thoại người tiêm (nếu có)"
-                          name="g"
+                          name="phoneNumber"
                           labelCol={{
                             span: 24
                           }}
@@ -247,7 +287,7 @@ const RegisterAppointmentPage = () => {
                       <Col span={7}>
                         <Form.Item
                           label="Tỉnh thành"
-                          name=""
+                          name="province"
                           rules={[
                             {
                               required: true,
@@ -268,7 +308,7 @@ const RegisterAppointmentPage = () => {
                       <Col span={7}>
                         <Form.Item
                           label="Quận huyện"
-                          name="qh"
+                          name="district"
                           rules={[
                             {
                               required: true,
@@ -289,7 +329,7 @@ const RegisterAppointmentPage = () => {
                       <Col span={7}>
                         <Form.Item
                           label="Phường xã"
-                          name="px"
+                          name="ward"
                           rules={[
                             {
                               required: true,
@@ -308,7 +348,7 @@ const RegisterAppointmentPage = () => {
                       <Col span={24}>
                         <Form.Item
                           label="Số nhà, tên đường"
-                          name="sn"
+                          name="street"
                           rules={[
                             {
                               required: true,
@@ -332,7 +372,7 @@ const RegisterAppointmentPage = () => {
                       <Col span={24}>
                         <Form.Item
                           label="Họ và tên người liên hệ"
-                          name="nlh"
+                          name="representativeName"
                           rules={[
                             {
                               required: true,
@@ -343,7 +383,7 @@ const RegisterAppointmentPage = () => {
                             span: 24
                           }}
                           wrapperCol={{ span: 24 }}>
-                          <Input />
+                          <Input disabled />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -351,7 +391,7 @@ const RegisterAppointmentPage = () => {
                       <Col span={11}>
                         <Form.Item
                           label="Mối quan hệ với người tiêm"
-                          name="mqh"
+                          name="relative"
                           rules={[
                             {
                               required: true,
@@ -368,7 +408,7 @@ const RegisterAppointmentPage = () => {
                       <Col span={11}>
                         <Form.Item
                           label="Số điện thoại người liên hệ "
-                          name="sdtlh"
+                          name="representativePhoneNumber"
                           labelCol={{
                             span: 24
                           }}
@@ -392,7 +432,7 @@ const RegisterAppointmentPage = () => {
                       <Col span={24}>
                         <Form.Item
                           label="Loại vắc xin muốn đăng ký"
-                          name="lvmdk"
+                          name="listType"
                           rules={[
                             {
                               required: true,
@@ -414,7 +454,7 @@ const RegisterAppointmentPage = () => {
                       <Col span={24}>
                         <Form.Item
                           label="Chọn vắc xin hoặc gói vắc xin"
-                          name="cvx"
+                          name="wishList"
                           rules={[
                             {
                               required: true,
@@ -489,7 +529,7 @@ const RegisterAppointmentPage = () => {
                       <Col span={24}>
                         <Form.Item
                           label="Ngày mong muốn tiêm (Chỉ được hẹn trước trong vòng 2 tuần)"
-                          name="nmmt"
+                          name="desiredDate"
                           rules={[
                             {
                               required: true,
@@ -517,6 +557,13 @@ const RegisterAppointmentPage = () => {
                           }}
                           wrapperCol={{ span: 11 }}>
                           <DatePicker
+                            disabledDate={(current) => {
+                              let customDate = moment().format('YYYY-MM-DD');
+                              return (
+                                current.diff(moment().startOf('day'), 'days') > 14 ||
+                                current.diff(moment().startOf('day'), 'days') < 1
+                              );
+                            }}
                             placeholder="Ngày/Tháng/Năm"
                             format="DD-MM-YYYY"
                             style={{ width: '100%' }}
@@ -529,7 +576,7 @@ const RegisterAppointmentPage = () => {
                       <Col span={24}>
                         <Form.Item
                           label="Chọn thời gian (Các ô màu đỏ đã có lịch hẹn). Lưu ý: Không thực hiện hẹn giờ khám chữa bệnh vào các ngày lễ, tết."
-                          name="ctg"
+                          name="scheduleId"
                           rules={[
                             {
                               required: true,
@@ -540,6 +587,7 @@ const RegisterAppointmentPage = () => {
                             span: 24
                           }}
                           wrapperCol={{ span: 24 }}>
+                          <Input hidden />
                           <div className="appointment-shift-card">
                             {scheduleOnDay?.loading ? (
                               <Loader />
@@ -554,9 +602,10 @@ const RegisterAppointmentPage = () => {
                               </p>
                             ) : (
                               scheduleArr?.length &&
-                              scheduleArr.map((item) =>
-                                item.caseNumber === 0 ? (
+                              scheduleArr.map((item, index) =>
+                                item.registerParticipantNumber === item.totalParticipant ? (
                                   <Tag
+                                    key={item.id}
                                     className="appointment-shift-tag"
                                     style={{
                                       margin: '10px',
@@ -573,7 +622,10 @@ const RegisterAppointmentPage = () => {
                                       margin: '10px',
                                       border: ' 2px solid #87d068',
                                       color: '#fcfefe'
-                                    }}>
+                                    }}
+                                    key={item.id}
+                                    checked={item.id === selectedTag?.id}
+                                    onChange={(checked) => handleChangeTag(item, checked)}>
                                     {`${item.startAt} - ${item.endAt}`}
                                   </CheckableTag>
                                 )

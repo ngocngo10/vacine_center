@@ -41,6 +41,8 @@ import { provinceListReducer } from './reducers/province.reducer';
 
 import { scheduleOnDayReducer } from './reducers/schedule.reducer';
 
+import { appointmentCreateReducer } from './reducers/appointment.reducer';
+
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
@@ -71,7 +73,9 @@ const reducer = combineReducers({
   scheduleConfigEdit: scheduleConfigEditReducer,
 
   provinceList: provinceListReducer,
-  scheduleOnDay: scheduleOnDayReducer
+  scheduleOnDay: scheduleOnDayReducer,
+
+  appointmentCreate: appointmentCreateReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
