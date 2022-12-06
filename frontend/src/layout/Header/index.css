@@ -137,12 +137,27 @@
   justify-content: space-between;
 }
 
-.user-info {
-  margin-top: 20px;
+.header-user-action {
+  display: flex;
+  justify-content: space-between;
   font-family: 'WorkSans-Regular';
   font-size: 18px;
   line-height: 1.4;
   color: var(--color-third);
+}
+
+.appointment-register-btn {
+  display: inline-block;
+  margin: auto 0;
+  margin-right: 20px;
+  font-size: 18px;
+  line-height: 1.4;
+  border-radius: 20px;
+  color: var(--color-primary);
+}
+
+.user-info {
+  margin: auto 0;
 }
 
 .user-info__name {
@@ -150,9 +165,8 @@
 }
 
 .user-info__login-btn {
-  font-family: 'WorkSans-Regular';
   font-size: 18px;
   line-height: 1.4;
-  color: var(--color-third);
-  border-radius: 7px;
+  color: var(--color-primary);
+  border-radius: 20px;
 }

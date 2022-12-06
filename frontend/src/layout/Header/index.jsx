@@ -135,23 +135,32 @@ const Header = () => {
                 </ul>
               </li>
             </ul>
-            <div className="user-info">
-              {userInfo ? (
-                <Dropdown menu={{ items }}>
-                  <div>
-                    <span className="user-info__name">{userInfo.user.name}</span>
-                    <Avatar size="large" icon={<UserOutlined />} />
-                  </div>
-                </Dropdown>
-              ) : (
-                <Button
-                  type="primary"
-                  className="user-info__login-btn"
-                  style={{ background: '#ffc107', border: '#ffc107' }}
-                  onClick={() => navigate('/login')}>
-                  Login
-                </Button>
-              )}
+            <div className="header-user-action">
+              <Button
+                type="primary"
+                className="appointment-register-btn"
+                style={{ background: '#bfd2f8', border: '#bfd2f8' }}
+                onClick={() => navigate('/register-appointment')}>
+                Đăng kí tiêm
+              </Button>
+              <div className="user-info">
+                {userInfo ? (
+                  <Dropdown menu={{ items }}>
+                    <div>
+                      <span className="user-info__name">{userInfo.user.name}</span>
+                      <Avatar size="large" icon={<UserOutlined />} />
+                    </div>
+                  </Dropdown>
+                ) : (
+                  <Button
+                    type="primary"
+                    className="user-info__login-btn"
+                    style={{ background: '#ffc107', border: '#ffc107' }}
+                    onClick={() => navigate('/login')}>
+                    Login
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </Container>
