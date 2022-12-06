@@ -4,7 +4,7 @@ const { AppointmentController } = require('../controllers');
 const { authMiddleware } = require('../middlewares/index');
 
 /* GET users listing. */
-router.post('/', authMiddleware.validateToken, authMiddleware.isAdmin, AppointmentController.create);
+router.post('/', authMiddleware.validateToken, AppointmentController.create);
 router.get('/', AppointmentController.find);
 router.get('/:id', AppointmentController.findOne);
 router.put('/:id', authMiddleware.validateToken, authMiddleware.isAdmin, AppointmentController.update);
