@@ -21,6 +21,7 @@ const ageGroupRouter = require('./src/routes/age-group');
 const appointmentRouter = require('./src/routes/appointment');
 const scheduleRouter = require('./src/routes/schedule');
 const staffRouter = require('./src/routes/staff');
+const injectionRouter = require('./src/routes/injection');
 const jobs = require('./src/jobs/create-schedule.job');
 
 // var usersRouter = require('./src/routes/users');
@@ -67,6 +68,7 @@ app.use('/api/age-groups', ageGroupRouter);
 app.use('/api/schedule', scheduleRouter);
 app.use('/api/appointments', appointmentRouter);
 app.use('/api/staffs', staffRouter);
+app.use('/api/injections', injectionRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
