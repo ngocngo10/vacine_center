@@ -24,6 +24,7 @@ VaccineDetail = require('./vaccine-detail.model')(sequelize, Sequelize);
 AgeGroupVaccine = require('./age-group-vaccine.model')(sequelize, Sequelize);
 ScheduleConfig = require('./schedule-config.model')(sequelize, Sequelize);
 Schedule = require('./schedule.model')(sequelize, Sequelize);
+Injection = require('./injection.model')(sequelize, Sequelize);
 
 // define relations
 Category.hasMany(Vaccine, { as: 'vaccines' });
@@ -85,5 +86,6 @@ module.exports = {
   Appointment,
   AgeGroupVaccine,
   Schedule,
-  ScheduleConfig
+  ScheduleConfig,
+  Injection
 };

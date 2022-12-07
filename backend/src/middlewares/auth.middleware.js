@@ -37,7 +37,17 @@ async function isAdmin(req, res, next) {
   next();
 }
 
+async function isStaff(req, res, next) {
+  const user = await User.findByPk(req.user.id);
+  console.log(user);
+  if (!user || !user.roles.includes('staff')) {
+    next(new ErrorCreator('Permission deny.', 403));
+  }
+  next();
+}
+
 module.exports = {
   validateToken,
-  isAdmin
+  isAdmin,
+  isStaff
 };

@@ -13,6 +13,7 @@ function hourToString(hourFloat) {
   const sec = hourFloat * 3600 - minute * 60;
   return [hour, minute, sec].map(item => ('0' + item).slice(-2)).join(':');
 }
+
 function addMinuteToStringHour(str, minute) {
   const hour = toHour(str) + minute / 60;
   return hourToString(hour);
@@ -29,7 +30,7 @@ async function createDailySchedules(date, db) {
   let time = scheduleConfig.startAt;
   let index = 0;
   const schedules = [];
-  while (time < scheduleConfig.restTime) {
+  while (time <= addMinuteToStringHour(scheduleConfig.endTime, - scheduleConfig.appointmentDuration)) {
     schedules.push({
       day: date,
       startAt: time,
@@ -43,7 +44,7 @@ async function createDailySchedules(date, db) {
   }
   startAfternoonHour = toHour(scheduleConfig.endTime) - (8 - morningTime);
   time = hourToString(startAfternoonHour);
-  while (time < scheduleConfig.endTime) {
+  while (time <= addMinuteToStringHour(scheduleConfig.endTime, - scheduleConfig.appointmentDuration)) {
     schedules.push({
       day: date,
       startAt: time,

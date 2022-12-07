@@ -20,6 +20,7 @@ const uploadRouter = require('./src/routes/upload');
 const ageGroupRouter = require('./src/routes/age-group');
 const appointmentRouter = require('./src/routes/appointment');
 const scheduleRouter = require('./src/routes/schedule');
+const staffRouter = require('./src/routes/staff');
 const jobs = require('./src/jobs/create-schedule.job');
 
 // var usersRouter = require('./src/routes/users');
@@ -65,9 +66,7 @@ app.use('/api/upload', uploadRouter);
 app.use('/api/age-groups', ageGroupRouter);
 app.use('/api/schedule', scheduleRouter);
 app.use('/api/appointments', appointmentRouter);
-
-// app.use('/users', usersRouter);
-
+app.use('/api/staffs', staffRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
