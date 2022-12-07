@@ -1,5 +1,5 @@
 import { Button, Modal } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, WarningOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -43,14 +43,20 @@ function useActionMenu({ selectedRow, updateEntityPath, handleDelete }) {
           <EditOutlined />
         </Button>
         <Modal
+          width={400}
           mask={false}
-          title="Delete Vaccine"
+          title={
+            <>
+              <WarningOutlined style={{ color: 'red' }} />
+              <span> Xóa</span>
+            </>
+          }
           open={open}
           onOk={handleDeleteSingle}
           onCancel={hideModal}
-          okText="Delete"
-          cancelText="Cancel">
-          <p>Are you sure you want to delete this vaccine?</p>
+          okText="Xóa"
+          cancelText="Hủy">
+          <p>Bạn có chắc chắc xóa không?</p>
         </Modal>
       </span>
     </>
