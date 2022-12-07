@@ -40,11 +40,10 @@ db.sequelize
   .then(() => {
     console.log('Synced db.');
     const job = new cron.CronJob(
-      '00 00 1 * * *',
+      '0 0 0 * * *',
       function() {
-        const date = moment().tz('Asia/Ho_Chi_Minh').startOf('day');
-        const endDate = moment().tz('Asia/Ho_Chi_Minh').endOf('month').startOf('day');
-        jobs.createSchedules(date, endDate);
+        const date = moment().tz('Asia/Ho_Chi_Minh').startOf('day').add(14, 'days');
+        jobs.createDailySchedules(date, db);
       },
       null,
       true,

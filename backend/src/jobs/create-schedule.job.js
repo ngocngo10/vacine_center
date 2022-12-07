@@ -71,6 +71,8 @@ async function createSchedules(fromDate, toDate) {
     timer.add(1, 'days');
   }
 }
+
 module.exports = {
-  createSchedules
+  createSchedules,
+  createDailySchedules
 }
