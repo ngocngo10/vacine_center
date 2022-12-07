@@ -22,6 +22,7 @@ import AdminScheduleConfig from './pages/AdminScheduleConfig';
 
 import RegisterAppointmentPage from './pages/RegisterAppointmentPage';
 import HomePage from './pages/HomePage';
+import AppointmentHistoryPage from './pages/AppointmentHistoryPage';
 
 import Main from './components/Main';
 const Routing = () => {
@@ -35,6 +36,7 @@ const Routing = () => {
         <Route path="vaccine-detail/:vaccineId" element={<VaccineDetailPage />} />
 
         <Route path="register-appointment" element={<RegisterAppointmentPage />} />
+        <Route path="appointment-history" element={<AppointmentHistoryPage />} />
       </Route>
 
       {/* <Route path="/admin-home" element={<AdminMain />} /> */}
