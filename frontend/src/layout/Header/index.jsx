@@ -156,7 +156,7 @@ const Header = () => {
                       type="primary"
                       className="appointment-register-btn"
                       style={{ background: '#ffc107', border: '#ffc107', color: '#1f2b6c' }}
-                      onClick={() => navigate('/register-appointment')}>
+                      onClick={() => navigate('/appointment-history')}>
                       <ScheduleOutlined />
                       Lịch sử tiêm
                     </Button>

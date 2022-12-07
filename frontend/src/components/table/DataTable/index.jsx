@@ -46,6 +46,7 @@ function useDataTable({ columns, dataSource, updateEntityPath, handleDelete, han
 
   const DataTable = () => (
     <Table
+      bordered
       rowKey={(record) => record.key}
       rowSelection={rowSelection}
       columns={updatedColumns}

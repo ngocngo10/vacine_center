@@ -7,8 +7,23 @@ const { authMiddleware } = require('../middlewares/index');
 router.post('/', authMiddleware.validateToken, AppointmentController.create);
 router.get('/', AppointmentController.find);
 router.get('/:id', AppointmentController.findOne);
-router.put('/:id', authMiddleware.validateToken, authMiddleware.isAdmin, AppointmentController.update);
-router.delete('/:id', authMiddleware.validateToken, authMiddleware.isAdmin, AppointmentController.deleteAppointment);
-router.delete('/', authMiddleware.validateToken, authMiddleware.isAdmin, AppointmentController.deleteMulti);
+router.put(
+  '/:id',
+  authMiddleware.validateToken,
+  authMiddleware.isUser,
+  AppointmentController.update
+);
+router.delete(
+  '/:id',
+  authMiddleware.validateToken,
+  authMiddleware.isUser,
+  AppointmentController.deleteAppointment
+);
+router.delete(
+  '/',
+  authMiddleware.validateToken,
+  authMiddleware.isUser,
+  AppointmentController.deleteMulti
+);
 
 module.exports = router;
