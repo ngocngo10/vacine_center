@@ -115,19 +115,6 @@ const VaccineDetailPage = () => {
       <>
         <main className="main-page">
           <Container>
-            <nav className="path-nav">
-              <p>
-                <Link to="/" className="path-nav__link">
-                  Trang chủ
-                </Link>
-                <span>/</span>
-                <Link to="/vaccine-list" className="path-nav__link">
-                  Thông tin sản phẩm vắc xin
-                </Link>
-                <span>/</span>
-                <span></span>
-              </p>
-            </nav>
             <section className="section-vaccine-base-inform">
               <div className="vaccine-image">
                 <img src={vaccine.image} alt="vaccine-image" />

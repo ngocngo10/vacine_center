@@ -1,5 +1,5 @@
 import { AudioOutlined, ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
-import { Input, Space } from 'antd';
+import { Input, Space, Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,7 +28,7 @@ const VaccineListPage = () => {
   const [carouselCategories, setCarouselCategories] = useState(categoryTotal);
 
   const handleOnSearch = (name) => {
-    dispatch(getVaccineList({ name, perPage: 9 }));
+    dispatch(getVaccineList({ name, perPage: 8 }));
   };
 
   const handleOnClickDisease = () => {
@@ -42,7 +42,7 @@ const VaccineListPage = () => {
   useEffect(() => {
     dispatch(getCategoryList({}));
     dispatch(getAgeGroups({}));
-    dispatch(getVaccineList({ perPage: 9 }));
+    dispatch(getVaccineList({ perPage: 8 }));
   }, []);
 
   return ageGroupsCategoryList.loading || categoryList.loading ? (
@@ -72,9 +72,19 @@ const VaccineListPage = () => {
                 Vắc xin theo độ tuổi
               </Link>
             </div>
-            <Space direction="vertical" className="slideshow-search">
-              <Search placeholder="Tìm kiếm vắc xin ..." onSearch={handleOnSearch} enterButton />
-            </Space>
+            <Row justify="center">
+              <Col>
+                <Space direction="vertical" className="slideshow-search">
+                  <Search
+                    size="large"
+                    placeholder="Tìm kiếm vắc xin ..."
+                    onSearch={handleOnSearch}
+                    enterButton
+                  />
+                </Space>
+              </Col>
+            </Row>
+
             <section className="section-categories">
               <VaccineCategoryCarousel categories={carouselCategories} />
             </section>

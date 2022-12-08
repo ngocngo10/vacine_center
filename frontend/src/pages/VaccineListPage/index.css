@@ -8,9 +8,9 @@
 
 .slideshow-nav {
   font-family: 'WorkSans-Regular';
-  font-size: 16px;
+  font-size: 15px;
   color: var(--color-third);
-  padding: 7px 0px;
+  padding: 15px 0px;
 }
 
 .slideshow-nav__link {

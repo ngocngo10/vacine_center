@@ -1,39 +1,39 @@
 .vaccine-item {
-  width: 390px;
+  width: 280px;
   height: 386px;
   padding: 15px 10px;
-  margin: 10px;
+  margin: 15px;
   border-radius: 12px;
-  box-shadow: 0px 3.43167px 20.59px -0.857918px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
 }
 
 .vaccine-item:hover {
-  width: 400px;
-  height: 396px;
-  margin: 5px;
-  transition-delay: 0.008s;
+  background-color: var(--color-fourth);
 }
 
 .vaccine-item__image {
-  width: 350px;
+  width: 260px;
   height: 220px;
-  border: 10px solid var(--color-primary);
   border-radius: 20px;
   margin: 0 auto;
 }
 .vaccine-item__image img {
-  width: 330px;
+  width: 260px;
   height: 200px;
   object-fit: cover;
   border-radius: 20px;
 }
 
 .vaccine-item__info {
-  padding: 15px;
+  padding-inline: 10px;
 }
 
 .vaccine-item__name {
+  vertical-align: top;
   font-family: 'WorkSans-SemiBold';
+  color: var(--color-primary);
   font-size: 16px;
   line-height: 22px;
   -webkit-line-clamp: 2; /* number of lines to show */
@@ -41,10 +41,11 @@
 }
 
 .vaccine-item__desc {
+  margin-top: 5px;
   font-family: 'WorkSans-Regular';
-  font-size: 16px;
+  font-size: 15px;
   line-height: 22px;
   color: #212124;
-  -webkit-line-clamp: 3; /* number of lines to show */
-  line-clamp: 3;
+  -webkit-line-clamp: 4; /* number of lines to show */
+  line-clamp: 4;
 }

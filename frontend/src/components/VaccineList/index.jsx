@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Pagination } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { Empty } from 'antd';
+import { Empty, Row, Col } from 'antd';
 import Message from '../Message';
 import Loader from '../Loader';
 import VaccineItem from '../VaccineItem';
@@ -16,7 +16,7 @@ const VaccineList = () => {
   const dispatch = useDispatch();
 
   const onChangePage = (page) => {
-    dispatch(getVaccineList({ page }));
+    dispatch(getVaccineList({ page, perPage: 8 }));
     setCurrent(page);
   };
 
@@ -26,17 +26,21 @@ const VaccineList = () => {
     <Message description={error} />
   ) : vaccines?.length ? (
     <>
-      <ul className="vaccine-list">
-        {vaccines.map((vaccine) => (
-          <VaccineItem key={vaccine.id} vaccine={vaccine} />
-        ))}
-      </ul>
+      <Row justify="center">
+        <Col span={22}>
+          <ul className="vaccine-list">
+            {vaccines.map((vaccine) => (
+              <VaccineItem key={vaccine.id} vaccine={vaccine} />
+            ))}
+          </ul>
+        </Col>
+      </Row>
 
       <Pagination
         className="page-pagination"
         current={current}
         onChange={onChangePage}
-        pageSize={9}
+        pageSize={8}
         total={totalItem}
         hideOnSinglePage
       />

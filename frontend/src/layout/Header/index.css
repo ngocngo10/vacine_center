@@ -62,6 +62,7 @@
 .header-nav {
   height: 80px;
   background-color: var(--color-primary);
+  width: 100%;
 }
 
 .header-menu {
@@ -170,4 +171,10 @@
   line-height: 1.4;
   color: var(--color-primary);
   border-radius: 20px;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
