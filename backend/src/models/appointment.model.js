@@ -68,6 +68,11 @@ module.exports = (sequelize, Sequelize) => {
       isConfirmed: {
         field: 'is_confirmed',
         type: Sequelize.BOOLEAN
+      },
+      isCheckIn: {
+        field: 'is_check_in',
+        type: Sequelize.BOOLEAN,
+        default: false
       }
     },
     {

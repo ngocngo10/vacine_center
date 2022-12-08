@@ -8,6 +8,8 @@ const ScheduleConfigService = require('./schedule-config.service');
 const AgeGroupService = require('./age-group.service');
 const AppointmentService = require('./appointment.service');
 const ScheduleService = require('./schedule.service');
+const StaffService = require('./staff.service');
+const InjectionService = require('./injection.service');
 
 module.exports = {
   UserService,
@@ -19,5 +21,7 @@ module.exports = {
   ScheduleConfigService,
   AgeGroupService,
   AppointmentService,
-  ScheduleService
+  ScheduleService,
+  StaffService,
+  InjectionService
 };
