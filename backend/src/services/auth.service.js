@@ -1,4 +1,5 @@
 const { UserRepository } = require('../repositories');
+const { Op } = require('sequelize');
 const ErrorCreator = require('../utils/error_creator');
 const constants = require('../constants');
 const { generateLoginToken, generateRefreshToken } = require('../utils');
@@ -22,7 +23,6 @@ module.exports = class AuthService {
     if (isExist) {
       throw new ErrorCreator(constants.USER_EXISTED, 400);
     }
-    console.log(userInfo);
     const newUser = await this.repository.createUser(userInfo);
     const token = generateLoginToken({
       id: newUser.id,
@@ -39,13 +39,25 @@ module.exports = class AuthService {
     return {
       token,
       refreshToken,
-      user: { name: newUser.name, roles: newUser.roles }
+      user: {
+        name: newUser.name,
+        roles: newUser.roles, 
+        email: newUser.email,
+        phoneNumber: newUser.phoneNumber
+      }
     };
   }
 
   async login(requestBody) {
     const { phoneNumber, password } = requestBody;
-    const user = await this.repository.findUserByPhoneNumber(phoneNumber);
+    const user = await this.repository.model.findOne({
+      where: {
+        [Op.or]: [
+          { phoneNumber: phoneNumber },
+          { email: phoneNumber }
+        ]
+      }
+    });
     if (!user) {
       throw new ErrorCreator(constants.INVALID_PHONE_OR_PASSWORD, 400);
     }
@@ -65,7 +77,12 @@ module.exports = class AuthService {
       return {
         token,
         refreshToken,
-        user: { name: user.name, roles: user.roles }
+        user: {
+          name: user.name,
+          roles: user.roles,
+          email: user.email,
+          phoneNumber: user.phoneNumber
+        }
       };
     }
 
