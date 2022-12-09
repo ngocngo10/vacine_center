@@ -131,7 +131,7 @@ const AppointmentHistoryPage = () => {
     // phoneNumber: item.phoneNumber,
     desiredDate: moment(item.desiredDate).format('DD-MM-YYYY'),
     // desiredDate: moment(moment(item.desiredDate, 'DD-MM-YYYY')).format('DD-MM-YYYY'),
-    schedule: moment(moment(item.schedule.startAt, 'HH:mm')).format('HH:mm'),
+    schedule: moment(moment(item.schedule?.startAt, 'HH:mm')).format('HH:mm'),
     listType: item.listType,
     wishList: item.wishList,
     isConfirmed: item.isConfirmed,
