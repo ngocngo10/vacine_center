@@ -24,6 +24,11 @@ import RegisterAppointmentPage from './pages/RegisterAppointmentPage';
 import HomePage from './pages/HomePage';
 import AppointmentHistoryPage from './pages/AppointmentHistoryPage';
 
+import StaffMain from './layout/StaffMain';
+import StaffAppointmentPage from './pages/StaffAppointmentPage';
+import StaffAppointmentDetailPage from './pages/StaffAppoinmentDetailPage';
+import StaffAppointmentsOnDayPage from './pages/StaffAppointmentsOnDayPage';
+import StaffAppointmentDetailOnDayPage from './pages/StaffAppointmentDetailOnDayPage';
 import Main from './components/Main';
 const Routing = () => {
   return (
@@ -39,7 +44,6 @@ const Routing = () => {
         <Route path="appointment-history" element={<AppointmentHistoryPage />} />
       </Route>
 
-      {/* <Route path="/admin-home" element={<AdminMain />} /> */}
       <Route exact path="/admin-home" element={<AdminMain />}>
         <Route index element={<AdminVaccinePage />} />
         <Route path="vaccines" element={<AdminVaccinePage />} />
@@ -56,6 +60,17 @@ const Routing = () => {
         <Route path="age-groups-categories/add" element={<AdminAddAgeGroupPage />} />
 
         <Route path="appointment-schedule/config" element={<AdminScheduleConfig />} />
+      </Route>
+
+      <Route exact path="/staff-home" element={<StaffMain />}>
+        <Route index element={<StaffAppointmentPage />} />
+        <Route path="appointments" element={<StaffAppointmentPage />} />
+        <Route path="appointments/details/:id" element={<StaffAppointmentDetailPage />} />
+        <Route path="appointments-on-day" element={<StaffAppointmentsOnDayPage />} />
+        <Route
+          path="appointments-on-day/details/:id"
+          element={<StaffAppointmentDetailOnDayPage />}
+        />
       </Route>
     </Routes>
   );
