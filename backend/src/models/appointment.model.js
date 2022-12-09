@@ -10,44 +10,8 @@ module.exports = (sequelize, Sequelize) => {
         field: 'user_id',
         type: Sequelize.INTEGER
       },
-      patientName: {
-        field: 'patient_name',
-        type: Sequelize.STRING
-      },
-      birthday: {
-        field: 'birthday',
-        type: Sequelize.DATE
-      },
-      phoneNumber: {
-        field: 'phone_number',
-        type: Sequelize.STRING
-      },
-      gender: {
-        field: 'gender',
-        type: Sequelize.BOOLEAN
-      },
-      province: {
-        field: 'province',
-        type: Sequelize.STRING
-      },
-      district: {
-        field: 'district',
-        type: Sequelize.STRING
-      },
-      ward: {
-        field: 'ward',
-        type: Sequelize.STRING
-      },
-      street: {
-        field: 'street',
-        type: Sequelize.STRING
-      },
-      representativeName: {
-        field: 'representative_name',
-        type: Sequelize.STRING
-      },
-      representativePhoneNumber: {
-        field: 'representative_phone_number',
+      patientId: {
+        field: 'patient_id',
         type: Sequelize.STRING
       },
       relative: {
@@ -69,10 +33,9 @@ module.exports = (sequelize, Sequelize) => {
         field: 'is_confirmed',
         type: Sequelize.BOOLEAN
       },
-      isCheckIn: {
-        field: 'is_check_in',
-        type: Sequelize.BOOLEAN,
-        default: false
+      checkInAt: {
+        field: 'check_in_at',
+        type: Sequelize.DATE
       }
     },
     {

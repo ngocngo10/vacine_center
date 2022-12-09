@@ -18,11 +18,12 @@ module.exports = class PatientService {
   }
 
   async find(reqQuery) {
-    const findOptions = {};
+    const findOptions = {
+      where: {},
+      include: ['representator']
+    };
     if (reqQuery.representative) {
-      findOptions.where = {
-        representative: reqQuery.representative
-      };
+      findOptions.where.representative = reqQuery.representative
     }
     if (reqQuery.page) {
       findOptions.limit = +reqQuery.perPage || 10;
@@ -32,11 +33,14 @@ module.exports = class PatientService {
     if (reqQuery.orderBy) {
       findOptions.order = [reqQuery.orderBy, reqQuery.orderType || 'DESC'];
     }
+    if (reqQuery.patientCode) {
+      findOptions.where.patientCode = reqQuery.patientCode;
+    }
     return await this.repository.find(findOptions);
   }
 
   async findOne(id) {
-    return await this.repository.findOne(id);
+    return await this.repository.findOne(id, ['representator']);
   }
 
   async deletePatient(id) {

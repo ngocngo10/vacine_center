@@ -72,6 +72,11 @@ Appointment.belongsTo(User, {
   as: 'user'
 });
 
+Patient.hasMany(Appointment, { as: 'appointments' });
+Appointment.belongsTo(Patient, {
+  foreignKey: 'patient_id',
+  as: 'patient'
+});
 
 module.exports = {
   Sequelize,
