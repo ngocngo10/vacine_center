@@ -3,7 +3,11 @@ const ErrorCreator = require('../utils/error_creator');
 const patientService = new PatientService();
 async function create(req, res, next) {
   try {
-    await patientService.create(req.body);
+    const data = {
+      ...req.body,
+      representative: req.user.id
+    }
+    await patientService.create(data);
     return res.json({
       message: 'Patient is created successfully'
     });

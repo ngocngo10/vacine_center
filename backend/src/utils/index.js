@@ -6,7 +6,7 @@ function generateLoginToken(userInfo) {
     user: userInfo
   };
   const token = jwt.sign(payload, process.env.JWT_TOKEN_KEY, {
-    expiresIn: '1h'
+    expiresIn: '3d'
   });
   return token;
 }
