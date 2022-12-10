@@ -19,11 +19,7 @@ module.exports = class InjectionService {
 
   async find(reqQuery) {
     const findOptions = {};
-    if (reqQuery.representative) {
-      findOptions.where = {
-        representative: reqQuery.representative
-      };
-    }
+
     if (reqQuery.page) {
       findOptions.limit = +reqQuery.perPage || 10;
       findOptions.offset = (+reqQuery.page - 1) * findOptions.limit;
