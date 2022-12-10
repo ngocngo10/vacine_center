@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Table, Tag, Badge, Input, Button, Select, Row, Col, DatePicker, Card, Form } from 'antd';
 import { CheckOutlined, SearchOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getScheduleOnDay } from '../../actions/schedule.action';
+import { getAppointmentHistories } from '../../actions/appointment.action';
 import moment from 'moment';
 import './index.css';
 
@@ -13,6 +14,12 @@ const StaffAppointmentPage = () => {
   const DEFAULT_PAGE_NUMBER = 0;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const appointmentList = useSelector((state) => state.appointmentList);
+  const { loading, error, appointmentHistories, totalItem } = appointmentList;
 
   const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_NUMBER);
   const scheduleOnDay = useSelector((state) => state.scheduleOnDay);
@@ -35,11 +42,30 @@ const StaffAppointmentPage = () => {
   };
 
   const handleTableChange = (pagination) => {
-    // handleChangePage(pagination.current);
-    // call api
-    console.log('pagination', pagination.current);
+    dispatch(getAppointmentHistories({ perPage: 10, page: pagination.current }));
     setCurrentPage(pagination.current - 1);
   };
+
+  const handleOnSearch = (values) => {
+    console.log(values);
+    dispatch(
+      getAppointmentHistories({
+        perPage: 10,
+        patientCode: values.patientCode,
+        patientName: values.patientName,
+        desiredDate: moment(values.desiredDate).format('YYYY-MM-DD'),
+        schedule: values.schedule
+      })
+    );
+  };
+
+  useEffect(() => {
+    if (userInfo && userInfo.user.roles.includes('staff')) {
+      dispatch(getAppointmentHistories({ perPage: 10 }));
+    } else {
+      navigate('/login');
+    }
+  }, [userInfo]);
   const columns = [
     {
       title: '#',
@@ -109,40 +135,32 @@ const StaffAppointmentPage = () => {
     }
   ];
   const data = {};
-  data.totalElements = 20;
-  data.content = [
-    {
-      key: 1,
-      index: 1,
-      patientName: 'Nguyễn Văn C',
-      desiredDate: '12/10/2022',
-      schedule: '10:00   -   11:00',
-      listType: 'Vắc xin lẻ',
-      wishList: ['ROTAVIN-M1: Vắc xin phòng bệnh tiêu chảy cấp do Rotavirus '],
-      isConfirmed: true,
-      checkInDate: '9:00 '
-    },
-    {
-      key: 1,
-      index: 1,
-      patientName: 'Nguyễn Văn C',
-      desiredDate: '12/10/2022',
-      schedule: '10:00 -11:00',
-      listType: 'Vắc xin lẻ',
-      wishList: ['ROTAVIN-M1: Vắc xin phòng bệnh tiêu chảy cấp do Rotavirus '],
-      isConfirmed: true,
-      checkInDate: '9:00'
-    }
-  ];
+  data.totalElements = totalItem;
+  data.content = appointmentHistories?.map((item, index) => ({
+    key: item.id,
+    index: index + 1,
+    code: item.patient.patientCode,
+    patientName: item.patient.patientName,
+    desiredDate: moment(item.desiredDate).format('DD-MM-YYYY'),
+    schedule: `${moment(moment(item.schedule?.startAt, 'HH:mm')).format('HH:mm')}-${moment(
+      moment(item.schedule?.startAt, 'HH:mm')
+    )
+      .add(item.schedule?.appointmentDuration, 'minutes')
+      .format('HH:mm')}`,
+    listType: item.listType,
+    wishList: item.wishList,
+    isConfirmed: item.isConfirmed,
+    checkInDate: item.checkInAt
+  }));
 
   return (
     <div>
       <h2 className="page-title">Quản lí đăng kí tiêm trực tuyến</h2>
       <Card style={{ borderRadius: 10 }}>
-        <Form>
+        <Form onFinish={handleOnSearch}>
           <Row justify="space-evenly">
             <Col>
-              <Form.Item name="code">
+              <Form.Item name="patientCode">
                 <Input placeholder="Tìm theo mã định danh" style={{ float: 'left' }} />
               </Form.Item>
             </Col>
@@ -152,12 +170,12 @@ const StaffAppointmentPage = () => {
               </Form.Item>
             </Col>
             <Col>
-              <Form.Item name="date">
+              <Form.Item name="desiredDate">
                 <DatePicker placeholder="Chọn ngày" onChange={handleChangeDay} />
               </Form.Item>
             </Col>
             <Col>
-              <Form.Item name="hours">
+              <Form.Item name="schedule">
                 <Select
                   showSearch
                   placeholder="Chọn khung giờ"

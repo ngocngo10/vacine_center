@@ -46,7 +46,9 @@ import {
   appointmentListReducer,
   appointmentEditReducer,
   appointmentDeleteReducer,
-  appointmentMultiDeleteReducer
+  appointmentMultiDeleteReducer,
+  appointmentReducer,
+  appointmentConfirmReducer
 } from './reducers/appointment.reducer';
 
 const reducer = combineReducers({
@@ -85,7 +87,10 @@ const reducer = combineReducers({
   appointmentList: appointmentListReducer,
   appointmentEdit: appointmentEditReducer,
   appointmentDelete: appointmentDeleteReducer,
-  appointmentMultiDelete: appointmentMultiDeleteReducer
+  appointmentMultiDelete: appointmentMultiDeleteReducer,
+
+  appointment: appointmentReducer,
+  appointmentConfirm: appointmentConfirmReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
@@ -99,6 +104,7 @@ const vaccineListFromStorage = localStorage.getItem('vaccines')
 const diseaseCategoriesFromStorage = localStorage.getItem('disease-categories')
   ? JSON.parse(localStorage.getItem('disease-categories'))
   : null;
+
 const initialState = {
   userLogin: { userInfo: userInfoFromStorage },
   vaccineList: { vaccines: vaccineListFromStorage },

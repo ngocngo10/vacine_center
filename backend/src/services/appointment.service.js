@@ -1,10 +1,7 @@
 const { Op } = require('sequelize');
-const {
-  AppointmentRepository,
-  ScheduleRepository,
-  PatientRepository
-} = require('../repositories');
+const { AppointmentRepository, ScheduleRepository, PatientRepository } = require('../repositories');
 const ErrorCreator = require('../utils/error_creator');
+const moment = require('moment');
 
 module.exports = class AppointmentService {
   constructor() {
@@ -19,12 +16,12 @@ module.exports = class AppointmentService {
     };
     let patient;
     if (data.patientCode) {
-      patient = await this.patientRepo.findOne({
+      patient = await this.patientRepo.model.findOne({
         where: {
           patientCode: data.patientCode
         }
       });
-      if (patient) throw new ErrorCreator('Patient Code is invalid', 404)
+      if (!patient) throw new ErrorCreator('Patient Code is invalid', 404);
     } else {
       const patientData = {
         patientName: data.patientName,
@@ -36,8 +33,8 @@ module.exports = class AppointmentService {
         district: data.district,
         ward: data.ward,
         street: data.street
-      }
-      patient = await this.patientRepo.model.create(patientData)
+      };
+      patient = await this.patientRepo.model.create(patientData);
     }
     createData.userId = userId;
     createData.patientId = patient.id;
@@ -56,7 +53,7 @@ module.exports = class AppointmentService {
       ...body
     };
     if (body.isCheckIn) {
-      updateData.checkInAt = 'now()';
+      updateData.checkInAt = moment().format('YYYY-MM-DD HH:mm:ss');
     } else {
       updateData.checkInAt = null;
     }
@@ -89,13 +86,13 @@ module.exports = class AppointmentService {
     if (reqQuery.patientId) {
       findOptions.where.patientId = reqQuery.patientId;
     }
-    if (reqQuery.userId) {
-      findOptions.where.userId = reqQuery.userId;
+    if (reqQuery.patientCode) {
+      findOptions.where['$patient.patient_code$'] = reqQuery.patientCode;
     }
     if (reqQuery.patientName) {
-      findOptions.where['$patient.patientNam$'] = {
+      findOptions.where['$patient.patient_name$'] = {
         [Op.like]: `%${reqQuery.patientName}%`
-      }
+      };
     }
     if (userId) {
       findOptions.where.userId = userId;

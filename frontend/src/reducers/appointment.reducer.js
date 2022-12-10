@@ -13,8 +13,30 @@ import {
   APPOINTMENT_DELETE_FAIL,
   APPOINTMENT_MULTI_DELETE_REQUEST,
   APPOINTMENT_MULTI_DELETE_SUCCESS,
-  APPOINTMENT_MULTI_DELETE_FAIL
+  APPOINTMENT_MULTI_DELETE_FAIL,
+  APPOINTMENT_REQUEST,
+  APPOINTMENT_SUCCESS,
+  APPOINTMENT_FAIL,
+  CONFIRM_APPOINTMENT_REQUEST,
+  CONFIRM_APPOINTMENT_SUCCESS,
+  CONFIRM_APPOINTMENT_FAIL
 } from '../constants/appointment.constant';
+
+export const appointmentConfirmReducer = (state = {}, action) => {
+  switch (action.type) {
+    case CONFIRM_APPOINTMENT_REQUEST:
+      return { loading: true };
+    case CONFIRM_APPOINTMENT_SUCCESS:
+      return {
+        loading: false,
+        confirmSuccess: true
+      };
+    case CONFIRM_APPOINTMENT_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
 
 export const appointmentCreateReducer = (state = {}, action) => {
   switch (action.type) {
@@ -43,6 +65,22 @@ export const appointmentListReducer = (state = {}, action) => {
         totalItem: action.payload.count
       };
     case APPOINTMENT_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const appointmentReducer = (state = {}, action) => {
+  switch (action.type) {
+    case APPOINTMENT_REQUEST:
+      return { loading: true };
+    case APPOINTMENT_SUCCESS:
+      return {
+        loading: false,
+        appointment: action.payload.schedule
+      };
+    case APPOINTMENT_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;
