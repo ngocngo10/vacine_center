@@ -10,6 +10,7 @@ const AppointmentService = require('./appointment.service');
 const ScheduleService = require('./schedule.service');
 const StaffService = require('./staff.service');
 const InjectionService = require('./injection.service');
+const ScreeningTestService = require('./screening-test.service');
 
 module.exports = {
   UserService,
@@ -23,5 +24,6 @@ module.exports = {
   AppointmentService,
   ScheduleService,
   StaffService,
-  InjectionService
+  InjectionService,
+  ScreeningTestService
 };
