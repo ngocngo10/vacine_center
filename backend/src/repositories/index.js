@@ -9,6 +9,7 @@ const AgeGroupVaccineRepository = require('./age-group-vaccine.repository');
 const ScheduleRepository = require('./schedule.repository');
 const AppointmentRepository = require('./appointment.repository');
 const InjectionRepository = require('./injection.repository');
+const ScreeningTestRepository = require('./screening-test.repository');
 
 module.exports = {
   UserRepository,
@@ -21,5 +22,6 @@ module.exports = {
   AgeGroupVaccineRepository,
   ScheduleRepository,
   AppointmentRepository,
-  InjectionRepository
+  InjectionRepository,
+  ScreeningTestRepository
 };

@@ -13,9 +13,9 @@ module.exports = class ScheduleConfigService {
     await this.repository.create(data);
     const toDate = moment().tz('Asia/Ho_Chi_Minh').add(14, 'days').startOf('day');
     const fromDate = moment(data.applyFrom).startOf('day');
-    if (fromDate.diff(moment().tz('Asia/Ho_Chi_Minh'), 'day') <= 0) {
-      throw new ErrorCreator('Vui lòng chọn ngày áp dụng lớn hơn ngày hiện tại!', 400);
-    }
+    // if (fromDate.diff(moment().tz('Asia/Ho_Chi_Minh'), 'day') <= 0) {
+    //   throw new ErrorCreator('Vui lòng chọn ngày áp dụng lớn hơn ngày hiện tại!', 400);
+    // }
     await this.scheduleRepository.model.destroy({
       where: {
         day: {
@@ -43,9 +43,9 @@ module.exports = class ScheduleConfigService {
     });
     const toDate = moment().tz('Asia/Ho_Chi_Minh').endOf('month').startOf('day');
     const fromDate = moment(body.applyFrom).tz('Asia/Ho_Chi_Minh').startOf('day');
-    if (fromDate.diff(moment().tz('Asia/Ho_Chi_Minh'), 'day') <= 0) {
-      throw new ErrorCreator('Vui lòng chọn ngày áp dụng lớn hơn ngày hiện tại!', 400);
-    }
+    // if (fromDate.diff(moment().tz('Asia/Ho_Chi_Minh'), 'day') <= 0) {
+    //   throw new ErrorCreator('Vui lòng chọn ngày áp dụng lớn hơn ngày hiện tại!', 400);
+    // }
     await this.repository.update(id, updateData);
     await jobs.createSchedules(fromDate, toDate);
     return;

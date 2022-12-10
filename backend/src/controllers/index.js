@@ -11,6 +11,7 @@ const AppointmentController = require('./appointment.controller');
 const ScheduleController = require('./schedule.controller');
 const StaffController = require('./staff.controller');
 const InjectionController = require('./injection.controller');
+const ScreeningTestController = require('./screening-test.controller');
 
 module.exports = {
   AuthController,
@@ -24,5 +25,6 @@ module.exports = {
   AppointmentController,
   ScheduleController,
   StaffController,
-  InjectionController
+  InjectionController,
+  ScreeningTestController
 };
