@@ -26,6 +26,7 @@ ScheduleConfig = require('./schedule-config.model')(sequelize, Sequelize);
 Schedule = require('./schedule.model')(sequelize, Sequelize);
 Injection = require('./injection.model')(sequelize, Sequelize);
 ScreeningTest = require('./screening-test.model')(sequelize, Sequelize);
+VaccineItem = require('./vaccine-item.model')(sequelize, Sequelize);
 
 // define relations
 Category.hasMany(Vaccine, { as: 'vaccines' });
@@ -46,7 +47,7 @@ AgeGroupVaccine.belongsTo(Vaccine, {
   as: 'vaccine'
 });
 
-AgeGroup.belongsToMany(Vaccine, { as: 'vaccines', through: AgeGroupVaccine });
+AgeGroup.belongsToMany(Vaccine, { as: 'vaccines', through: AgeGroupVaccine, uniqueKey: 'vaccine_age_group_unique' });
 Vaccine.belongsToMany(AgeGroup, { as: 'ageGroups', through: AgeGroupVaccine });
 
 Vaccine.hasMany(VaccineDetail, { as: 'vaccineDetails' });
@@ -90,12 +91,43 @@ Injection.belongsTo(Vaccine, {
   foreignKey: 'vaccine_id',
   as: 'vaccine'
 });
-
-// Appointment.hasOne(ScreeningTest, { as: 'screeningTest' });
-// ScreeningTest.belongsTo(Appointment, {
-//   foreignKey: 'appointment_id',
-//   as: 'appointment'
+// Appointment.belongsToMany(Vaccine, {
+//   through: Injection,
+//   as: 'injectionVaccines',
+//   uniqueKey: 'appointment_vaccine_unique'
 // });
+
+VaccineItem.hasMany(Injection, { as: 'injections' });
+Injection.belongsTo(VaccineItem, {
+  foreignKey: 'vaccine_item_id',
+  as: 'vaccineItem'
+});
+
+Vaccine.hasMany(VaccineItem, {
+  as: 'vaccineItems',
+  sourceKey: 'vaccineCode'
+});
+VaccineItem.belongsTo(Vaccine, {
+  foreignKey: 'vaccine_code',
+  as: 'vaccine',
+  targetKey: 'vaccineCode'
+});
+
+Injection.afterCreate(async (injection, options) => {
+  const vaccine = await Vaccine.findOne(injection.vaccineId);
+  vaccine.quantity = vaccine.quantity - 1;
+  await vaccine.save();
+  const vaccineItem = await VaccineItem.findOne(injection.vaccineItemId);
+  vaccineItem.quantity = vaccineItem.quantity - 1;
+  await vaccineItem.save();
+});
+
+
+Appointment.hasOne(ScreeningTest, { as: 'screeningTest' });
+ScreeningTest.belongsTo(Appointment, {
+  foreignKey: 'appointment_id',
+  as: 'appointment'
+});
 
 module.exports = {
   Sequelize,
@@ -112,5 +144,6 @@ module.exports = {
   Schedule,
   ScheduleConfig,
   Injection,
-  ScreeningTest
+  ScreeningTest,
+  VaccineItem
 };

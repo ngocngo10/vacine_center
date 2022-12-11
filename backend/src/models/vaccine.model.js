@@ -9,6 +9,12 @@ module.exports = (sequelize, Sequelize) => {
       name: {
         type: Sequelize.STRING(5000)
       },
+      vaccineCode: {
+        field: 'vaccine_code',
+        type: Sequelize.TEXT,
+        allowNull: false,
+        unique: true
+      },
       image: {
         type: Sequelize.STRING(2000)
       },
