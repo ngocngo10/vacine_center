@@ -12,6 +12,17 @@ async function create(req, res, next) {
   }
 }
 
+async function bulkCreate(req, res, next) {
+  try {
+    await injectionService.bulkCreate(req.body);
+    return res.json({
+      message: 'Injections are created successfully'
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function find(req, res, next) {
   try {
     const injections = await injectionService.find(req.query);
@@ -61,5 +72,6 @@ module.exports = {
   findOne,
   update,
   deleteInjection,
-  deleteMulti
+  deleteMulti,
+  bulkCreate
 };

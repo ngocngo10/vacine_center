@@ -172,7 +172,6 @@ export const getAppointment = (id) => async (dispatch, getState) => {
       type: APPOINTMENT_SUCCESS,
       payload: data
     });
-    localStorage.setItem('appointments', JSON.stringify(data.rows));
   } catch (error) {
     if (error.response?.status == 401 || error.response?.status == 403) {
       dispatch(logout());

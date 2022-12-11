@@ -51,6 +51,12 @@ import {
   appointmentConfirmReducer
 } from './reducers/appointment.reducer';
 
+import {
+  injectionCreateReducer,
+  injectionListReducer,
+  injectionReducer
+} from './reducers/injection.reducer';
+
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
@@ -88,9 +94,12 @@ const reducer = combineReducers({
   appointmentEdit: appointmentEditReducer,
   appointmentDelete: appointmentDeleteReducer,
   appointmentMultiDelete: appointmentMultiDeleteReducer,
-
   appointment: appointmentReducer,
-  appointmentConfirm: appointmentConfirmReducer
+  appointmentConfirm: appointmentConfirmReducer,
+
+  injectionCreate: injectionCreateReducer,
+  injectionList: injectionListReducer,
+  injection: injectionReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

@@ -8,6 +8,7 @@ import {
   getAppointment,
   confirmAppointment
 } from '../../actions/appointment.action';
+import { createInjection } from '../../actions/injection.action';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import './index.css';
@@ -41,6 +42,12 @@ const StaffAppointmentDetailPage = () => {
 
   const handleCheckIn = () => {
     dispatch(editAppointment({ isCheckIn: true, id }));
+    dispatch(
+      createInjection({
+        appointmentId: id,
+        vaccineId: appointment.wishList.map((item) => JSON.parse(item).id)
+      })
+    );
   };
 
   const handleConfirm = () => {
@@ -148,20 +155,14 @@ const StaffAppointmentDetailPage = () => {
                 <h3>THÔNG TIN DỊCH VỤ</h3>
               </Col>
             </Row>
-            <Row>
-              <Col>
-                <span>
-                  Loại vắc xin: <strong>{appointment?.listType == 1 ? 'Gói' : 'Lẻ'}</strong>
-                </span>
-              </Col>
-            </Row>
+
             <Row>
               <Col>
                 <span>
                   Vắc xin mong muốn tiêm:
                   {appointment?.wishList.map((item) => (
                     <>
-                      <strong>{item}</strong>
+                      <strong>{JSON.parse(item).name}</strong>
                       <br />
                     </>
                   ))}
@@ -192,6 +193,12 @@ const StaffAppointmentDetailPage = () => {
               </Col>
             </Row>
             <Row>
+              <Col span={12}>
+                <span>
+                  Trạng thái xác nhận:
+                  <strong>{appointment?.isConfirmed ? 'Đã xác nhận' : 'Chưa xác nhận'}</strong>
+                </span>
+              </Col>
               <Col>
                 <span>
                   Giờ check in:

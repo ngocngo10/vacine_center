@@ -168,7 +168,7 @@ const RegisterAppointmentPage = () => {
 
   const onFinish = (values) => {
     values.gender = values.gender === 'male';
-    values.wishList = values.wishList.map((item) => item.name);
+    values.wishList = values.wishList.map((item) => ({ name: item.name, id: item.id }));
     values.birthday = values.birthday.format('YYYY-MM-DD');
     values.desiredDate = values.desiredDate.format('YYYY-MM-DD');
     console.log('values', values);

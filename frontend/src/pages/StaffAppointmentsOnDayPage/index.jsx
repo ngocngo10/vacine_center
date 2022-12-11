@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Table, Tag, Badge, Input, Button, Select, Row, Col, DatePicker, Card, Form } from 'antd';
-import { CheckOutlined, SearchOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getScheduleOnDay } from '../../actions/schedule.action';
+import { getInjectionList } from '../../actions/injection.action';
 import moment from 'moment';
 import './index.css';
 
@@ -13,6 +14,12 @@ const StaffAppointmentsOnDayPage = () => {
   const DEFAULT_PAGE_NUMBER = 0;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const injectionList = useSelector((state) => state.injectionList);
+  const { loading, error, injections, totalItem } = injectionList;
 
   const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_NUMBER);
   const scheduleOnDay = useSelector((state) => state.scheduleOnDay);
@@ -27,24 +34,44 @@ const StaffAppointmentsOnDayPage = () => {
     value: item.id
   }));
 
-  const handleChangeDay = (date) => {
-    console.log('date', date);
-    const selectedDay = moment(date).format('YYYY-MM-DD');
-    console.log('selectedDay', selectedDay);
-    dispatch(getScheduleOnDay(selectedDay));
+  const handleTableChange = (pagination) => {
+    dispatch(
+      getInjectionList({
+        perPage: 10,
+        page: pagination.current,
+        desiredDate: currentDay
+      })
+    );
+    setCurrentPage(pagination.current - 1);
   };
 
-  const handleTableChange = (pagination) => {
-    // handleChangePage(pagination.current);
-    // call api
-    console.log('pagination', pagination.current);
-    setCurrentPage(pagination.current - 1);
+  const handleOnSearch = (values) => {
+    console.log(values);
+    dispatch(
+      getInjectionList({
+        perPage: 10,
+        patientCode: values.patientCode,
+        patientName: values.patientName,
+        desiredDate: currentDay,
+        scheduleId: values.schedule
+      })
+    );
   };
 
   const currentDay = moment().format('YYYY-MM-DD');
   useEffect(() => {
-    dispatch(getScheduleOnDay(currentDay));
-  }, [currentDay]);
+    if (userInfo && userInfo.user.roles.includes('staff')) {
+      dispatch(getScheduleOnDay(currentDay));
+      dispatch(
+        getInjectionList({
+          perPage: 10,
+          desiredDate: currentDay
+        })
+      );
+    } else {
+      navigate('/login');
+    }
+  }, [currentDay, userInfo]);
   const columns = [
     {
       title: '#',
@@ -73,25 +100,14 @@ const StaffAppointmentsOnDayPage = () => {
     },
 
     {
-      title: 'Loại vắc xin ',
-      dataIndex: 'listType',
-      key: 'listType',
-      align: 'center',
-      render: (listType) =>
-        listType == 1 ? <Tag color="green">GÓI</Tag> : <Tag color="purple">LẺ</Tag>
-    },
-
-    {
       title: 'Tên vắc xin',
       dataIndex: 'wishList',
       key: 'wishList',
-      align: 'center',
       render: (wishList) =>
         wishList?.map((item, index) => (
-          <p>
-            <Badge status="success" style={{ marginRight: 10 }} />
-            {item}
-          </p>
+          <ol>
+            <li>{`${index + 1}. ${item.trim()}`}</li>
+          </ol>
         ))
     },
     {
@@ -99,51 +115,53 @@ const StaffAppointmentsOnDayPage = () => {
       dataIndex: 'isConfirmed',
       key: 'isConfirmed',
       align: 'center',
-      render: (isConfirmed) => isConfirmed && <CheckOutlined style={{ color: 'blue' }} />
+      render: (isConfirmed) =>
+        isConfirmed ? (
+          <CheckOutlined style={{ color: 'blue' }} />
+        ) : (
+          <CloseOutlined style={{ color: 'red' }} />
+        )
     },
     {
       title: 'Đã tiêm',
       dataIndex: 'checkInDate',
       align: 'center',
       key: 'checkInDate',
-      render: (value) => value && <CheckOutlined style={{ color: 'blue' }} />
+      render: (value) =>
+        value ? (
+          <CheckOutlined style={{ color: 'blue' }} />
+        ) : (
+          <CloseOutlined style={{ color: 'red' }} />
+        )
     }
   ];
   const data = {};
-  data.totalElements = 20;
-  data.content = [
-    {
-      key: 1,
-      index: 1,
-      patientName: 'Nguyễn Văn C',
-      // desiredDate: '12/10/2022',
-      schedule: '10:00   -   11:00',
-      listType: 'Vắc xin lẻ',
-      wishList: ['ROTAVIN-M1: Vắc xin phòng bệnh tiêu chảy cấp do Rotavirus '],
-      isConfirmed: true,
-      checkInDate: true
-    },
-    {
-      key: 2,
-      index: 2,
-      patientName: 'Nguyễn Văn C',
-      // desiredDate: '12/10/2022',
-      schedule: '10:00 -11:00',
-      listType: 'Vắc xin lẻ',
-      wishList: ['ROTAVIN-M1: Vắc xin phòng bệnh tiêu chảy cấp do Rotavirus '],
-      isConfirmed: true,
-      checkInDate: true
-    }
-  ];
+  data.totalElements = totalItem;
+  data.content = injections?.map((item, index) => ({
+    key: item.id,
+    index: index + 1,
+    // code: item.patient.patientCode,
+    // patientName: item.patient.patientName,
+    desiredDate: moment(item.desiredDate).format('DD/MM/YYYY'),
+    schedule: `${moment(moment(item.schedule?.startAt, 'HH:mm')).format('HH:mm')}-${moment(
+      moment(item.schedule?.startAt, 'HH:mm')
+    )
+      .add(item.schedule?.appointmentDuration, 'minutes')
+      .format('HH:mm')}`,
+    // listType: item.listType,
+    wishList: item.wishList
+    // isConfirmed: item.isConfirmed,
+    // checkInDate: item.checkInAt
+  }));
 
   return (
     <div>
-      <h2 className="page-title">Quản lí lịch làm việc trong ngày</h2>
+      <h2 className="page-title">Quản lí lịch tiêm chủng trong ngày</h2>
       <Card style={{ borderRadius: 10 }}>
-        <Form>
+        <Form onFinish={handleOnSearch}>
           <Row justify="space-evenly">
             <Col>
-              <Form.Item name="code">
+              <Form.Item name="patientCode">
                 <Input placeholder="Tìm theo mã định danh" style={{ float: 'left' }} />
               </Form.Item>
             </Col>
@@ -153,7 +171,7 @@ const StaffAppointmentsOnDayPage = () => {
               </Form.Item>
             </Col>
             <Col>
-              <Form.Item name="hours">
+              <Form.Item name="schedule">
                 <Select
                   showSearch
                   placeholder="Chọn khung giờ"

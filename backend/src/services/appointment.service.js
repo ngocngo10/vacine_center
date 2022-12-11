@@ -86,6 +86,9 @@ module.exports = class AppointmentService {
     if (reqQuery.patientId) {
       findOptions.where.patientId = reqQuery.patientId;
     }
+    if (reqQuery.isCheckIn) {
+      findOptions.where['$check_in_at$'] = { [Op.not]: null };
+    }
     if (reqQuery.patientCode) {
       findOptions.where['$patient.patient_code$'] = reqQuery.patientCode;
     }
@@ -97,7 +100,7 @@ module.exports = class AppointmentService {
     if (userId) {
       findOptions.where.userId = userId;
     }
-    findOptions.include = ['schedule', 'user', 'patient'];
+    findOptions.include = ['schedule', 'user', 'patient', 'screeningTest', 'vaccines'];
 
     if (reqQuery.isConfirmed) {
       findOptions.where.isConfirmed = reqQuery.isConfirmed;
@@ -107,7 +110,13 @@ module.exports = class AppointmentService {
   }
 
   async findOne(id) {
-    return await this.repository.findOne(id, ['schedule', 'user', 'patient']);
+    return await this.repository.findOne(id, [
+      'schedule',
+      'user',
+      'patient',
+      'screeningTest',
+      'vaccines'
+    ]);
   }
 
   async deleteAppointment(id) {

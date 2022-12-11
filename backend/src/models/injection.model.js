@@ -17,8 +17,7 @@ module.exports = (sequelize, Sequelize) => {
       injectionAt: {
         field: 'injection_at',
         type: 'TIMESTAMP'
-      },
-
+      }
     },
     {
       paranoid: true

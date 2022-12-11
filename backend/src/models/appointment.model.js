@@ -21,12 +21,8 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.DATE,
         field: 'desired_date'
       },
-      listType: {
-        type: Sequelize.STRING,
-        field: 'list_type'
-      },
       wishList: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+        type: Sequelize.ARRAY(Sequelize.STRING(2000)),
         field: 'wish_list'
       },
       isConfirmed: {

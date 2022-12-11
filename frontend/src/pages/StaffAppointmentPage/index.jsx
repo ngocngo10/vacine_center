@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Table, Tag, Badge, Input, Button, Select, Row, Col, DatePicker, Card, Form } from 'antd';
-import { CheckOutlined, SearchOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getScheduleOnDay } from '../../actions/schedule.action';
 import { getAppointmentHistories } from '../../actions/appointment.action';
@@ -52,7 +52,7 @@ const StaffAppointmentPage = () => {
         patientCode: values.patientCode,
         patientName: values.patientName,
         desiredDate: moment(values.desiredDate).format('YYYY-MM-DD'),
-        schedule: values.schedule
+        scheduleId: values.schedule
       })
     );
   };
@@ -97,25 +97,14 @@ const StaffAppointmentPage = () => {
     },
 
     {
-      title: 'Loại vắc xin ',
-      dataIndex: 'listType',
-      key: 'listType',
-      align: 'center',
-      render: (listType) =>
-        listType == 1 ? <Tag color="green">GÓI</Tag> : <Tag color="purple">LẺ</Tag>
-    },
-
-    {
       title: 'Tên vắc xin',
       dataIndex: 'wishList',
       key: 'wishList',
-      align: 'center',
       render: (wishList) =>
         wishList?.map((item, index) => (
-          <p>
-            <Badge status="success" style={{ marginRight: 10 }} />
-            {item}
-          </p>
+          <ol>
+            <li>{`${index + 1}. ${JSON.parse(item).name}`}</li>
+          </ol>
         ))
     },
     {
@@ -123,7 +112,12 @@ const StaffAppointmentPage = () => {
       dataIndex: 'isConfirmed',
       key: 'isConfirmed',
       align: 'center',
-      render: (isConfirmed) => isConfirmed && <CheckOutlined style={{ color: 'blue' }} />
+      render: (value) =>
+        value ? (
+          <CheckOutlined style={{ color: 'blue' }} />
+        ) : (
+          <CloseOutlined style={{ color: 'red' }} />
+        )
     },
     {
       title: 'Giờ check in',
@@ -145,10 +139,10 @@ const StaffAppointmentPage = () => {
     )
       .add(item.schedule?.appointmentDuration, 'minutes')
       .format('HH:mm')}`,
-    listType: item.listType,
+    // listType: item.listType,
     wishList: item.wishList,
     isConfirmed: item.isConfirmed,
-    checkInDate: item.checkInAt
+    checkInDate: item.checkInAt ? moment(item.checkInAt).format('HH:mm:ss') : 'Chưa check in'
   }));
 
   return (
