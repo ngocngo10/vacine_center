@@ -17,6 +17,13 @@ module.exports = (sequelize, Sequelize) => {
       injectionAt: {
         field: 'injection_at',
         type: 'TIMESTAMP'
+      },
+      vaccineItemId: {
+        field: 'vaccine_item_id',
+        type: Sequelize.INTEGER
+      },
+      price: {
+        type: Sequelize.FLOAT
       }
     },
     {

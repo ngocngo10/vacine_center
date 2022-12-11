@@ -100,7 +100,7 @@ module.exports = class AppointmentService {
     if (userId) {
       findOptions.where.userId = userId;
     }
-    findOptions.include = ['schedule', 'user', 'patient', 'screeningTest', 'vaccines'];
+    findOptions.include = ['schedule', 'user', 'patient', 'screeningTest'];
 
     if (reqQuery.isConfirmed) {
       findOptions.where.isConfirmed = reqQuery.isConfirmed;
@@ -114,8 +114,7 @@ module.exports = class AppointmentService {
       'schedule',
       'user',
       'patient',
-      'screeningTest',
-      'vaccines'
+      'screeningTest'
     ]);
   }
 
