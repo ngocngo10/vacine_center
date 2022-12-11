@@ -23,6 +23,7 @@ const scheduleRouter = require('./src/routes/schedule');
 const staffRouter = require('./src/routes/staff');
 const injectionRouter = require('./src/routes/injection');
 const screeningTestRouter = require('./src/routes/screening-test');
+const vaccineItemRouter = require('./src/routes/vaccine-item');
 const jobs = require('./src/jobs/create-schedule.job');
 
 // var usersRouter = require('./src/routes/users');
@@ -71,6 +72,7 @@ app.use('/api/appointments', appointmentRouter);
 app.use('/api/staffs', staffRouter);
 app.use('/api/injections', injectionRouter);
 app.use('/api/screening-tests', screeningTestRouter);
+app.use('/api/vaccine-items', vaccineItemRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
