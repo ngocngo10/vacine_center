@@ -11,7 +11,7 @@ function hourToString(hourFloat) {
   const hour = hourFloat - (hourFloat % 1);
   const minute = Math.floor(hourFloat * 60 - hour * 60);
   const sec = hourFloat * 3600 - minute * 60;
-  return [hour, minute, sec].map(item => ('0' + item).slice(-2)).join(':');
+  return [hour, minute, sec].map((item) => ('0' + item).slice(-2)).join(':');
 }
 
 function addMinuteToStringHour(str, minute) {
@@ -20,17 +20,16 @@ function addMinuteToStringHour(str, minute) {
 }
 
 async function createDailySchedules(date, db) {
-  const {
-    repository,
-    scheduleConfigRepository
-  } = db;  
+  const { repository, scheduleConfigRepository } = db;
   const scheduleConfigs = await scheduleConfigRepository.find();
   const scheduleConfig = scheduleConfigs[1] || scheduleConfigs[0];
   const morningTime = toHour(scheduleConfig.restTime) - toHour(scheduleConfig.startAt);
   let time = scheduleConfig.startAt;
   let index = 0;
   const schedules = [];
-  while (time <= addMinuteToStringHour(scheduleConfig.endTime, - scheduleConfig.appointmentDuration)) {
+  while (
+    time <= addMinuteToStringHour(scheduleConfig.restTime, -scheduleConfig.appointmentDuration)
+  ) {
     schedules.push({
       day: date,
       startAt: time,
@@ -44,7 +43,9 @@ async function createDailySchedules(date, db) {
   }
   startAfternoonHour = toHour(scheduleConfig.endTime) - (8 - morningTime);
   time = hourToString(startAfternoonHour);
-  while (time <= addMinuteToStringHour(scheduleConfig.endTime, - scheduleConfig.appointmentDuration)) {
+  while (
+    time <= addMinuteToStringHour(scheduleConfig.endTime, -scheduleConfig.appointmentDuration)
+  ) {
     schedules.push({
       day: date,
       startAt: time,
@@ -65,8 +66,8 @@ async function createSchedules(fromDate, toDate) {
   const db = {
     repository,
     scheduleConfigRepository
-  }
-  let timer = fromDate.clone()
+  };
+  let timer = fromDate.clone();
   while (toDate.diff(timer, 'days') > -1) {
     await createDailySchedules(timer.format('YYYY-MM-DD'), db);
     timer.add(1, 'days');
@@ -76,4 +77,4 @@ async function createSchedules(fromDate, toDate) {
 module.exports = {
   createSchedules,
   createDailySchedules
-}
+};

@@ -15,7 +15,13 @@ const SignInPage = () => {
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
 
-  const url = userInfo?.user.roles.includes('admin') ? '/admin-home' : '/';
+  let url = '/';
+  if (userInfo?.user.roles.includes('admin')) {
+    url = '/admin-home';
+  }
+  if (userInfo?.user.roles.includes('staff')) {
+    url = '/staff-home';
+  }
 
   useEffect(() => {
     if (userInfo) {
@@ -25,7 +31,6 @@ const SignInPage = () => {
 
   const onFinish = (values) => {
     const { phoneNumber, password } = values;
-    console.log('values', values);
     dispatch(login(phoneNumber, password));
   };
   return (

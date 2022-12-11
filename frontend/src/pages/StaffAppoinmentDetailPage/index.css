@@ -1,0 +1,18 @@
+.appointment-details-card {
+  font-family: 'WorkSans-Regular';
+  font-size: 16px;
+  line-height: 2;
+  color: var(--color-fifth);
+  border-radius: 10px;
+}
+
+.appointment-details-card strong {
+  font-family: 'WorkSans-Medium';
+}
+
+.appointment-details-card h3 {
+  font-family: 'WorkSans-Medium';
+  font-size: 20px;
+  line-height: 2;
+  color: var(--color-primary);
+}

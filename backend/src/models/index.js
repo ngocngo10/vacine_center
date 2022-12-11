@@ -79,13 +79,23 @@ Appointment.belongsTo(Patient, {
   as: 'patient'
 });
 
-Appointment.hasOne(ScreeningTest, { as: 'screeningTest' });
-ScreeningTest.belongsTo(Appointment, {
+Appointment.hasMany(Injection, { as: 'injections' });
+Injection.belongsTo(Appointment, {
   foreignKey: 'appointment_id',
   as: 'appointment'
 });
 
-// Patient.belongsToMany(ScreeningTest, { as: 'screeningTests', through: Appointment });
+Vaccine.hasMany(Injection, { as: 'injections' });
+Injection.belongsTo(Vaccine, {
+  foreignKey: 'vaccine_id',
+  as: 'vaccine'
+});
+
+// Appointment.hasOne(ScreeningTest, { as: 'screeningTest' });
+// ScreeningTest.belongsTo(Appointment, {
+//   foreignKey: 'appointment_id',
+//   as: 'appointment'
+// });
 
 module.exports = {
   Sequelize,

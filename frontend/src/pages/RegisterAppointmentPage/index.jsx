@@ -168,7 +168,7 @@ const RegisterAppointmentPage = () => {
 
   const onFinish = (values) => {
     values.gender = values.gender === 'male';
-    values.wishList = values.wishList.map((item) => item.name);
+    values.wishList = values.wishList.map((item) => ({ name: item.name, id: item.id }));
     values.birthday = values.birthday.format('YYYY-MM-DD');
     values.desiredDate = values.desiredDate.format('YYYY-MM-DD');
     console.log('values', values);
@@ -179,7 +179,9 @@ const RegisterAppointmentPage = () => {
     if (userInfo && userInfo.user.roles.includes('user')) {
       dispatch(getProvinceList());
       formRef.current?.setFieldsValue({
-        representativeName: userInfo.user.name
+        representativeName: userInfo.user.name,
+        email: userInfo.user.email,
+        representativePhoneNumber: userInfo.user.phoneNumber
       });
     } else {
       navigate('/login');
@@ -198,7 +200,7 @@ const RegisterAppointmentPage = () => {
         <Container>
           <Row justify="center">
             <Col span={24}>
-              {appointmentCreate?.error && <Message description={error} />}
+              {appointmentCreate?.error && <Message description={appointmentCreate.error} />}
               {createSuccess ? (
                 <Result
                   status="success"
@@ -251,9 +253,20 @@ const RegisterAppointmentPage = () => {
                               <Input />
                             </Form.Item>
                           </Col>
-                          <Col span={11}>
+                          <Col span={5}>
                             <Form.Item
-                              label="Ngày tháng năm sinh người tiêm"
+                              label="Mã định danh (Nếu có)"
+                              name="patientCode"
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 24 }}>
+                              <Input />
+                            </Form.Item>
+                          </Col>
+                          <Col span={5}>
+                            <Form.Item
+                              label="Ngày tháng năm sinh"
                               name="birthday"
                               rules={[
                                 {
@@ -404,16 +417,22 @@ const RegisterAppointmentPage = () => {
                           </Col>
                         </Row>
                         <Row justify="space-between">
-                          <Col span={24}>
+                          <Col span={11}>
                             <Form.Item
                               label="Họ và tên người liên hệ"
                               name="representativeName"
-                              rules={[
-                                {
-                                  required: true,
-                                  message: 'Vui lòng nhập họ và tên người liên hệ!'
-                                }
-                              ]}
+                              labelCol={{
+                                span: 24
+                              }}
+                              wrapperCol={{ span: 24 }}>
+                              <Input disabled />
+                            </Form.Item>
+                          </Col>
+                          <Col span={11}>
+                            <Form.Item
+                              disabled
+                              label="Email"
+                              name="email"
                               labelCol={{
                                 span: 24
                               }}
@@ -447,14 +466,8 @@ const RegisterAppointmentPage = () => {
                               labelCol={{
                                 span: 24
                               }}
-                              wrapperCol={{ span: 24 }}
-                              rules={[
-                                {
-                                  required: true,
-                                  message: 'Vui lòng chọn số điện thoại người liên hệ!'
-                                }
-                              ]}>
-                              <Input />
+                              wrapperCol={{ span: 24 }}>
+                              <Input disabled />
                             </Form.Item>
                           </Col>
                         </Row>

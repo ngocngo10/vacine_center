@@ -8,6 +8,9 @@ module.exports = class InjectionService {
     await this.repository.create(data);
     return;
   }
+  async bulkCreate(data) {
+    await this.repository.bulkCreate(data);
+  }
 
   async update(id, body) {
     const updateData = {
@@ -40,6 +43,6 @@ module.exports = class InjectionService {
   }
 
   async deleteMulti(ids) {
-    return await this.repository.deleteMulti(ids)
+    return await this.repository.deleteMulti(ids);
   }
 };
