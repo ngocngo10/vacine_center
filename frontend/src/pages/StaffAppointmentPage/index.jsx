@@ -8,8 +8,6 @@ import { getAppointmentHistories } from '../../actions/appointment.action';
 import moment from 'moment';
 import './index.css';
 
-const { Search } = Input;
-
 const StaffAppointmentPage = () => {
   const DEFAULT_PAGE_NUMBER = 0;
   const dispatch = useDispatch();

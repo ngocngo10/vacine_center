@@ -29,6 +29,8 @@ import StaffAppointmentPage from './pages/StaffAppointmentPage';
 import StaffAppointmentDetailPage from './pages/StaffAppoinmentDetailPage';
 import StaffAppointmentsOnDayPage from './pages/StaffAppointmentsOnDayPage';
 import StaffAppointmentDetailOnDayPage from './pages/StaffAppointmentDetailOnDayPage';
+
+import StaffInjectionHistoryPage from './pages/StaffInjectionHistoryPage';
 import Main from './components/Main';
 const Routing = () => {
   return (
@@ -71,6 +73,7 @@ const Routing = () => {
           path="appointments-on-day/details/:id"
           element={<StaffAppointmentDetailOnDayPage />}
         />
+        <Route path="appointments-history" element={<StaffInjectionHistoryPage />} />
       </Route>
     </Routes>
   );

@@ -40,8 +40,8 @@ function StaffSideNav() {
         </Menu.Item>
         {/* <Menu.Item key="2"> */}
         {/* <Menu.SubMenu key="submenu-2" title="Vắc xin"> */}
-        <Menu.Item key="vaccines">
-          <NavLink to="vaccines">
+        <Menu.Item key="appointments-history">
+          <NavLink to="appointments-history">
             <ApiOutlined style={{ fontSize: '25px', marginRight: '10px' }} />
             Hồ sơ tiêm
           </NavLink>
