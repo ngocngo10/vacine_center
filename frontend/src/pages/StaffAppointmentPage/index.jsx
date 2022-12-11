@@ -35,9 +35,7 @@ const StaffAppointmentPage = () => {
   }));
 
   const handleChangeDay = (date) => {
-    console.log('date', date);
     const selectedDay = moment(date).format('YYYY-MM-DD');
-    console.log('selectedDay', selectedDay);
     dispatch(getScheduleOnDay(selectedDay));
   };
 
@@ -141,7 +139,7 @@ const StaffAppointmentPage = () => {
     index: index + 1,
     code: item.patient.patientCode,
     patientName: item.patient.patientName,
-    desiredDate: moment(item.desiredDate).format('DD-MM-YYYY'),
+    desiredDate: moment(item.desiredDate).format('DD/MM/YYYY'),
     schedule: `${moment(moment(item.schedule?.startAt, 'HH:mm')).format('HH:mm')}-${moment(
       moment(item.schedule?.startAt, 'HH:mm')
     )

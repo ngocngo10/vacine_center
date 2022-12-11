@@ -158,7 +158,7 @@ const Header = () => {
                       style={{ background: '#ffc107', border: '#ffc107', color: '#1f2b6c' }}
                       onClick={() => navigate('/appointment-history')}>
                       <ScheduleOutlined />
-                      Lịch sử tiêm
+                      Lịch sử hẹn
                     </Button>
                     <Dropdown menu={{ items }}>
                       <div>

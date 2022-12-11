@@ -178,7 +178,7 @@ const AppointmentHistoryPage = () => {
     <div className="vaccines-card">
       <Container>
         <>
-          <h2 className="page-title">Lịch sử tiêm</h2>
+          <h2 className="page-title">Lịch sử cuộc hẹn</h2>
           <Header
             addNewPath="register-appointment"
             selectedRowKeys={selectedRowKeys}

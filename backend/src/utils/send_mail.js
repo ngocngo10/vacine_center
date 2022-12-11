@@ -7,14 +7,12 @@ async function sendEmailConfirmAppointment(emailAddress, data) {
   const image = await generateQRcodeImage(data);
   const params = {
     Destination: {
-      ToAddresses: [
-        emailAddress
-      ]
+      ToAddresses: [emailAddress]
     },
     Message: {
       Body: {
         Html: {
-          Charset: "UTF-8",
+          Charset: 'UTF-8',
           Data: `<p>Cảm ơn bạn đã xác nhận tham gia cuộc hẹn.
             Dưới đây là mã QR code của bạn.
             Hãy quét mã này với nhân viên để được checkin đúng giờ.</p>
@@ -26,21 +24,23 @@ async function sendEmailConfirmAppointment(emailAddress, data) {
         Data: 'Xác nhận lịch hẹn thành công.'
       }
     },
-    Source: 'no-reply@mail.vuongtran.info',
+    Source: 'no-reply@mail.datn-vaccine-center.website'
   };
 
-  const sendPromise = new AWS.SES({ 
-    apiVersion: '2010-12-01',
-  }).sendEmail(params).promise();
-  sendPromise.then(
-    function (data) {
+  const sendPromise = new AWS.SES({
+    apiVersion: '2010-12-01'
+  })
+    .sendEmail(params)
+    .promise();
+  sendPromise
+    .then(function (data) {
       console.log(data.MessageId);
-    }).catch(
-      function (err) {
-        console.error(err, err.stack);
-      });
+    })
+    .catch(function (err) {
+      console.error(err, err.stack);
+    });
 }
 
 module.exports = {
-  sendEmailConfirmAppointment,
-}
+  sendEmailConfirmAppointment
+};
