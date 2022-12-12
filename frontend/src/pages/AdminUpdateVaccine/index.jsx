@@ -78,7 +78,9 @@ const AdminUpdateVaccine = () => {
     formRef.current?.setFieldsValue({
       name: vaccine?.name,
       image: vaccine?.image,
+      vaccineCode: vaccine?.vaccineCode,
       origin: vaccine?.origin,
+      price: vaccine?.price,
       description: vaccine?.description,
       categoryId: vaccine?.categoryId,
       injectedNumberTotal: vaccine?.injectedNumberTotal,
@@ -130,6 +132,18 @@ const AdminUpdateVaccine = () => {
               ]}>
               <Input />
             </Form.Item>
+            <Form.Item
+              label="Mã vắc xin"
+              name="vaccineCode"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập mã vắc xin!',
+                  whitespace: true
+                }
+              ]}>
+              <Input />
+            </Form.Item>
             <Form.Item label="Ảnh" name="image" style={{ display: 'none' }}>
               <Input />
             </Form.Item>
@@ -140,6 +154,18 @@ const AdminUpdateVaccine = () => {
                 {
                   required: true,
                   message: 'Vui lòng nhập nguồn gốc vắc xin!',
+                  whitespace: true
+                }
+              ]}>
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Giá"
+              name="price"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập giá vắc xin!',
                   whitespace: true
                 }
               ]}>

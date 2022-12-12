@@ -8,6 +8,7 @@
 
 .appointment-details-card strong {
   font-family: 'WorkSans-Medium';
+  margin-left: 10px;
 }
 
 .appointment-details-card h3 {

@@ -1,139 +1,83 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Card, Row, Col, Divider, Button, Checkbox, Form } from 'antd';
-import { useNavigate, useParams } from 'react-router-dom';
-import { getProvinceList } from '../../actions/province.action';
-import {
-  editAppointment,
-  getAppointment,
-  confirmAppointment
-} from '../../actions/appointment.action';
-import { createInjection } from '../../actions/injection.action';
-import Loader from '../../components/Loader';
-import Message from '../../components/Message';
+import React from 'react';
+import { Row, Col, Card, Collapse } from 'antd';
+import InjectionHistoryItem from '../../components/InjectionHistoryItem';
 import './index.css';
-import moment from 'moment';
 
-const StaffAppointmentDetailPage = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { id } = useParams();
+const { Panel } = Collapse;
 
-  const provinceList = useSelector((state) => state.provinceList);
-  const { provinces } = provinceList;
-
-  const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
-
-  const { loading, error, appointment } = useSelector((state) => state.appointment);
-
-  const appointmentEdit = useSelector((state) => state.appointmentEdit);
-  const { editSuccess } = appointmentEdit;
-
-  const injectionCreate = useSelector((state) => state.injectionCreate);
-  const { createSuccess } = injectionCreate;
-
-  const gender = appointment?.patient.gender ? 'Nam' : 'Nữ';
-  const birthday = moment(appointment?.patient.birthday).format('DD/MM/YYYY');
-  const province = provinces?.find((item) => item.code == +appointment?.patient.province);
-  const district = province?.districts?.find((item) => item.code == +appointment?.patient.district);
-  const ward = district?.wards?.find((item) => item.code == +appointment?.patient.ward);
-  const address = `${appointment?.patient.street}, ${province?.name}, ${district?.name},  ${ward?.name}`;
-
-  const appointmentConfirm = useSelector((state) => state.appointmentConfirm);
-  const { confirmSuccess } = appointmentEdit;
-
-  const handleCheckIn = () => {
-    dispatch(editAppointment({ isCheckIn: true, id }));
-    dispatch(
-      createInjection({
-        injections: appointment.wishList.map((item) => ({
-          appointmentId: id,
-          nurseId: userInfo.user.id,
-          vaccineId: JSON.parse(item).id,
-          vaccineItemId: null
-        }))
-      })
-    );
-  };
-
-  const handleConfirm = () => {
-    dispatch(confirmAppointment(id));
-  };
-
-  useEffect(() => {
-    if (userInfo && userInfo.user.roles.includes('staff')) {
-      dispatch(getProvinceList());
-      dispatch(getAppointment(id));
-    } else {
-      navigate('/login');
-    }
-  }, [userInfo, id, editSuccess, confirmSuccess]);
-  return loading ? (
-    <Loader />
-  ) : error ? (
-    <Message description={error} />
-  ) : (
+const StaffInjectionHistoryDetailPage = () => {
+  return (
     <div>
-      {injectionCreate?.error && <Message description={injectionCreate?.error} />}
-      {appointmentEdit?.error && <Message description={appointmentEdit?.error} />}
-      {appointmentEdit?.editSuccess && createSuccess && (
-        <Message type="success" description="Check in thành công!" />
-      )}
-      {appointmentConfirm?.error && <Message description={appointmentConfirm?.error} />}
-      {appointmentConfirm?.confirmSuccess && (
-        <Message type="success" description="Xác nhận cuộc hẹn thành công!" />
-      )}
       <Row justify="center">
         <Col span={24}>
-          <Card className="appointment-details-card">
-            <h2 className="page-title">Thông tin chi tiết cuộc hẹn</h2>
+          <Card className="injection-details-card">
+            <h2 className="page-title">Lịch sử chi tiết của bệnh nhân</h2>
             <Row>
               <Col>
-                <h3>THÔNG TIN NGƯỜI TIÊM</h3>
+                <h3>THÔNG TIN BỆNH NHÂN</h3>
               </Col>
             </Row>
             <Row justify="space-between">
               <Col span={12}>
                 <span>
-                  Họ và tên người tiêm: <strong>{appointment?.patient.patientName}</strong>
+                  Họ và tên người tiêm: <strong>Nguyễn Thị C</strong>
                 </span>
               </Col>
               <Col span={12}>
                 <span>
-                  Mã số bệnh nhân: <strong>{appointment?.patient.patientCode}</strong>
+                  Mã số bệnh nhân: <strong>P0001</strong>
                 </span>
               </Col>
             </Row>
             <Row justify="space-between">
               <Col span={8}>
                 <span>
-                  Giới tính: <strong>{gender}</strong>
+                  Giới tính: <strong>Nữ</strong>
                 </span>
               </Col>
               <Col span={8}>
                 <span>
-                  Ngày sinh: <strong>{birthday}</strong>
+                  Ngày sinh: <strong>01/12/1999</strong>
                 </span>
               </Col>
               <Col span={8}>
                 <span>
-                  Số điện thoại: <strong>{appointment?.patient.phoneNumber}</strong>
+                  Số điện thoại: <strong>1234567890</strong>
                 </span>
               </Col>
             </Row>
             <Row>
               <Col>
                 <span>
-                  Địa chỉ: <strong>{address}</strong>
+                  Địa chỉ: <strong>Số nhà 29 thôn phú đông</strong>
                 </span>
               </Col>
             </Row>
             <Row>
               <Col>
-                <h3>THÔNG TIN NGƯỜI LIÊN HỆ</h3>
+                <h3>LỊCH SỬ TIÊM</h3>
               </Col>
             </Row>
+            <Row>
+              <Col span={24}>
+                <Collapse
+                  className="injection-history-list"
+                  defaultActiveKey={['1']}
+                  style={{ background: '#bfd2f8' }}>
+                  <Panel header="1. Ngày 11/01/2022" key="1">
+                    <InjectionHistoryItem />
+                  </Panel>
+                  <Panel header="This is panel header 2" key="2">
+                    <p>ddđ</p>
+                  </Panel>
+                  <Panel header="This is panel header 3" key="3">
+                    <p>fffff</p>
+                  </Panel>
+                </Collapse>
+              </Col>
+            </Row>
+
+            {/*
             <Row justify="space-between">
               <Col span={12}>
                 <span>
@@ -163,7 +107,6 @@ const StaffAppointmentDetailPage = () => {
                 <h3>THÔNG TIN DỊCH VỤ</h3>
               </Col>
             </Row>
-
             <Row>
               <Col>
                 <span>
@@ -217,7 +160,6 @@ const StaffAppointmentDetailPage = () => {
                 </span>
               </Col>
             </Row>
-
             <Divider />
             <Row justify="center">
               <Col span={3}>
@@ -243,7 +185,8 @@ const StaffAppointmentDetailPage = () => {
                   Xác nhận check in
                 </Button>
               </Col>
-            </Row>
+            </Row>{' '}
+            */}
           </Card>
         </Col>
       </Row>
@@ -251,4 +194,4 @@ const StaffAppointmentDetailPage = () => {
   );
 };
 
-export default StaffAppointmentDetailPage;
+export default StaffInjectionHistoryDetailPage;

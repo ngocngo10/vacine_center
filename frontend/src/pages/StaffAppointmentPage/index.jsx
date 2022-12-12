@@ -43,13 +43,13 @@ const StaffAppointmentPage = () => {
   };
 
   const handleOnSearch = (values) => {
-    console.log(values);
+    console.log(values, 'values');
     dispatch(
       getAppointmentHistories({
         perPage: 10,
         patientCode: values.patientCode,
         patientName: values.patientName,
-        desiredDate: moment(values.desiredDate).format('YYYY-MM-DD'),
+        desiredDate: values.desiredDate ? moment(values.desiredDate).format('YYYY-MM-DD') : null,
         scheduleId: values.schedule
       })
     );

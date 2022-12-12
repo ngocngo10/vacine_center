@@ -1,0 +1,37 @@
+.injection-history-list {
+  font-family: 'WorkSans-Regular';
+  font-size: 16px;
+  line-height: 2;
+  border-radius: 10px;
+  margin-top: 15px;
+}
+
+.injection-details-card {
+  font-family: 'WorkSans-Regular';
+  font-size: 16px;
+  line-height: 2;
+  color: var(--color-fifth);
+  border-radius: 10px;
+}
+
+.injection-details-card strong {
+  font-family: 'WorkSans-Medium';
+  margin-left: 10px;
+}
+
+.injection-details-card h3 {
+  font-family: 'WorkSans-Medium';
+  font-size: 20px;
+  line-height: 1.4;
+  margin-block: 15px;
+  color: var(--color-primary);
+}
+
+.checkout-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.checkout-total {
+  color: red;
+}

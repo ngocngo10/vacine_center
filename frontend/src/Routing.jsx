@@ -31,6 +31,7 @@ import StaffAppointmentsOnDayPage from './pages/StaffAppointmentsOnDayPage';
 import StaffAppointmentDetailOnDayPage from './pages/StaffAppointmentDetailOnDayPage';
 
 import StaffInjectionHistoryPage from './pages/StaffInjectionHistoryPage';
+import StaffInjectionHistoryDetailPage from './pages/StaffInjectionHistoryDetailPage';
 import Main from './components/Main';
 const Routing = () => {
   return (
@@ -74,6 +75,10 @@ const Routing = () => {
           element={<StaffAppointmentDetailOnDayPage />}
         />
         <Route path="appointments-history" element={<StaffInjectionHistoryPage />} />
+        <Route
+          path="appointments-history/details/:patientId"
+          element={<StaffInjectionHistoryDetailPage />}
+        />
       </Route>
     </Routes>
   );

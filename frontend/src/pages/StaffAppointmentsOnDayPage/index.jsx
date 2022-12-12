@@ -20,6 +20,7 @@ const StaffAppointmentsOnDayPage = () => {
 
   const injectionList = useSelector((state) => state.injectionList);
   const { loading, error, injections, totalItem } = injectionList;
+  console.log('injections', injections);
 
   const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_NUMBER);
   const scheduleOnDay = useSelector((state) => state.scheduleOnDay);
@@ -65,7 +66,7 @@ const StaffAppointmentsOnDayPage = () => {
       dispatch(
         getInjectionList({
           perPage: 10,
-          desiredDate: currentDay
+          desiredDate: '2022-12-13'
         })
       );
     } else {
@@ -156,8 +157,8 @@ const StaffAppointmentsOnDayPage = () => {
 
   return (
     <div>
-      <h2 className="page-title">Quản lí lịch tiêm chủng trong ngày</h2>
       <Card style={{ borderRadius: 10 }}>
+        <h2 className="page-title">Quản lí lịch tiêm chủng trong ngày</h2>
         <Form onFinish={handleOnSearch}>
           <Row justify="space-evenly">
             <Col>
