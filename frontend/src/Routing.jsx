@@ -29,6 +29,13 @@ import StaffAppointmentPage from './pages/StaffAppointmentPage';
 import StaffAppointmentDetailPage from './pages/StaffAppoinmentDetailPage';
 import StaffAppointmentsOnDayPage from './pages/StaffAppointmentsOnDayPage';
 import StaffAppointmentDetailOnDayPage from './pages/StaffAppointmentDetailOnDayPage';
+
+import StaffInjectionHistoryPage from './pages/StaffInjectionHistoryPage';
+import StaffInjectionHistoryDetailPage from './pages/StaffInjectionHistoryDetailPage';
+
+import AdminUsersPage from './pages/AdminUsersPage';
+import AdminUpdateUserPage from './pages/AdminUpdateUserPage';
+import AdminWarehousePage from './pages/AdminWarehousePage';
 import Main from './components/Main';
 const Routing = () => {
   return (
@@ -60,6 +67,11 @@ const Routing = () => {
         <Route path="age-groups-categories/add" element={<AdminAddAgeGroupPage />} />
 
         <Route path="appointment-schedule/config" element={<AdminScheduleConfig />} />
+
+        <Route path="users" element={<AdminUsersPage />} />
+        <Route path="users/:id" element={<AdminUpdateUserPage />} />
+
+        <Route path="warehouse" element={<AdminWarehousePage />} />
       </Route>
 
       <Route exact path="/staff-home" element={<StaffMain />}>
@@ -70,6 +82,11 @@ const Routing = () => {
         <Route
           path="appointments-on-day/details/:id"
           element={<StaffAppointmentDetailOnDayPage />}
+        />
+        <Route path="appointments-history" element={<StaffInjectionHistoryPage />} />
+        <Route
+          path="appointments-history/details/:patientId"
+          element={<StaffInjectionHistoryDetailPage />}
         />
       </Route>
     </Routes>

@@ -9,7 +9,7 @@ module.exports = class InjectionService {
     return;
   }
   async bulkCreate(data) {
-    await this.repository.bulkCreate(data);
+    await this.repository.bulkCreate(data.injections);
   }
 
   async update(id, body) {
@@ -31,6 +31,7 @@ module.exports = class InjectionService {
     if (reqQuery.orderBy) {
       findOptions.order = [reqQuery.orderBy, reqQuery.orderType || 'DESC'];
     }
+    findOptions.include = ['vaccine', 'appointment'];
     return await this.repository.find(findOptions);
   }
 

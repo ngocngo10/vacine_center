@@ -127,10 +127,10 @@ const StaffAppointmentDetailOnDayPage = () => {
   };
   return (
     <div>
-      <h2 className="page-title">Thông tin chi tiết bệnh nhân</h2>
       <Row justify="center">
-        <Col span={18}>
+        <Col span={24}>
           <Card className="appointment-details-card">
+            <h2 className="page-title">Thông tin chi tiết bệnh nhân</h2>
             <Row>
               <Col>
                 <h3>THÔNG TIN NGƯỜI TIÊM</h3>
@@ -204,17 +204,18 @@ const StaffAppointmentDetailOnDayPage = () => {
                 <h3>THÔNG TIN DỊCH VỤ</h3>
               </Col>
             </Row>
+
             <Row>
               <Col>
                 <span>
-                  Loại vắc xin: <strong>Lẻ</strong>
+                  Vắc xin mong muốn tiêm: <strong>Infanrix Hexa – Vắc xin 6 trong 1 của Bỉ</strong>
                 </span>
               </Col>
             </Row>
             <Row>
               <Col>
                 <span>
-                  Vắc xin mong muốn tiêm: <strong>Infanrix Hexa – Vắc xin 6 trong 1 của Bỉ</strong>
+                  Giá vắc xin vắc xin: <strong>1220000</strong>
                 </span>
               </Col>
             </Row>
