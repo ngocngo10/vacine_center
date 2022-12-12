@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Table, Input, Button, Select, Row, Col, DatePicker, Card, Form } from 'antd';
-import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
+import { Table, Input, Button, Row, Col, Modal, Checkbox, Form, Card } from 'antd';
+import { CheckOutlined, CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import { useNavigate, NavLink, Link } from 'react-router-dom';
 import { getScheduleOnDay } from '../../actions/schedule.action';
 import { getAppointmentHistories } from '../../actions/appointment.action';
 import moment from 'moment';
+import patterns from '../../constants/pattern.constant';
 import './index.css';
 
 const { Search } = Input;
@@ -14,9 +15,30 @@ const AdminUsersPage = () => {
   const DEFAULT_PAGE_NUMBER = 0;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  const upload = useSelector((state) => state.upload);
+  const { imageUrl } = upload;
+
+  const onChange = (e) => {
+    let files = e.target.files;
+    dispatch(getSignedRequest(files[0]));
+  };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const onFinnish = (values) => {
+    console.log('values', values);
+  };
 
   // const appointmentList = useSelector((state) => state.appointmentList);
   // const { loading, error, appointmentHistories, totalItem } = appointmentList;
@@ -64,6 +86,21 @@ const AdminUsersPage = () => {
   //     navigate('/login');
   //   }
   // }, [userInfo]);
+  const roleOptions = [
+    {
+      label: 'Quản trị viên',
+      value: 'admin'
+    },
+    {
+      label: 'Nhân viên',
+      value: 'staff'
+    },
+    {
+      label: 'Khách hàng',
+      value: 'user'
+    }
+  ];
+
   const columns = [
     {
       title: '#',
@@ -78,22 +115,42 @@ const AdminUsersPage = () => {
       align: 'center'
     },
     {
-      title: 'Số điện thoại',
-      dataIndex: 'phoneNumber',
-      key: 'phoneNumber',
-      align: 'center'
-    },
-    {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
       align: 'center'
     },
     {
-      title: 'Role',
-      dataIndex: 'role',
-      key: 'role',
+      title: 'Số điện thoại',
+      dataIndex: 'phoneNumber',
+      key: 'phoneNumber',
       align: 'center'
+    },
+    {
+      title: 'Role',
+      dataIndex: 'roles',
+      key: 'roles',
+      align: 'center',
+      render: (roles) =>
+        roles.map((item) => (
+          <ul>
+            <li>
+              {item == 'admin' ? 'Quản trị viên' : item == 'staff' ? 'Nhân viên' : 'Khách hàng'}
+            </li>
+          </ul>
+        ))
+    },
+    {
+      title: 'Mở khóa /Khóa',
+      dataIndex: 'block',
+      key: 'block',
+      align: 'center',
+      render: (value) =>
+        value ? (
+          <CheckOutlined style={{ color: 'blue' }} />
+        ) : (
+          <CloseOutlined style={{ color: 'red' }} />
+        )
     },
 
     {
@@ -101,7 +158,7 @@ const AdminUsersPage = () => {
       dataIndex: 'action',
       align: 'center',
       key: 'action',
-      render: (value) => <Link to={value}>Xem chi tiết</Link>
+      render: (value) => <Link to={`${value}`}>Xem chi tiết</Link>
     }
   ];
   const data = {};
@@ -114,26 +171,28 @@ const AdminUsersPage = () => {
   //   patientName: item.patientName
   // }));
   data.content = [
-    // {
-    //   key: 1,
-    //   index: 1,
-    //   code: 'P0001',
-    //   phoneNumber: '1234567890',
-    //   patientName: 'Nguyễn Văn A',
-    //   action: 'details/1'
-    // }
+    {
+      key: 1,
+      index: 1,
+      name: 'Trần Văn A',
+      email: 'a@gmail.com',
+      phoneNumber: '1234567890',
+      roles: ['user', 'staff'],
+      action: '1',
+      block: true
+    }
   ];
 
   return (
     <div>
       <Card style={{ borderRadius: 10 }}>
-        <h2 className="page-title">Quản lí người dùng</h2>
+        <h2 className="page-title">Quản lí tài khoản người dùng</h2>
         <Row justify="space-between">
           <Col span={10}>
             <Search placeholder="Tìm theo tên" />
           </Col>
           <Col>
-            <Button icon={<PlusOutlined />} type="primary">
+            <Button onClick={showModal} icon={<PlusOutlined />} type="primary">
               Thêm
             </Button>
           </Col>
@@ -155,6 +214,134 @@ const AdminUsersPage = () => {
           }}
         />
       </Card>
+      <Modal width={800} open={isModalOpen} onCancel={handleCancel} footer={null}>
+        <Card className="category-card">
+          <h2 className="page-title">Thêm tài khoản người dùng</h2>
+          <Row justify="space-around">
+            <Col span={24}>
+              <Form
+                labelAlign="left"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
+                name="product-form"
+                onFinish={onFinnish}>
+                <Form.Item
+                  name="email"
+                  label="E-mail"
+                  rules={[
+                    {
+                      type: 'email',
+                      message: 'Email không đúng!'
+                    },
+                    {
+                      required: true,
+                      message: 'Vui lòng nhập email!'
+                    }
+                  ]}>
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  name="name"
+                  label="Họ và tên"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng nhập họ và tên!',
+                      whitespace: true
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value?.trim() || patterns.FULL_NAME_PATTERN.test(value?.trim())) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(
+                          new Error('Họ và tên có ít nhất 3 kí tự và tối đa 40 kí tự!')
+                        );
+                      }
+                    })
+                  ]}>
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  name="password"
+                  label="Mật khẩu"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng nhập mật khẩu!'
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || patterns.PASSWORD_PATTERN.test(value)) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(
+                          new Error(
+                            'Mật khẩu phải có ít nhất 8 kí tự, tối đa 15 kí tự, bao gồm ít nhất 1 kí tự hoa, thường, số và kí tự đặc biệt!'
+                          )
+                        );
+                      }
+                    })
+                  ]}
+                  hasFeedback>
+                  <Input.Password />
+                </Form.Item>
+                <Form.Item
+                  name="confirm"
+                  label="Xác nhận mật khẩu"
+                  dependencies={['password']}
+                  hasFeedback
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng nhập lại mật khẩu!'
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(new Error('Mật khẩu nhập lại không khớp!'));
+                      }
+                    })
+                  ]}>
+                  <Input.Password />
+                </Form.Item>
+                <Form.Item
+                  name="roles"
+                  label="Roles"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng chọn role!'
+                    }
+                  ]}>
+                  <Checkbox.Group options={roleOptions} />
+                </Form.Item>
+                <Row justify="center">
+                  <Col span={3}>
+                    <Form.Item>
+                      <Button onClick={handleCancel} type="primary">
+                        Hủy
+                      </Button>
+                    </Form.Item>
+                  </Col>
+                  <Col span={3}>
+                    <Form.Item>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{ border: '#198754', background: '#198754' }}>
+                        Thêm tài khoản
+                      </Button>
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
+            </Col>
+          </Row>
+        </Card>
+      </Modal>
     </div>
   );
 };
