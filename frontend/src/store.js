@@ -64,6 +64,11 @@ import {
   injectionReducer
 } from './reducers/injection.reducer';
 
+import {
+  vaccineListWareHouseReducer,
+  vaccineWareHouseCreateReducer
+} from './reducers/warehouse.reducer';
+
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
@@ -112,7 +117,10 @@ const reducer = combineReducers({
 
   injectionCreate: injectionCreateReducer,
   injectionList: injectionListReducer,
-  injection: injectionReducer
+  injection: injectionReducer,
+
+  vaccineListWareHouse: vaccineListWareHouseReducer,
+  vaccineWareHouseCreate: vaccineWareHouseCreateReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
