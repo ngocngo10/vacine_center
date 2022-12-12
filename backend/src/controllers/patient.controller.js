@@ -6,7 +6,7 @@ async function create(req, res, next) {
     const data = {
       ...req.body,
       representative: req.user.id
-    }
+    };
     await patientService.create(data);
     return res.json({
       message: 'Patient is created successfully'

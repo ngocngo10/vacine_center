@@ -47,7 +47,11 @@ AgeGroupVaccine.belongsTo(Vaccine, {
   as: 'vaccine'
 });
 
-AgeGroup.belongsToMany(Vaccine, { as: 'vaccines', through: AgeGroupVaccine, uniqueKey: 'vaccine_age_group_unique' });
+AgeGroup.belongsToMany(Vaccine, {
+  as: 'vaccines',
+  through: AgeGroupVaccine,
+  uniqueKey: 'vaccine_age_group_unique'
+});
 Vaccine.belongsToMany(AgeGroup, { as: 'ageGroups', through: AgeGroupVaccine });
 
 Vaccine.hasMany(VaccineDetail, { as: 'vaccineDetails' });
@@ -121,7 +125,6 @@ Injection.afterCreate(async (injection, options) => {
   vaccineItem.quantity = vaccineItem.quantity - 1;
   await vaccineItem.save();
 });
-
 
 Appointment.hasOne(ScreeningTest, { as: 'screeningTest' });
 ScreeningTest.belongsTo(Appointment, {

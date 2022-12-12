@@ -22,7 +22,7 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         field: 'blood_pressure'
       },
-      breath:{
+      breath: {
         type: Sequelize.STRING
       },
       isQualified: {

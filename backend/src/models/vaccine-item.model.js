@@ -31,7 +31,7 @@ module.exports = (sequelize, Sequelize) => {
       vaccineCode: {
         field: 'vaccine_code',
         type: Sequelize.TEXT
-      },
+      }
     },
     {
       paranoid: true

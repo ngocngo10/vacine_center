@@ -8,7 +8,17 @@ router.post('/', authMiddleware.validateToken, authMiddleware.isAdmin, AgeGroupC
 router.get('/', AgeGroupController.find);
 router.get('/:id', AgeGroupController.findOne);
 router.put('/:id', authMiddleware.validateToken, authMiddleware.isAdmin, AgeGroupController.update);
-router.delete('/:id', authMiddleware.validateToken, authMiddleware.isAdmin, AgeGroupController.deleteAgeGroup);
-router.delete('/', authMiddleware.validateToken, authMiddleware.isAdmin, AgeGroupController.deleteMulti);
+router.delete(
+  '/:id',
+  authMiddleware.validateToken,
+  authMiddleware.isAdmin,
+  AgeGroupController.deleteAgeGroup
+);
+router.delete(
+  '/',
+  authMiddleware.validateToken,
+  authMiddleware.isAdmin,
+  AgeGroupController.deleteMulti
+);
 
 module.exports = router;

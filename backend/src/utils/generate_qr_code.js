@@ -33,4 +33,4 @@ async function uploadQRCode(data) {
 
 module.exports = {
   generateQRcodeImage
-}
+};

@@ -50,6 +50,6 @@ module.exports = class CategoryService {
   }
 
   async deleteMulti(ids) {
-    return await this.repository.deleteMulti(ids)
+    return await this.repository.deleteMulti(ids);
   }
 };

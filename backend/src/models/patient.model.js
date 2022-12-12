@@ -39,7 +39,7 @@ module.exports = (sequelize, Sequelize) => {
       street: {
         field: 'street',
         type: Sequelize.STRING
-      },
+      }
     },
     {
       paranoid: true,

@@ -3,7 +3,7 @@ const ErrorCreator = require('../utils/error_creator');
 const appointmentService = new AppointmentService();
 async function create(req, res, next) {
   try {
-    const userId = req.user.id
+    const userId = req.user.id;
     await appointmentService.create(req.body, userId);
     return res.json({
       message: 'Appointment is created successfully'

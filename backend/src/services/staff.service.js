@@ -15,7 +15,7 @@ module.exports = class StaffService {
     const data = {
       patientName: appointment.patientName,
       startAt: appointment.schedule.startAt
-    }
+    };
     sendEmailConfirmAppointment(appointment.user.email, data);
     return;
   }
@@ -26,5 +26,4 @@ module.exports = class StaffService {
     await appointment.save();
     return;
   }
-  
 };
