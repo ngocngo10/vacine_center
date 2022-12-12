@@ -10,6 +10,10 @@ module.exports = (sequelize, Sequelize) => {
         field: 'manufacture_date',
         type: Sequelize.DATE
       },
+      productionBatch: {
+        field: 'production_batch',
+        type: Sequelize.STRING
+      },
       expirationDate: {
         field: 'expiration_date',
         type: Sequelize.DATE
@@ -24,8 +28,8 @@ module.exports = (sequelize, Sequelize) => {
         field: 'supplier_phone_number',
         type: Sequelize.STRING
       },
-      totalPrice: {
-        field: 'total_price',
+      price: {
+        field: 'price',
         type: Sequelize.FLOAT
       },
       vaccineCode: {

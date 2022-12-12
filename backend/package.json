@@ -16,6 +16,7 @@
     "cron": "^2.1.0",
     "debug": "~2.6.9",
     "dotenv": "^16.0.3",
+    "exceljs": "^4.3.0",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
@@ -25,7 +26,10 @@
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
     "qrcode": "^1.5.1",
-    "sequelize": "^6.25.3"
+    "read-excel-file": "^5.5.3",
+    "sequelize": "^6.25.3",
+    "sheetjs-style": "^0.15.8",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "prettier": "^2.7.1"
