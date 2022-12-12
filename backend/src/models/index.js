@@ -118,12 +118,28 @@ VaccineItem.belongsTo(Vaccine, {
 });
 
 Injection.afterCreate(async (injection, options) => {
-  const vaccine = await Vaccine.findOne(injection.vaccineId);
-  vaccine.quantity = vaccine.quantity - 1;
-  await vaccine.save();
-  const vaccineItem = await VaccineItem.findOne(injection.vaccineItemId);
-  vaccineItem.quantity = vaccineItem.quantity - 1;
-  await vaccineItem.save();
+  await Vaccine.update(
+    {
+      quantity: Sequelize.literal(`quantity - 1`)
+    },
+    { where: { id: injection.vaccineId } }
+  );
+  await VaccineItem.update(
+    {
+      quantity: Sequelize.literal(`quantity - 1`)
+    },
+    { where: { id: injection.vaccineItemId } }
+  );
+});
+VaccineItem.afterCreate(async (vaccineItem, options) => {
+  await Vaccine.update(
+    { quantity: Sequelize.literal(`quantity + ${vaccineItem.quantity}`) },
+    {
+      where: {
+        vaccineCode: vaccineItem.vaccineCode
+      }
+    }
+  );
 });
 
 Appointment.hasOne(ScreeningTest, { as: 'screeningTest' });

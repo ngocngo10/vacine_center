@@ -43,10 +43,9 @@ async function uploadExcel(req, res, next) {
   } catch (error) {
     next(error);
   }
-  
 }
 
 module.exports = {
   getS3SignedURL,
   uploadExcel
-}
+};

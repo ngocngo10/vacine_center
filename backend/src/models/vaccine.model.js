@@ -30,6 +30,9 @@ module.exports = (sequelize, Sequelize) => {
       },
       price: {
         type: Sequelize.FLOAT
+      },
+      quantity: {
+        type: Sequelize.INTEGER
       }
     },
     {
