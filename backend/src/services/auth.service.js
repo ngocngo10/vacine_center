@@ -41,7 +41,7 @@ module.exports = class AuthService {
       refreshToken,
       user: {
         name: newUser.name,
-        roles: newUser.roles, 
+        roles: newUser.roles,
         email: newUser.email,
         phoneNumber: newUser.phoneNumber
       }
@@ -52,10 +52,7 @@ module.exports = class AuthService {
     const { phoneNumber, password } = requestBody;
     const user = await this.repository.model.findOne({
       where: {
-        [Op.or]: [
-          { phoneNumber: phoneNumber },
-          { email: phoneNumber }
-        ]
+        [Op.or]: [{ phoneNumber: phoneNumber }, { email: phoneNumber }]
       }
     });
     if (!user) {

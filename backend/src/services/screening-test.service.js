@@ -1,7 +1,4 @@
-const {
-  ScreeningTestRepository,
-  AppointmentRepository
-} = require('../repositories');
+const { ScreeningTestRepository, AppointmentRepository } = require('../repositories');
 
 module.exports = class ScreeningTestService {
   constructor() {
@@ -10,7 +7,7 @@ module.exports = class ScreeningTestService {
   }
 
   async create(data) {
-    await this.repository.create(data)
+    await this.repository.create(data);
     return;
   }
 
@@ -30,12 +27,12 @@ module.exports = class ScreeningTestService {
       findOptions.order = [req.query.orderBy, req.query.orderType || 'DESC'];
     }
     if (req.query.patientId) {
-      findOptions.where['$appointment.patient_id$'] = req.query.patientId
+      findOptions.where['$appointment.patient_id$'] = req.query.patientId;
     }
     if (req.query.appointmentId) {
-      findOptions.where.appointmentId = req.query.appointmentId
+      findOptions.where.appointmentId = req.query.appointmentId;
     }
-    findOptions.include = ['appointment']
+    findOptions.include = ['appointment'];
     return await this.repository.find(findOptions);
   }
   async findOne(id) {

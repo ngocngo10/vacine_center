@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { PatientController } = require('../controllers');
-const { authMiddleware } = require('../middlewares')
+const { authMiddleware } = require('../middlewares');
 
 /* GET users listing. */
 router.post('/', authMiddleware.validateToken, PatientController.create);

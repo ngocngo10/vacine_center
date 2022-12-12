@@ -1,6 +1,4 @@
-const {
-  VaccineItemRepository,
-} = require('../repositories');
+const { VaccineItemRepository } = require('../repositories');
 const { sequelize } = require('../models');
 const ErrorCreator = require('../utils/error_creator');
 const { Op } = require('sequelize');
@@ -12,7 +10,7 @@ module.exports = class VaccineItemService {
   async create(bodyRequest) {
     const t = await sequelize.transaction();
     try {
-      const { vaccineItems } = bodyRequest
+      const { vaccineItems } = bodyRequest;
       await this.repository.model.bulkCreate(vaccineItems);
       await t.commit();
       return;
@@ -24,7 +22,7 @@ module.exports = class VaccineItemService {
 
   async find(reqQuery) {
     try {
-      let findOptions = { where: {}};
+      let findOptions = { where: {} };
       if (reqQuery.vaccineId) {
         findOptions.where['$vaccine.id$'] = reqQuery.vaccineId;
       }
@@ -32,7 +30,7 @@ module.exports = class VaccineItemService {
       if (reqQuery.vaccineName) {
         findOptions.where['$vaccine.name$'] = {
           [Op.like]: `%${reqQuery.vaccineName}%`
-        }
+        };
       }
 
       if (reqQuery.vaccineCode) {
@@ -42,7 +40,7 @@ module.exports = class VaccineItemService {
       if (reqQuery.isAvailable) {
         findOptions.where.quantity = {
           [Op.gt]: 0
-        }
+        };
       }
 
       const page = reqQuery.page || 1;

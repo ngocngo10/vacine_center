@@ -8,7 +8,17 @@ router.post('/', authMiddleware.validateToken, authMiddleware.isAdmin, CategoryC
 router.get('/', CategoryController.find);
 router.get('/:id', CategoryController.findOne);
 router.put('/:id', authMiddleware.validateToken, authMiddleware.isAdmin, CategoryController.update);
-router.delete('/:id', authMiddleware.validateToken, authMiddleware.isAdmin, CategoryController.deleteCategory);
-router.delete('/', authMiddleware.validateToken, authMiddleware.isAdmin, CategoryController.deleteMulti);
+router.delete(
+  '/:id',
+  authMiddleware.validateToken,
+  authMiddleware.isAdmin,
+  CategoryController.deleteCategory
+);
+router.delete(
+  '/',
+  authMiddleware.validateToken,
+  authMiddleware.isAdmin,
+  CategoryController.deleteMulti
+);
 
 module.exports = router;

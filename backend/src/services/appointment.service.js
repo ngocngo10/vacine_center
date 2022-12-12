@@ -110,12 +110,7 @@ module.exports = class AppointmentService {
   }
 
   async findOne(id) {
-    return await this.repository.findOne(id, [
-      'schedule',
-      'user',
-      'patient',
-      'screeningTest'
-    ]);
+    return await this.repository.findOne(id, ['schedule', 'user', 'patient', 'screeningTest']);
   }
 
   async deleteAppointment(id) {

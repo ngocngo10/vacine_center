@@ -11,6 +11,9 @@ module.exports = class BaseRepository {
 
   async find(findOptions) {
     console.log(findOptions);
+    findOptions.order = findOptions.order
+      ? [['updatedAt', 'DESC'], findOptions.order]
+      : [['updatedAt', 'DESC']];
     return this.model.findAndCountAll(findOptions);
   }
 
@@ -37,6 +40,6 @@ module.exports = class BaseRepository {
       where: {
         id: ids
       }
-    })
+    });
   }
 };

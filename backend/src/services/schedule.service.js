@@ -26,17 +26,17 @@ module.exports = class ScheduleService {
     }
 
     if (reqQuery.orderBy) {
-      findOptions.order = [['caseNumber', 'ASC']];
+      findOptions.order = ['caseNumber', 'ASC'];
     }
     const now = moment().format('YYYY-MM-DD');
     if (reqQuery.day) {
       findOptions.where = {
         day: reqQuery.day
-      }
+      };
     } else {
       findOptions.where = {
         day: now
-      }
+      };
     }
 
     return await this.repository.find(findOptions);
@@ -51,6 +51,6 @@ module.exports = class ScheduleService {
   }
 
   async deleteMulti(ids) {
-    return await this.repository.deleteMulti(ids)
+    return await this.repository.deleteMulti(ids);
   }
 };

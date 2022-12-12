@@ -23,7 +23,7 @@ module.exports = class PatientService {
       include: ['representator']
     };
     if (reqQuery.representative) {
-      findOptions.where.representative = reqQuery.representative
+      findOptions.where.representative = reqQuery.representative;
     }
     if (reqQuery.page) {
       findOptions.limit = +reqQuery.perPage || 10;

@@ -8,7 +8,17 @@ router.post('/', authMiddleware.validateToken, authMiddleware.isAdmin, ScheduleC
 router.get('/', ScheduleController.find);
 router.get('/:id', ScheduleController.findOne);
 router.put('/:id', authMiddleware.validateToken, authMiddleware.isAdmin, ScheduleController.update);
-router.delete('/:id', authMiddleware.validateToken, authMiddleware.isAdmin, ScheduleController.deleteSchedule);
-router.delete('/', authMiddleware.validateToken, authMiddleware.isAdmin, ScheduleController.deleteMulti);
+router.delete(
+  '/:id',
+  authMiddleware.validateToken,
+  authMiddleware.isAdmin,
+  ScheduleController.deleteSchedule
+);
+router.delete(
+  '/',
+  authMiddleware.validateToken,
+  authMiddleware.isAdmin,
+  ScheduleController.deleteMulti
+);
 
 module.exports = router;
