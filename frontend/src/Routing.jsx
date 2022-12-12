@@ -32,6 +32,8 @@ import StaffAppointmentDetailOnDayPage from './pages/StaffAppointmentDetailOnDay
 
 import StaffInjectionHistoryPage from './pages/StaffInjectionHistoryPage';
 import StaffInjectionHistoryDetailPage from './pages/StaffInjectionHistoryDetailPage';
+
+import AdminUsersPage from './pages/AdminUsersPage';
 import Main from './components/Main';
 const Routing = () => {
   return (
@@ -63,6 +65,8 @@ const Routing = () => {
         <Route path="age-groups-categories/add" element={<AdminAddAgeGroupPage />} />
 
         <Route path="appointment-schedule/config" element={<AdminScheduleConfig />} />
+
+        <Route path="users" element={<AdminUsersPage />} />
       </Route>
 
       <Route exact path="/staff-home" element={<StaffMain />}>

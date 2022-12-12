@@ -21,9 +21,9 @@ function AdminSideNav() {
         <ClusterOutlined style={{ fontSize: '25px', marginRight: '10px' }} />
         Hệ thống quản lí
       </h3>
-      <Menu them="dark" mode="inline" className="admin-menu" defaultSelectedKeys={['vaccines']}>
-        <Menu.Item key="1" className="admin-menu__item">
-          <NavLink to="/users">
+      <Menu them="dark" mode="inline" className="admin-menu" defaultSelectedKeys={['users']}>
+        <Menu.Item key="users" className="admin-menu__item">
+          <NavLink to="users">
             <span className="label">
               <UsergroupAddOutlined style={{ fontSize: '25px', marginRight: '10px' }} />
               Người dùng
