@@ -1,5 +1,10 @@
 const { Op } = require('sequelize');
-const { AppointmentRepository, ScheduleRepository, PatientRepository } = require('../repositories');
+const {
+  AppointmentRepository,
+  ScheduleRepository,
+  PatientRepository,
+  VaccineRepository
+} = require('../repositories');
 const ErrorCreator = require('../utils/error_creator');
 const moment = require('moment');
 
@@ -8,6 +13,7 @@ module.exports = class AppointmentService {
     this.repository = new AppointmentRepository();
     this.scheduleRepository = new ScheduleRepository();
     this.patientRepo = new PatientRepository();
+    this.vaccineRepo = new VaccineRepository();
   }
   async create(data, userId) {
     const createData = {
@@ -100,15 +106,29 @@ module.exports = class AppointmentService {
     if (userId) {
       findOptions.where.userId = userId;
     }
-    findOptions.include = ['schedule', 'user', 'patient', 'screeningTest'];
+    findOptions.include = ['schedule', 'user', 'patient', 'screeningTest', 'injections'];
 
     if (reqQuery.isConfirmed) {
       findOptions.where.isConfirmed = reqQuery.isConfirmed;
     }
 
-    return await this.repository.find(findOptions);
+    const appointments = await this.repository.find(findOptions);
+    const injections = appointments.rows.map((item) => item.injections);
+    const vaccines = await Promise.all(
+      injections.map(async (item) => {
+        return await this.vaccineRepo.model.findAll({
+          where: {
+            id: item.map((i) => i.vaccineId)
+          }
+        });
+      })
+    );
+    appointments.rows.forEach((element, index) => {
+      element.setDataValue('vaccines', vaccines[index]);
+      console.log(element);
+    });
+    return appointments;
   }
-
   async findOne(id) {
     return await this.repository.findOne(id, ['schedule', 'user', 'patient', 'screeningTest']);
   }

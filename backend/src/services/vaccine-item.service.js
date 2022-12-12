@@ -43,6 +43,12 @@ module.exports = class VaccineItemService {
         };
       }
 
+      if (reqQuery.isAvailable === false) {
+        findOptions.where.quantity = {
+          [Op.eq]: 0
+        };
+      }
+
       const page = reqQuery.page || 1;
       findOptions.limit = +reqQuery.perPage || 10;
       findOptions.offset = (page - 1) * findOptions.limit;
