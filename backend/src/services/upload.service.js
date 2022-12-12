@@ -17,9 +17,7 @@ module.exports = class UploadService {
     });
     const bucketName = process.env.S3_BUCKET + '/vaccines';
     const fileKey = req.body.fileName;
-
-    // Simple GetObject
-    let file = await s3.getObject({ Bucket: bucketName, Key: fileKey }).promise();
+    const file = await s3.getObject({ Bucket: bucketName, Key: fileKey }).promise();
 
     var workbook = XLSX.read(file.Body);
     var sheet_name_list = workbook.SheetNames;
@@ -33,7 +31,8 @@ module.exports = class UploadService {
         'manufactureDate',
         'expirationDate',
         'quantity',
-        'price'
+        'price',
+        'importDate'
       ],
       raw: false
     });
@@ -41,7 +40,7 @@ module.exports = class UploadService {
     console.log(xlData);
     try {
       const t = await sequelize.transaction();
-      await this.repository.model.bulkCreate(xlData);
+      await this.repository.model.bulkCreate(xlData, { individualHooks: true });
       await t.commit();
     } catch (error) {
       await t.rollback();
