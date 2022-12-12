@@ -125,7 +125,6 @@ module.exports = class AppointmentService {
     );
     appointments.rows.forEach((element, index) => {
       element.setDataValue('vaccines', vaccines[index]);
-      console.log(element);
     });
     return appointments;
   }
