@@ -1,8 +1,10 @@
 const aws = require('aws-sdk');
 const S3_BUCKET = process.env.S3_BUCKET;
 aws.config.region = 'ap-southeast-1';
+const { UploadService } = require('../services');
+const service = new UploadService();
 
-function getS3SignedURL(req, res) {
+function getS3SignedURL(req, res, next) {
   const s3 = new aws.S3({
     apiVersion: '2006-03-01',
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -34,4 +36,17 @@ function getS3SignedURL(req, res) {
   });
 }
 
-module.exports = { getS3SignedURL };
+async function uploadExcel(req, res, next) {
+  try {
+    await service.uploadVaccineItem(req);
+    res.json({ message: 'Created' });
+  } catch (error) {
+    next(error);
+  }
+  
+}
+
+module.exports = {
+  getS3SignedURL,
+  uploadExcel
+}
