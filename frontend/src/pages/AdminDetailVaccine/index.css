@@ -64,6 +64,14 @@ hr {
   margin-top: 30px;
 }
 
+.admin-vaccine-quantity {
+  margin-top: 30px;
+}
+
+.admin-vaccine-price {
+  margin-top: 30px;
+}
+
 .admin-inform-heading {
   color: var(--color-fifth);
   font-family: 'Yeseva One';

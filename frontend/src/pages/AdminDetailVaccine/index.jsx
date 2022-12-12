@@ -144,11 +144,13 @@ const AdminDetailVaccine = () => {
               <span>Nguồn gốc: </span>
               {vaccine?.origin}
             </p>
-            <p className="admin-vaccine-price">{vaccine?.price}</p>
-            {/* <p className="admin-vaccine-category">
-              <span>Loại vắc xin: </span>
-              {vaccine?.category}
-            </p> */}
+            <p className="admin-vaccine-quantity">
+              <span>Số lượng: </span>
+              {vaccine?.quantity}
+            </p>
+            <p className="admin-vaccine-price">
+              <span>{`${vaccine.price} ₫`}</span>
+            </p>
           </div>
         </section>
         <section className="section-admin-vaccine-detail-inform">

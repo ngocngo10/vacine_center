@@ -56,16 +56,17 @@ const AdminVaccinePage = () => {
       )
     },
     {
+      title: 'Mã vắc xin',
+      key: 'vaccineCode',
+      dataIndex: 'vaccineCode'
+    },
+    {
       title: 'Tên vắc xin',
       dataIndex: 'name',
       key: 'name',
       render: (name, record) => <Link to={'/admin-home/vaccines/' + record.key}>{name}</Link>
     },
-    {
-      title: 'Loại vắc xin',
-      key: 'category',
-      dataIndex: 'category'
-    },
+
     {
       title: 'Nguồn gốc',
       dataIndex: 'origin',
@@ -91,9 +92,9 @@ const AdminVaccinePage = () => {
     image: vaccine.image,
     name: vaccine.name,
     price: vaccine.price,
-    // category: vaccine.categories.name,
+    vaccineCode: vaccine.vaccineCode,
     origin: vaccine.origin,
-    qty: 34
+    qty: vaccine.quantity
   }));
 
   const handleDeleteSingleVaccine = (id) => {
