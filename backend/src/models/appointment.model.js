@@ -32,6 +32,14 @@ module.exports = (sequelize, Sequelize) => {
       checkInAt: {
         field: 'check_in_at',
         type: Sequelize.DATE
+      },
+      postInjectionReaction: {
+        field: 'post_injection_reaction',
+        type: Sequelize.TEXT
+      },
+      isPaid: {
+        field: 'is_paid',
+        type: Sequelize.BOOLEAN
       }
     },
     {
