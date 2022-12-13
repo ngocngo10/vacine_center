@@ -129,7 +129,19 @@ module.exports = class AppointmentService {
     return appointments;
   }
   async findOne(id) {
-    return await this.repository.findOne(id, ['schedule', 'user', 'patient', 'screeningTest']);
+    const appointment = await this.repository.findOne(id, [
+      'schedule',
+      'user',
+      'patient',
+      'screeningTest'
+    ]);
+    const vaccines = await this.vaccineRepo.model.findAll({
+      where: {
+        id: appointment.injections.map((item) => item.vaccineId)
+      }
+    });
+    appointment.setDataValue('vaccines', vaccines);
+    return appointment;
   }
 
   async deleteAppointment(id) {
