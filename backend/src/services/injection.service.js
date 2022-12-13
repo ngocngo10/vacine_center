@@ -18,7 +18,7 @@ module.exports = class InjectionService {
       const vaccineItems = await this.vaccineItemRepo.model.findAll({
         where: {
           quantity: {
-            [Op.gte]: 0,
+            [Op.gt]: 0,
           },
           vaccineCode: vaccine.vaccineCode,
           expirationDate: {
