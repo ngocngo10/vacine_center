@@ -1,7 +1,8 @@
 const { UserRepository } = require('../repositories');
 const ErrorCreator = require('../utils/error_creator');
 const bcrypt = require('bcryptjs');
-module.export = class UserService {
+
+module.exports = class UserService {
   constructor() {
     this.repository = new UserRepository();
   }
@@ -18,23 +19,93 @@ module.export = class UserService {
       console.log('User is existed');
       throw new ErrorCreator('User is existed', 400);
     }
-    const newUser = await this.repository.createUser(userInfo);
-    sendEmail();
+    const newUser = await this.repository.create(userInfo);
+    return newUser;
   }
 
-  async listUsers(requestQuery) {
-    const userInfo = {
-      ...requestQuery
-    };
+  async find(reqQuery) {
+    try {
+      let findOptions = { where: {} };
+      if (reqQuery.name) {
+        findOptions.where.name = {
+          [Op.iLike]: `%${reqQuery.name}%`
+        };
+      }
+      findOptions.attributes = { exclude: ['password', 'refreshToken', 'forgotPasswordToken'] }
 
-    return this.repository.findAllUsers(userInfo);
+      if (reqQuery.email) {
+        findOptions.where.email = reqQuery.email;
+      }
+
+      if (reqQuery.phoneNumber) {
+        findOptions.where.phoneNumber = reqQuery.phoneNumber;
+      }
+
+      const page = reqQuery.page || 1;
+      findOptions.limit = +reqQuery.perPage || 10;
+      findOptions.offset = (page - 1) * findOptions.limit;
+
+      if (reqQuery.orderBy) {
+        findOptions.order = [reqQuery.orderBy, reqQuery.orderType || 'DESC'];
+      }
+      findOptions.include = ['patients'];
+      const data = await this.repository.find(findOptions);
+      return data;
+    } catch (error) {
+      throw new ErrorCreator(error.message, 500);
+    }
+  }
+
+  async findOne(id) {
+    try {
+      const data = await this.repository.findOne(id, ['patients']);
+      data.setDataValue('password', undefined);
+      data.setDataValue('forgotPasswordToken', undefined);
+      data.setDataValue('refreshToken', undefined);
+
+      return data;
+    } catch (error) {
+      throw new ErrorCreator(error.message, 500);
+    }
   }
 
   async checkUserExisted(phoneNumber) {
     return this.repository.findUserByPhoneNumber(phoneNumber);
   }
 
-  async sendEmail() {
-    console.log('Sending email');
+  async update(id, body) {
+    try {
+      if (body.password) {
+        const rawPassword = body.password;
+        const salt = bcrypt.genSaltSync(10);
+        body.password = bcrypt.hashSync(rawPassword, salt);
+      }
+      await this.repository.update(id, body);
+      return;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async delete(id) {
+    try {
+      await this.repository.delete(id);
+      return;
+    } catch (error) {
+      throw new ErrorCreator(error.message, 500);
+    }
+  }
+
+  async deleteMulti(ids) {
+    try {
+      await this.repository.model.destroy({
+        where: {
+          id: ids
+        }
+      });
+      return;
+    } catch (error) {
+      throw new ErrorCreator(error.message, 500);
+    }
   }
 };
