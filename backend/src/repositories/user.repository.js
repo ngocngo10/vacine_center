@@ -1,8 +1,10 @@
 const db = require('../models');
 const Op = db.Sequelize.Op;
+const BaseRepository = require('../utils/base_repository');
 
-module.exports = class UserRepository {
+module.exports = class UserRepository extends BaseRepository {
   constructor() {
+    super();
     this.model = db.User;
   }
 

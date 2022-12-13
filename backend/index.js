@@ -24,15 +24,11 @@ const staffRouter = require('./src/routes/staff');
 const injectionRouter = require('./src/routes/injection');
 const screeningTestRouter = require('./src/routes/screening-test');
 const vaccineItemRouter = require('./src/routes/vaccine-item');
+const userRouter = require('./src/routes/users');
 const jobs = require('./src/jobs/create-schedule.job');
 
-// var usersRouter = require('./src/routes/users');
-
 var app = express();
-var corsOptions = {
-  origin: 'http://127.0.0.1:5173',
-};
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -73,6 +69,7 @@ app.use('/api/staffs', staffRouter);
 app.use('/api/injections', injectionRouter);
 app.use('/api/screening-tests', screeningTestRouter);
 app.use('/api/vaccine-items', vaccineItemRouter);
+app.use('/api/users', userRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
