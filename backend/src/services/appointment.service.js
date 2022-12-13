@@ -133,7 +133,8 @@ module.exports = class AppointmentService {
       'schedule',
       'user',
       'patient',
-      'screeningTest'
+      'screeningTest',
+      'injections'
     ]);
     const vaccines = await this.vaccineRepo.model.findAll({
       where: {
