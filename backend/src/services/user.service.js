@@ -3,7 +3,7 @@ const ErrorCreator = require('../utils/error_creator');
 const bcrypt = require('bcryptjs');
 module.export = class UserService {
   constructor() {
-    this.repository = userRepository;
+    this.repository = new UserRepository();
   }
   async createUser(requestBody) {
     const rawPassword = requestBody.password;
