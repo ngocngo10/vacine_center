@@ -1,15 +1,34 @@
-const { InjectionRepository } = require('../repositories');
-
+const { InjectionRepository, VaccineRepository, VaccineItemRepository } = require('../repositories');
+const moment = require('moment-timezone');
+const { Op } = require('sequelize');
 module.exports = class InjectionService {
   constructor() {
     this.repository = new InjectionRepository();
+    this.vaccineRepo = new VaccineRepository();
+    this.vaccineItemRepo = new VaccineItemRepository
   }
   async create(data) {
     await this.repository.create(data);
     return;
   }
   async bulkCreate(data) {
-    await this.repository.bulkCreate(data.injections);
+    const today = moment().format('YYYY-MM-DD');
+    await Promise.all(data.injections.map(async (item) => {
+      const vaccine = await this.vaccineRepo.model.findOne({ where: { id: item.vaccineId } });
+      const vaccineItems = await this.vaccineItemRepo.model.findAll({
+        where: {
+          quantity: {
+            [Op.gt]: 0,
+          },
+          vaccineCode: vaccine.vaccineCode,
+          expirationDate: {
+            [Op.gt]: today
+          }
+        },
+        order: [['expirationDate', 'ASC']]
+      });
+      await this.repository.model.create({ ...item, vaccineItemId: vaccineItems[0].id })
+    }));
   }
 
   async update(id, body) {
