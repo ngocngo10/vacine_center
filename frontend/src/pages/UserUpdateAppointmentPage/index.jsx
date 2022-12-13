@@ -168,7 +168,12 @@ const UserUpdateAppointmentPage = () => {
 
   const onFinish = (values) => {
     values.gender = values.gender === 'male';
-    values.wishList = values.wishList.map((item) => ({ name: item.name, id: item.id }));
+    values.wishList = values.wishList.map((item) => ({
+      name: item.name,
+      image: item.image,
+      id: item.id,
+      price: item.price
+    }));
     values.birthday = values.birthday.format('YYYY-MM-DD');
     values.desiredDate = values.desiredDate.format('YYYY-MM-DD');
     values.id = id;

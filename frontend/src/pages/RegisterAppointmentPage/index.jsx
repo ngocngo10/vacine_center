@@ -33,7 +33,6 @@ const RegisterAppointmentPage = () => {
   const dispatch = useDispatch();
   const [districts, setDistricts] = useState();
   const [wards, setWards] = useState();
-  // const [vaccineOptions, setVaccineOptions] = useState()cons
   const [selectedVaccines, setSelectedVaccines] = useState([]);
   const [changedVaccineId, setChangedVaccineId] = useState();
 
@@ -166,7 +165,8 @@ const RegisterAppointmentPage = () => {
     values.wishList = values.wishList.map((item) => ({
       name: item.name,
       id: item.id,
-      image: item.image
+      image: item.image,
+      price: item.price
     }));
     values.birthday = values.birthday.format('YYYY-MM-DD');
     values.desiredDate = values.desiredDate.format('YYYY-MM-DD');
@@ -479,7 +479,7 @@ const RegisterAppointmentPage = () => {
                         <Row justify="space-between">
                           <Col span={24}>
                             <Form.Item
-                              label="Chọn vắc xin hoặc gói vắc xin"
+                              label="Chọn vắc xin"
                               name="wishList"
                               rules={[
                                 {

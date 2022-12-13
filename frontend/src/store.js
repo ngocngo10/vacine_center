@@ -69,6 +69,8 @@ import {
   vaccineWareHouseCreateReducer
 } from './reducers/warehouse.reducer';
 
+import { screenTestCreateReducer, screenTestEditReducer } from './reducers/screen_test.reducer';
+
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
@@ -120,7 +122,10 @@ const reducer = combineReducers({
   injection: injectionReducer,
 
   vaccineListWareHouse: vaccineListWareHouseReducer,
-  vaccineWareHouseCreate: vaccineWareHouseCreateReducer
+  vaccineWareHouseCreate: vaccineWareHouseCreateReducer,
+
+  screenTestCreate: screenTestCreateReducer,
+  screenTestEdit: screenTestEditReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

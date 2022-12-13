@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Card, Row, Col, Divider, Button, Checkbox, Form } from 'antd';
+import { Card, Row, Col, Divider, Button } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getProvinceList } from '../../actions/province.action';
 import {
@@ -158,10 +158,15 @@ const StaffAppointmentDetailPage = () => {
               <Col>
                 <span>
                   Vắc xin mong muốn tiêm:
-                  {appointmentItem?.wishList.map((item) => (
+                  {appointmentItem?.wishList.map((item, index) => (
                     <>
-                      <strong>{JSON.parse(item).name}</strong>
-                      <br />
+                      <ul>
+                        <li>
+                          <strong>{`${index + 1}. ${JSON.parse(item).name}-----${
+                            JSON.parse(item).price
+                          } ₫`}</strong>
+                        </li>
+                      </ul>
                     </>
                   ))}
                 </span>
