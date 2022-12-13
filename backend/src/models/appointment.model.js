@@ -36,6 +36,10 @@ module.exports = (sequelize, Sequelize) => {
       postInjectionReaction: {
         field: 'post_injection_reaction',
         type: Sequelize.TEXT
+      },
+      isPaid: {
+        field: 'is_paid',
+        type: Sequelize.BOOLEAN
       }
     },
     {
