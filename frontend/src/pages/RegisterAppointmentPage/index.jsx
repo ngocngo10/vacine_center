@@ -33,7 +33,7 @@ const RegisterAppointmentPage = () => {
   const dispatch = useDispatch();
   const [districts, setDistricts] = useState();
   const [wards, setWards] = useState();
-  const [vaccineOptions, setVaccineOptions] = useState();
+  // const [vaccineOptions, setVaccineOptions] = useState()cons
   const [selectedVaccines, setSelectedVaccines] = useState([]);
   const [changedVaccineId, setChangedVaccineId] = useState();
 
@@ -47,6 +47,12 @@ const RegisterAppointmentPage = () => {
 
   const vaccineList = useSelector((state) => state.vaccineList);
   const { vaccines } = vaccineList;
+
+  const vaccineOptions = vaccines?.map((item) => ({
+    label: item.name,
+    value: item.id,
+    key: item.id
+  }));
 
   const appointmentCreate = useSelector((state) => state.appointmentCreate);
   const { createSuccess } = appointmentCreate;
@@ -131,17 +137,6 @@ const RegisterAppointmentPage = () => {
     dispatch(getScheduleOnDay(selectedDay));
   };
 
-  const onChangeRadio = (e) => {
-    if (e.target.value == 2) {
-      dispatch(getVaccineList({}));
-      setVaccineOptions(
-        vaccines.map((item) => ({ label: item.name, value: item.id, key: item.id }))
-      );
-    } else {
-      setVaccineOptions([]);
-    }
-  };
-
   const onChangeVaccine = (value) => {
     setChangedVaccineId(value);
   };
@@ -168,7 +163,11 @@ const RegisterAppointmentPage = () => {
 
   const onFinish = (values) => {
     values.gender = values.gender === 'male';
-    values.wishList = values.wishList.map((item) => ({ name: item.name, id: item.id }));
+    values.wishList = values.wishList.map((item) => ({
+      name: item.name,
+      id: item.id,
+      image: item.image
+    }));
     values.birthday = values.birthday.format('YYYY-MM-DD');
     values.desiredDate = values.desiredDate.format('YYYY-MM-DD');
     console.log('values', values);
@@ -178,6 +177,7 @@ const RegisterAppointmentPage = () => {
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('user')) {
       dispatch(getProvinceList());
+      dispatch(getVaccineList({}));
       formRef.current?.setFieldsValue({
         representativeName: userInfo.user.name,
         email: userInfo.user.email,
@@ -479,28 +479,6 @@ const RegisterAppointmentPage = () => {
                         <Row justify="space-between">
                           <Col span={24}>
                             <Form.Item
-                              label="Loại vắc xin muốn đăng ký"
-                              name="listType"
-                              rules={[
-                                {
-                                  required: true,
-                                  message: 'Vui lòng chọn loại vắc xin muốn đăng kí! '
-                                }
-                              ]}
-                              labelCol={{
-                                span: 7
-                              }}
-                              wrapperCol={{ span: 11 }}>
-                              <Radio.Group onChange={onChangeRadio}>
-                                <Radio.Button value="1">Vắc xin gói </Radio.Button>
-                                <Radio.Button value="2">Vắc xin lẻ</Radio.Button>
-                              </Radio.Group>
-                            </Form.Item>
-                          </Col>
-                        </Row>
-                        <Row justify="space-between">
-                          <Col span={24}>
-                            <Form.Item
                               label="Chọn vắc xin hoặc gói vắc xin"
                               name="wishList"
                               rules={[
@@ -517,7 +495,7 @@ const RegisterAppointmentPage = () => {
                                 <Col span={16}>
                                   <Select
                                     showSearch
-                                    placeholder="Chọn loại vắc xin trước"
+                                    placeholder="Chọn vắc xin"
                                     onChange={onChangeVaccine}
                                     onSearch={onSearchVaccine}
                                     filterOption={(input, option) =>

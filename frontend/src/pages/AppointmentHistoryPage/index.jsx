@@ -47,25 +47,15 @@ const AppointmentHistoryPage = () => {
       key: 'key'
     },
     {
+      title: 'Mã định danh',
+      dataIndex: 'patientCode',
+      key: 'patientCode'
+    },
+    {
       title: 'Tên người tiêm',
       dataIndex: 'patientName',
       key: 'patientName'
     },
-    // {
-    //   title: 'Ngày sinh',
-    //   key: 'birthday',
-    //   dataIndex: 'birthday'
-    // },
-    // {
-    //   title: 'Giới tính',
-    //   dataIndex: 'gender',
-    //   key: 'gender'
-    // },
-    // {
-    //   title: 'Số điện thoại',
-    //   dataIndex: 'phoneNumber',
-    //   key: 'phoneNumber'
-    // },
     {
       title: 'Ngày hẹn',
       dataIndex: 'desiredDate',
@@ -78,14 +68,6 @@ const AppointmentHistoryPage = () => {
     },
 
     {
-      title: 'Loại vắc xin ',
-      dataIndex: 'listType',
-      key: 'listType',
-      render: (listType) =>
-        listType == 1 ? <Tag color="green">VẮC XIN GÓI</Tag> : <Tag color="purple">VẮC XIN LẺ</Tag>
-    },
-
-    {
       title: 'Tên vắc xin',
       dataIndex: 'wishList',
       key: 'wishList',
@@ -93,7 +75,7 @@ const AppointmentHistoryPage = () => {
         wishList.map((item, index) => (
           <p>
             <Badge status="success" style={{ marginRight: 10 }} />
-            {item}
+            {JSON.parse(item).name}
           </p>
         ))
     },
@@ -111,11 +93,6 @@ const AppointmentHistoryPage = () => {
             CHƯA XÁC NHẬN
           </Tag>
         )
-    },
-    {
-      title: 'Đã tiêm',
-      dataIndex: 'isInjected',
-      key: 'isInjected'
     }
   ];
 
@@ -124,14 +101,14 @@ const AppointmentHistoryPage = () => {
   data.content = appointmentHistories?.map((item, index) => ({
     key: item.id,
     index: index + 1,
-    patientName: item.patientName,
-    // birthday: moment(moment(item.birthday, 'DD-MM-YYYY')).format('DD-MM-YYYY'),
-    // birthday: item.birthday,
-    // gender: item.gender,
-    // phoneNumber: item.phoneNumber,
+    patientCode: item.patient.patientCode,
+    patientName: item.patient.patientName,
     desiredDate: moment(item.desiredDate).format('DD-MM-YYYY'),
-    // desiredDate: moment(moment(item.desiredDate, 'DD-MM-YYYY')).format('DD-MM-YYYY'),
-    schedule: moment(moment(item.schedule?.startAt, 'HH:mm')).format('HH:mm'),
+    schedule: `${moment(moment(item.schedule?.startAt, 'HH:mm')).format('HH:mm')}-${moment(
+      moment(item.schedule?.startAt, 'HH:mm')
+    )
+      .add(item.schedule?.appointmentDuration, 'minutes')
+      .format('HH:mm')}`,
     listType: item.listType,
     wishList: item.wishList,
     isConfirmed: item.isConfirmed,
@@ -151,7 +128,7 @@ const AppointmentHistoryPage = () => {
   };
 
   const handleOnSearch = (name) => {
-    dispatch(getAppointments({ desiredDate: name, perPage: 10 }));
+    dispatch(getAppointmentHistories({ patientName: name, perPage: 10 }));
   };
 
   const {
@@ -165,7 +142,7 @@ const AppointmentHistoryPage = () => {
   } = useDataTable({
     columns: columns,
     dataSource: data,
-    updateEntityPath: 'admin-home/vaccines/update-vaccine',
+    updateEntityPath: 'appointment-history/update',
     handleDelete: handleDeleteSingleAppointment,
     handleChangePage: getAppointments
   });
