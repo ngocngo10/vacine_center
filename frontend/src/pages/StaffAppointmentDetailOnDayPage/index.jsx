@@ -136,7 +136,8 @@ const StaffAppointmentDetailOnDayPage = () => {
         injections: selectedVaccines?.map((item) => ({
           appointmentId: id,
           vaccineId: item.id,
-          vaccineItemId: null
+          vaccineItemId: null,
+          price: item.price
         }))
       })
     );

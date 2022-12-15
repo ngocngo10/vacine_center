@@ -67,11 +67,11 @@ const AdminVaccinePage = () => {
       render: (name, record) => <Link to={'/admin-home/vaccines/' + record.key}>{name}</Link>
     },
 
-    {
-      title: 'Nguồn gốc',
-      dataIndex: 'origin',
-      key: 'origin'
-    },
+    // {
+    //   title: 'Nguồn gốc',
+    //   dataIndex: 'origin',
+    //   key: 'origin'
+    // },
     {
       title: 'Giá',
       dataIndex: 'price',

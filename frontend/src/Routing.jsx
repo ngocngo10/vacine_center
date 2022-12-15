@@ -87,7 +87,7 @@ const Routing = () => {
         />
         <Route path="appointments-history" element={<StaffInjectionHistoryPage />} />
         <Route
-          path="appointments-history/details/:patientId"
+          path="appointments-history/details/:id"
           element={<StaffInjectionHistoryDetailPage />}
         />
       </Route>

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Table, Input, Button, Row, Col, Modal, Checkbox, Form, Card } from 'antd';
 import { CheckOutlined, CloseOutlined, PlusOutlined } from '@ant-design/icons';
-import { useNavigate, NavLink, Link } from 'react-router-dom';
-import { getScheduleOnDay } from '../../actions/schedule.action';
-import { getAppointmentHistories } from '../../actions/appointment.action';
-import moment from 'moment';
+import { useNavigate, Link } from 'react-router-dom';
+import { getUserList } from '../../actions/user.action';
 import patterns from '../../constants/pattern.constant';
+import Loader from '../../components/Loader';
+import Message from '../../components/Message';
 import './index.css';
 
 const { Search } = Input;
@@ -16,17 +16,10 @@ const AdminUsersPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_NUMBER);
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-
-  const upload = useSelector((state) => state.upload);
-  const { imageUrl } = upload;
-
-  const onChange = (e) => {
-    let files = e.target.files;
-    dispatch(getSignedRequest(files[0]));
-  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -40,8 +33,9 @@ const AdminUsersPage = () => {
     console.log('values', values);
   };
 
-  // const appointmentList = useSelector((state) => state.appointmentList);
-  // const { loading, error, appointmentHistories, totalItem } = appointmentList;
+  const userList = useSelector((state) => state.userList);
+  const { loading, error, users, totalItem } = userList;
+  console.log('users', users);
 
   // const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_NUMBER);
   // const scheduleOnDay = useSelector((state) => state.scheduleOnDay);
@@ -61,31 +55,23 @@ const AdminUsersPage = () => {
   //   dispatch(getScheduleOnDay(selectedDay));
   // };
 
-  // const handleTableChange = (pagination) => {
-  //   dispatch(getAppointmentHistories({ perPage: 10, page: pagination.current }));
-  //   setCurrentPage(pagination.current - 1);
-  // };
+  const handleTableChange = (pagination) => {
+    dispatch(getUserList({ perPage: 10, page: pagination.current }));
+    setCurrentPage(pagination.current - 1);
+  };
 
-  // const handleOnSearch = (values) => {
-  //   console.log(values);
-  //   dispatch(
-  //     getAppointmentHistories({
-  //       perPage: 10,
-  //       patientCode: values.patientCode,
-  //       patientName: values.patientName,
-  //       desiredDate: moment(values.desiredDate).format('YYYY-MM-DD'),
-  //       scheduleId: values.schedule
-  //     })
-  //   );
-  // };
+  const handleOnSearch = (value) => {
+    console.log(value);
+    dispatch(getUserList({ perPage: 10, name: value }));
+  };
 
-  // useEffect(() => {
-  //   if (userInfo && userInfo.user.roles.includes('staff')) {
-  //     dispatch(getAppointmentHistories({ perPage: 10 }));
-  //   } else {
-  //     navigate('/login');
-  //   }
-  // }, [userInfo]);
+  useEffect(() => {
+    if (userInfo && userInfo.user.roles.includes('admin')) {
+      dispatch(getUserList({ perPage: 10 }));
+    } else {
+      navigate('/login');
+    }
+  }, [userInfo]);
   const roleOptions = [
     {
       label: 'Quản trị viên',
@@ -141,12 +127,12 @@ const AdminUsersPage = () => {
         ))
     },
     {
-      title: 'Mở khóa /Khóa',
+      title: 'Tài khoản đang mở',
       dataIndex: 'block',
       key: 'block',
       align: 'center',
       render: (value) =>
-        value ? (
+        !value ? (
           <CheckOutlined style={{ color: 'blue' }} />
         ) : (
           <CloseOutlined style={{ color: 'red' }} />
@@ -162,26 +148,17 @@ const AdminUsersPage = () => {
     }
   ];
   const data = {};
-  data.totalElements = 12;
-  // data.content = appointmentHistories?.map((item, index) => ({
-  //   key: item.id,
-  //   index: index + 1,
-  //   code: item.patientCode,
-  //   phoneNumber: item.phoneNumber,
-  //   patientName: item.patientName
-  // }));
-  data.content = [
-    {
-      key: 1,
-      index: 1,
-      name: 'Trần Văn A',
-      email: 'a@gmail.com',
-      phoneNumber: '1234567890',
-      roles: ['user', 'staff'],
-      action: '1',
-      block: true
-    }
-  ];
+  data.totalElements = totalItem;
+  data.content = users?.map((item, index) => ({
+    key: item.id,
+    index: currentPage * 10 + index + 1,
+    name: item.name,
+    email: item.email,
+    phoneNumber: item.phoneNumber,
+    roles: ['user', 'staff'],
+    action: item.id,
+    block: item.isBlock
+  }));
 
   return (
     <div>
@@ -189,7 +166,7 @@ const AdminUsersPage = () => {
         <h2 className="page-title">Quản lí tài khoản người dùng</h2>
         <Row justify="space-between">
           <Col span={10}>
-            <Search placeholder="Tìm theo tên" />
+            <Search placeholder="Tìm theo tên" onSearch={handleOnSearch} />
           </Col>
           <Col>
             <Button onClick={showModal} icon={<PlusOutlined />} type="primary">
@@ -197,22 +174,27 @@ const AdminUsersPage = () => {
             </Button>
           </Col>
         </Row>
-
-        <Table
-          style={{ marginTop: 20 }}
-          rowKey={(record) => record.key}
-          dataSource={data.content}
-          columns={columns}
-          // onChange={handleTableChange}
-          pagination={{
-            pageSize: 10,
-            // current: currentPage + 1,
-            total: data.totalElements,
-            showTotal: (total, range) => {
-              return `${range[0]}-${range[1]} of ${total} items`;
-            }
-          }}
-        />
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <Message description={error} />
+        ) : (
+          <Table
+            style={{ marginTop: 20 }}
+            rowKey={(record) => record.key}
+            dataSource={data.content}
+            columns={columns}
+            onChange={handleTableChange}
+            pagination={{
+              pageSize: 10,
+              current: currentPage + 1,
+              total: data.totalElements,
+              showTotal: (total, range) => {
+                return `${range[0]}-${range[1]} of ${total} items`;
+              }
+            }}
+          />
+        )}
       </Card>
       <Modal width={800} open={isModalOpen} onCancel={handleCancel} footer={null}>
         <Card className="category-card">
