@@ -63,7 +63,7 @@ module.exports = class AuthService {
     if (!user) {
       throw new ErrorCreator(constants.INVALID_PHONE_OR_PASSWORD, 400);
     }
-    if (!user.isActive) {
+    if (user.isBlocked) {
       throw new ErrorCreator('User is blocked', 400);
     }
     const isCorrectPassword = bcrypt.compareSync(password, user.password);
@@ -135,8 +135,10 @@ module.exports = class AuthService {
     return await this.repository.findUser({ phoneNumber });
   }
   async checkEmailExisted(email) {
-    return await this.repository.model.findOne({ where: {
-      email: email
-    }})
+    return await this.repository.model.findOne({
+      where: {
+        email: email
+      }
+    });
   }
 };

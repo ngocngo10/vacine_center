@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Card, Row, Col, Divider, Button, Checkbox, Form } from 'antd';
+import { Card, Row, Col, Divider, Button } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getProvinceList } from '../../actions/province.action';
 import {
@@ -8,7 +8,6 @@ import {
   getAppointment,
   confirmAppointment
 } from '../../actions/appointment.action';
-import { createInjection } from '../../actions/injection.action';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import './index.css';
@@ -25,7 +24,7 @@ const StaffAppointmentDetailPage = () => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const { loading, error, appointment } = useSelector((state) => state.appointment);
+  const { loading, error, appointmentItem } = useSelector((state) => state.appointment);
 
   const appointmentEdit = useSelector((state) => state.appointmentEdit);
   const { editSuccess } = appointmentEdit;
@@ -33,28 +32,20 @@ const StaffAppointmentDetailPage = () => {
   const injectionCreate = useSelector((state) => state.injectionCreate);
   const { createSuccess } = injectionCreate;
 
-  const gender = appointment?.patient.gender ? 'Nam' : 'Nữ';
-  const birthday = moment(appointment?.patient.birthday).format('DD/MM/YYYY');
-  const province = provinces?.find((item) => item.code == +appointment?.patient.province);
-  const district = province?.districts?.find((item) => item.code == +appointment?.patient.district);
-  const ward = district?.wards?.find((item) => item.code == +appointment?.patient.ward);
-  const address = `${appointment?.patient.street}, ${province?.name}, ${district?.name},  ${ward?.name}`;
+  const gender = appointmentItem?.patient.gender ? 'Nam' : 'Nữ';
+  const birthday = moment(appointmentItem?.patient.birthday).format('DD/MM/YYYY');
+  const province = provinces?.find((item) => item.code == +appointmentItem?.patient.province);
+  const district = province?.districts?.find(
+    (item) => item.code == +appointmentItem?.patient.district
+  );
+  const ward = district?.wards?.find((item) => item.code == +appointmentItem?.patient.ward);
+  const address = `${appointmentItem?.patient.street}, ${province?.name}, ${district?.name},  ${ward?.name}`;
 
   const appointmentConfirm = useSelector((state) => state.appointmentConfirm);
   const { confirmSuccess } = appointmentEdit;
 
   const handleCheckIn = () => {
     dispatch(editAppointment({ isCheckIn: true, id }));
-    dispatch(
-      createInjection({
-        injections: appointment.wishList.map((item) => ({
-          appointmentId: id,
-          nurseId: userInfo.user.id,
-          vaccineId: JSON.parse(item).id,
-          vaccineItemId: null
-        }))
-      })
-    );
   };
 
   const handleConfirm = () => {
@@ -75,7 +66,6 @@ const StaffAppointmentDetailPage = () => {
     <Message description={error} />
   ) : (
     <div>
-      {injectionCreate?.error && <Message description={injectionCreate?.error} />}
       {appointmentEdit?.error && <Message description={appointmentEdit?.error} />}
       {appointmentEdit?.editSuccess && createSuccess && (
         <Message type="success" description="Check in thành công!" />
@@ -96,12 +86,12 @@ const StaffAppointmentDetailPage = () => {
             <Row justify="space-between">
               <Col span={12}>
                 <span>
-                  Họ và tên người tiêm: <strong>{appointment?.patient.patientName}</strong>
+                  Họ và tên người tiêm: <strong>{appointmentItem?.patient.patientName}</strong>
                 </span>
               </Col>
               <Col span={12}>
                 <span>
-                  Mã số bệnh nhân: <strong>{appointment?.patient.patientCode}</strong>
+                  Mã số bệnh nhân: <strong>{appointmentItem?.patient.patientCode}</strong>
                 </span>
               </Col>
             </Row>
@@ -118,7 +108,7 @@ const StaffAppointmentDetailPage = () => {
               </Col>
               <Col span={8}>
                 <span>
-                  Số điện thoại: <strong>{appointment?.patient.phoneNumber}</strong>
+                  Số điện thoại: <strong>{appointmentItem?.patient.phoneNumber}</strong>
                 </span>
               </Col>
             </Row>
@@ -137,24 +127,24 @@ const StaffAppointmentDetailPage = () => {
             <Row justify="space-between">
               <Col span={12}>
                 <span>
-                  Họ và tên người liên hệ: <strong>{appointment?.user.name}</strong>
+                  Họ và tên người liên hệ: <strong>{appointmentItem?.user.name}</strong>
                 </span>
               </Col>
             </Row>
             <Row justify="space-between">
               <Col span={8}>
                 <span>
-                  Số điện thoại: <strong>{appointment?.user.phoneNumber}</strong>
+                  Số điện thoại: <strong>{appointmentItem?.user.phoneNumber}</strong>
                 </span>
               </Col>
               <Col span={8}>
                 <span>
-                  Email: <strong>{appointment?.user.email}</strong>
+                  Email: <strong>{appointmentItem?.user.email}</strong>
                 </span>
               </Col>
               <Col span={8}>
                 <span>
-                  Mối quan hệ với người tiêm: <strong>{appointment?.relative}</strong>
+                  Mối quan hệ với người tiêm: <strong>{appointmentItem?.relative}</strong>
                 </span>
               </Col>
             </Row>
@@ -168,10 +158,15 @@ const StaffAppointmentDetailPage = () => {
               <Col>
                 <span>
                   Vắc xin mong muốn tiêm:
-                  {appointment?.wishList.map((item) => (
+                  {appointmentItem?.wishList.map((item, index) => (
                     <>
-                      <strong>{JSON.parse(item).name}</strong>
-                      <br />
+                      <ul>
+                        <li>
+                          <strong>{`${index + 1}. ${JSON.parse(item).name}-----${
+                            JSON.parse(item).price
+                          } ₫`}</strong>
+                        </li>
+                      </ul>
                     </>
                   ))}
                 </span>
@@ -181,16 +176,16 @@ const StaffAppointmentDetailPage = () => {
               <Col span={12}>
                 <span>
                   Ngày mong muốn tiêm:
-                  <strong>{moment(appointment?.desiredDate).format('DD/MM/YYYY')}</strong>
+                  <strong>{moment(appointmentItem?.desiredDate).format('DD/MM/YYYY')}</strong>
                 </span>
               </Col>
               <Col span={12}>
                 <span>
                   Khung giờ:
-                  <strong>{`${moment(moment(appointment?.schedule.startAt, 'HH:mm')).format(
+                  <strong>{`${moment(moment(appointmentItem?.schedule.startAt, 'HH:mm')).format(
                     'HH:mm'
-                  )}-${moment(moment(appointment?.schedule.startAt, 'HH:mm'))
-                    .add(appointment?.schedule.appointmentDuration, 'minutes')
+                  )}-${moment(moment(appointmentItem?.schedule.startAt, 'HH:mm'))
+                    .add(appointmentItem?.schedule.appointmentDuration, 'minutes')
                     .format('HH:mm')}`}</strong>
                 </span>
               </Col>
@@ -204,15 +199,15 @@ const StaffAppointmentDetailPage = () => {
               <Col span={12}>
                 <span>
                   Trạng thái xác nhận:
-                  <strong>{appointment?.isConfirmed ? 'Đã xác nhận' : 'Chưa xác nhận'}</strong>
+                  <strong>{appointmentItem?.isConfirmed ? 'Đã xác nhận' : 'Chưa xác nhận'}</strong>
                 </span>
               </Col>
               <Col>
                 <span>
                   Giờ check in:
                   <strong>
-                    {appointment?.checkInAt &&
-                      moment(appointment?.checkInAt).format('DD/MM/YYY HH:mm:ss')}
+                    {appointmentItem?.checkInAt &&
+                      moment(appointmentItem?.checkInAt).format('DD/MM/YYY HH:mm:ss')}
                   </strong>
                 </span>
               </Col>
@@ -230,14 +225,14 @@ const StaffAppointmentDetailPage = () => {
               <Col span={4}>
                 <Button
                   onClick={handleConfirm}
-                  disabled={appointment?.isConfirmed ? true : false}
+                  disabled={appointmentItem?.isConfirmed ? true : false}
                   style={{ background: '#1f2b6c', border: '#1f2b6c', color: '#fff' }}>
                   Xác nhận hẹn
                 </Button>
               </Col>
               <Col>
                 <Button
-                  disabled={appointment?.checkInAt ? true : false}
+                  disabled={appointmentItem?.checkInAt ? true : false}
                   onClick={handleCheckIn}
                   style={{ background: '#dc3545', border: '#dc3545', color: '#fff' }}>
                   Xác nhận check in

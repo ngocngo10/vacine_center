@@ -2,7 +2,6 @@ const { UserRepository } = require('../repositories');
 const ErrorCreator = require('../utils/error_creator');
 const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
-
 module.exports = class UserService {
   constructor() {
     this.repository = new UserRepository();
@@ -10,16 +9,12 @@ module.exports = class UserService {
   async createUser(requestBody) {
     const rawPassword = requestBody.password;
     const salt = bcrypt.genSaltSync(10);
-    const password = bcrypt.hash(rawPassword, salt);
+    const password = bcrypt.hashSync(rawPassword, salt);
     const userInfo = {
       ...requestBody,
       password
     };
-    const isExist = await checkUserExisted(userInfo.phoneNumber);
-    if (isExist) {
-      console.log('User is existed');
-      throw new ErrorCreator('User is existed', 400);
-    }
+
     const isExistedEmail = await this.checkEmailExisted(userInfo.email);
     if (isExistedEmail) {
       throw new ErrorCreator('Email is existed', 400);
@@ -36,7 +31,7 @@ module.exports = class UserService {
           [Op.iLike]: `%${reqQuery.name}%`
         };
       }
-      findOptions.attributes = { exclude: ['password', 'refreshToken', 'forgotPasswordToken'] }
+      findOptions.attributes = { exclude: ['password', 'refreshToken', 'forgotPasswordToken'] };
 
       if (reqQuery.email) {
         findOptions.where.email = reqQuery.email;
@@ -87,7 +82,7 @@ module.exports = class UserService {
       where: {
         email: email
       }
-    })
+    });
   }
 
   async update(id, body) {
@@ -97,6 +92,7 @@ module.exports = class UserService {
         const salt = bcrypt.genSaltSync(10);
         body.password = bcrypt.hashSync(rawPassword, salt);
       }
+
       await this.repository.update(id, body);
       return;
     } catch (error) {

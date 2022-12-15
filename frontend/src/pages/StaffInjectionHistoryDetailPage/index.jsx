@@ -1,17 +1,42 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Row, Col, Card, Collapse } from 'antd';
 import InjectionHistoryItem from '../../components/InjectionHistoryItem';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { getAppointmentHistories } from '../../actions/appointment.action';
 import './index.css';
+import moment from 'moment';
 
 const { Panel } = Collapse;
 
 const StaffInjectionHistoryDetailPage = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const patientList = useSelector((state) => state.patientList);
+  const { patients } = patientList;
+  const patient = patients?.find((item) => item.id == id);
+
+  const appointmentList = useSelector((state) => state.appointmentList);
+  const { appointmentHistories } = appointmentList;
+  console.log('appointmentHistories', appointmentHistories);
+
+  useEffect(() => {
+    if (userInfo && userInfo.user.roles.includes('staff')) {
+      dispatch(getAppointmentHistories({ patientCode: patient.patientCode }));
+    } else {
+      navigate('/login');
+    }
+  }, [userInfo, patient]);
   return (
     <div>
       <Row justify="center">
         <Col span={24}>
           <Card className="injection-details-card">
-            <h2 className="page-title">Lịch sử chi tiết của bệnh nhân</h2>
+            <h2 className="page-title">Hồ sơ chi tiết của bệnh nhân</h2>
             <Row>
               <Col>
                 <h3>THÔNG TIN BỆNH NHÂN</h3>
@@ -20,29 +45,32 @@ const StaffInjectionHistoryDetailPage = () => {
             <Row justify="space-between">
               <Col span={12}>
                 <span>
-                  Họ và tên người tiêm: <strong>Nguyễn Thị C</strong>
+                  Họ và tên người tiêm: <strong>{patient?.patientName}</strong>
                 </span>
               </Col>
               <Col span={12}>
                 <span>
-                  Mã số bệnh nhân: <strong>P0001</strong>
+                  Mã số bệnh nhân: <strong>{patient?.patientCode}</strong>
                 </span>
               </Col>
             </Row>
             <Row justify="space-between">
               <Col span={8}>
                 <span>
-                  Giới tính: <strong>Nữ</strong>
+                  Giới tính: <strong>{patient?.gender ? 'Name' : 'Nữ'}</strong>
                 </span>
               </Col>
               <Col span={8}>
                 <span>
-                  Ngày sinh: <strong>01/12/1999</strong>
+                  Ngày sinh:{' '}
+                  <strong>
+                    {patient?.birthday && moment(patient?.birthday).format('DD/MM/YYYY')}
+                  </strong>
                 </span>
               </Col>
               <Col span={8}>
                 <span>
-                  Số điện thoại: <strong>1234567890</strong>
+                  Số điện thoại: <strong>{patient?.phoneNumber}</strong>
                 </span>
               </Col>
             </Row>
@@ -64,15 +92,11 @@ const StaffInjectionHistoryDetailPage = () => {
                   className="injection-history-list"
                   defaultActiveKey={['1']}
                   style={{ background: '#bfd2f8' }}>
-                  <Panel header="1. Ngày 11/01/2022" key="1">
-                    <InjectionHistoryItem />
-                  </Panel>
-                  <Panel header="This is panel header 2" key="2">
-                    <p>ddđ</p>
-                  </Panel>
-                  <Panel header="This is panel header 3" key="3">
-                    <p>fffff</p>
-                  </Panel>
+                  {appointmentHistories?.map((item, index) => (
+                    <Panel header={index + 1} key={index}>
+                      <InjectionHistoryItem appointment={item} />
+                    </Panel>
+                  ))}
                 </Collapse>
               </Col>
             </Row>

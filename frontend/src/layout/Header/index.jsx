@@ -117,11 +117,11 @@ const Header = () => {
                   Thông tin vắc xin
                 </Link>
               </li>
-              <Link className="header-menu__item">
+              {/* <Link className="header-menu__item">
                 <a to="#" className="header-menu-item__link">
                   Gói tiêm
                 </a>
-              </Link>
+              </Link> */}
               {/* <li className="header-menu__item">
                 <a href="#" className="header-menu-item__link">
                   Cẩm nang

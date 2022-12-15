@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Radio,
   Card,
-  Space,
   Row,
   Col,
   Divider,
@@ -10,349 +9,643 @@ import {
   Checkbox,
   Form,
   Input,
-  Modal,
-  Table
+  Collapse,
+  Select
 } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { CloseOutlined } from '@ant-design/icons';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAppointment, editAppointment } from '../../actions/appointment.action';
+import { createInjection } from '../../actions/injection.action';
+import { getProvinceList } from '../../actions/province.action';
+import { getVaccineList } from '../../actions/vaccine.action';
+import { createScreenTest, editScreenTest } from '../../actions/screen_test.action';
+import Loader from '../../components/Loader';
+import Message from '../../components/Message';
+import moment from 'moment';
 import './index.css';
 
 const { TextArea } = Input;
+const { Meta } = Card;
+const { Panel } = Collapse;
 
 const StaffAppointmentDetailOnDayPage = () => {
-  const dataSource = [
+  const { id } = useParams();
+  // const formRef = useRef();
+  const [formRef] = Form.useForm();
+  const [screenTestFormRef] = Form.useForm();
+  // const screenTestFormRef = useRef();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [selectedVaccines, setSelectedVaccines] = useState([]);
+  const [changedVaccineId, setChangedVaccineId] = useState();
+
+  const provinceList = useSelector((state) => state.provinceList);
+  const { provinces } = provinceList;
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const appointment = useSelector((state) => state.appointment);
+  const { loading, error, appointmentItem } = appointment;
+
+  const gender = appointmentItem?.patient.gender ? 'Nam' : 'Nữ';
+  const birthday = moment(appointmentItem?.patient.birthday).format('DD/MM/YYYY');
+  const province = provinces?.find((item) => item.code == +appointmentItem?.patient.province);
+  const district = province?.districts?.find(
+    (item) => item.code == +appointmentItem?.patient.district
+  );
+  const ward = district?.wards?.find((item) => item.code == +appointmentItem?.patient.ward);
+  const address = `${appointmentItem?.patient.street}, ${province?.name}, ${district?.name},  ${ward?.name}`;
+
+  const vaccineList = useSelector((state) => state.vaccineList);
+  const { vaccines } = vaccineList;
+
+  const screenTestCreate = useSelector((state) => state.screenTestCreate);
+  const { createSuccess } = screenTestCreate;
+
+  const screenTestEdit = useSelector((state) => state.screenTestEdit);
+  const { editSuccess } = screenTestEdit;
+
+  const appointmentEdit = useSelector((state) => state.appointmentEdit);
+
+  const injectionCreate = useSelector((state) => state.injectionCreate);
+
+  const vaccineOptions = vaccines?.map((item) => ({
+    label: item.name,
+    value: item.id,
+    key: item.id
+  }));
+
+  const options = [
     {
-      key: '1',
-      information: `Tiền sử rõ ràng phản vệ với vắc xin phòng COVID-19 lần trƣớc hoặc các thành phần
-      của vắcxin phòng COVID-19`
-    },
-    {
-      key: '1',
-      information: `Tiền sử rõ ràng phản vệ với vắc xin phòng COVID-19 lần trƣớc hoặc các thành phần
-      của vắcxin phòng COVID-19`
-    },
-    {
-      key: '1',
-      information: `Tiền sử rõ ràng phản vệ với vắc xin phòng COVID-19 lần trƣớc hoặc các thành phần
-    của vắcxin phòng COVID-19`
-    },
-    {
-      key: '1',
-      information: `Tiền sử rõ ràng phản vệ với vắc xin phòng COVID-19 lần trƣớc hoặc các thành phần
-    của vắcxin phòng COVID-19`
-    },
-    {
-      key: '1',
-      information: `Tiền sử rõ ràng phản vệ với vắc xin phòng COVID-19 lần trƣớc hoặc các thành phần
-    của vắcxin phòng COVID-19`
-    },
-    {
-      key: '1',
-      information: `Tiền sử rõ ràng phản vệ với vắc xin phòng COVID-19 lần trƣớc hoặc các thành phần
-    của vắcxin phòng COVID-19`
-    },
-    {
-      key: '1',
-      information: `Tiền sử rõ ràng phản vệ với vắc xin phòng COVID-19 lần trƣớc hoặc các thành phần
-    của vắcxin phòng COVID-19`
-    },
-    {
-      key: '1',
-      information: `Tiền sử rõ ràng phản vệ với vắc xin phòng COVID-19 lần trƣớc hoặc các thành phần
-    của vắcxin phòng COVID-19`
-    },
-    {
-      key: '1',
-      information: `Tiền sử rõ ràng phản vệ với vắc xin phòng COVID-19 lần trƣớc hoặc các thành phần
-    của vắcxin phòng COVID-19`
-    },
-    {
-      key: '1',
-      information: `Tiền sử rõ ràng phản vệ với vắc xin phòng COVID-19 lần trƣớc hoặc các thành phần
-    của vắcxin phòng COVID-19`
-    },
-    {
-      key: '1',
-      information: `Tiền sử rõ ràng phản vệ với vắc xin phòng COVID-19 lần trƣớc hoặc các thành phần
-    của vắcxin phòng COVID-19`
-    },
-    {
-      key: '1',
-      information: `Tiền sử rõ ràng phản vệ với vắc xin phòng COVID-19 lần trƣớc hoặc các thành phần
-    của vắcxin phòng COVID-19`
-    },
-    {
-      key: '1',
-      information: `Tiền sử rõ ràng phản vệ với vắc xin phòng COVID-19 lần trƣớc hoặc các thành phần
-    của vắcxin phòng COVID-19`
-    },
-    {
-      key: '1',
-      information: `Tiền sử rõ ràng phản vệ với vắc xin phòng COVID-19 lần trƣớc hoặc các thành phần
-    của vắcxin phòng COVID-19`
+      label: 'Đã tiêm',
+      value: 1
     }
   ];
 
-  const columns = [
+  const payOptions = [
     {
-      title: 'Thông tin',
-      dataIndex: 'information',
-      key: 'information',
-      render: (text, record, index) => `${index + 1}. ${text}`
-    },
-    {
-      title: 'Có/Không',
-      dataIndex: 'true',
-      key: 'true',
-      align: 'center',
-      render: (text, record, index) => (
-        <Form.Item name="1" rules={[{ required: true, message: 'Please input a quantity' }]}>
-          <Radio.Group>
-            <Radio value="Có">Có</Radio>
-            <Radio value="Không">Không</Radio>
-          </Radio.Group>
-        </Form.Item>
-      )
+      label: 'Đã thanh toán',
+      value: 1
     }
   ];
-  const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
+
+  const onChangeVaccine = (value) => {
+    setChangedVaccineId(value);
   };
-  const handleOk = () => {
-    setIsModalOpen(false);
+  const onSearchVaccine = (value) => {
+    console.log('search:', value);
   };
-  const handleCancel = () => {
-    setIsModalOpen(false);
+
+  const handleRemoveVaccine = (id) => {
+    if (id) setSelectedVaccines(selectedVaccines.filter((item) => item.id != id));
   };
+
+  const handleAddVaccine = () => {
+    const vaccine = vaccines.find((item) => item.id == changedVaccineId);
+    if (vaccine) setSelectedVaccines(selectedVaccines.concat(vaccine));
+  };
+
+  const handleUpdateScreenTest = (values) => {
+    if (appointmentItem?.screeningTest || appointmentItem?.screeningTest?.length) {
+      values.id = appointmentItem.screeningTest.id;
+      dispatch(editScreenTest(values));
+    } else {
+      //call api tao
+      values.appointmentId = id;
+      dispatch(createScreenTest(values));
+    }
+  };
+
+  const handleUpdateAppointment = (values) => {
+    values.isPaid = values.isPaid == 1 ? true : false;
+    dispatch(
+      editAppointment({
+        id: id,
+        isPaid: values.isPaid,
+        postInjectionReaction: values.postInjectionReaction
+      })
+    );
+  };
+
+  const handleInjection = () => {
+    selectedVaccines;
+    dispatch(
+      createInjection({
+        injections: selectedVaccines?.map((item) => ({
+          appointmentId: id,
+          vaccineId: item.id,
+          vaccineItemId: null,
+          price: item.price
+        }))
+      })
+    );
+  };
+  useEffect(() => {
+    if (userInfo && userInfo.user.roles.includes('staff')) {
+      dispatch(getProvinceList());
+      dispatch(getAppointment(id));
+      dispatch(getVaccineList({}));
+    } else {
+      navigate('/login');
+    }
+  }, [
+    userInfo,
+    id,
+    screenTestCreate.createSuccess,
+    screenTestCreate.editSuccess,
+    appointmentEdit.editSuccess,
+    injectionCreate.createSuccess
+  ]);
+
+  useEffect(() => {
+    setSelectedVaccines(
+      appointmentItem?.wishList.map((item, index) => ({
+        name: JSON.parse(item).name,
+        image: JSON.parse(item).image,
+        price: JSON.parse(item).price,
+        id: JSON.parse(item).id
+      }))
+    );
+
+    screenTestFormRef.setFieldsValue({
+      injectionHistory: appointmentItem?.screeningTest?.injectionHistory || 'aaaa',
+      temperature: appointmentItem?.screeningTest?.temperature,
+      circuit: appointmentItem?.screeningTest?.circuit,
+      bloodPressure: appointmentItem?.screeningTest?.bloodPressure,
+      breath: appointmentItem?.screeningTest?.breath,
+      medicalHistory: appointmentItem?.screeningTest?.medicalHistory,
+      isQualified: appointmentItem?.screeningTest?.isQualified ? 1 : 0,
+      rejectReason: appointmentItem?.screeningTest?.rejectReason
+    });
+  }, [appointmentItem]);
+
+  useEffect(() => {
+    formRef.setFieldsValue({
+      injection: appointmentItem?.injections?.length ? '1 ' : ' 0',
+      postInjectionReaction: appointmentItem?.postInjectionReaction,
+      isPaid: appointmentItem?.isPaid ? '1' : '0'
+    });
+  }, [appointmentItem]);
+
   return (
     <div>
-      <Row justify="center">
-        <Col span={24}>
-          <Card className="appointment-details-card">
-            <h2 className="page-title">Thông tin chi tiết bệnh nhân</h2>
-            <Row>
-              <Col>
-                <h3>THÔNG TIN NGƯỜI TIÊM</h3>
-              </Col>
-            </Row>
-            <Row justify="space-between">
-              <Col span={12}>
-                <span>
-                  Họ và tên người tiêm: <strong>Nguyễn Văn C</strong>
-                </span>
-              </Col>
-              <Col span={12}>
-                <span>
-                  Mã số bệnh nhân (Nếu có): <strong>1111111S</strong>
-                </span>
-              </Col>
-            </Row>
-            <Row justify="space-between">
-              <Col span={8}>
-                <span>
-                  Giới tính: <strong>Nữ</strong>
-                </span>
-              </Col>
-              <Col span={8}>
-                <span>
-                  Ngày sinh: <strong>10/12/2002</strong>
-                </span>
-              </Col>
-              <Col span={8}>
-                <span>
-                  Số điện thoại: <strong>111111</strong>
-                </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <span>
-                  Địa chỉ: <strong>29 Điện Biên Phủ, Quận Thanh Khuê, thành phố Đà Nắng</strong>
-                </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <h3>THÔNG TIN NGƯỜI LIÊN HỆ</h3>
-              </Col>
-            </Row>
-            <Row justify="space-between">
-              <Col span={12}>
-                <span>
-                  Họ và tên người liên hệ: <strong>Nguyễn Văn A</strong>
-                </span>
-              </Col>
-            </Row>
-            <Row justify="space-between">
-              <Col span={8}>
-                <span>
-                  Số điện thoại: <strong>0364675651</strong>
-                </span>
-              </Col>
-              <Col span={8}>
-                <span>
-                  Email: <strong>a@gmail.com</strong>
-                </span>
-              </Col>
-              <Col span={8}>
-                <span>Mối quan hệ với người tiêm: Cha</span>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <h3>THÔNG TIN DỊCH VỤ</h3>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col>
-                <span>
-                  Vắc xin mong muốn tiêm: <strong>Infanrix Hexa – Vắc xin 6 trong 1 của Bỉ</strong>
-                </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <span>
-                  Giá vắc xin vắc xin: <strong>1220000</strong>
-                </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={9}>
-                <span>
-                  Ngày mong muốn tiêm: <strong>20/10/2022</strong>
-                </span>
-              </Col>
-              <Col span={7}>
-                <span>
-                  Khung giờ: <strong>10:00 - 11:00</strong>
-                </span>
-              </Col>
-              <Col span={7}>
-                <span>
-                  Giờ check in: <strong></strong>
-                </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <h3>TÌNH TRẠNG BỆNH NHÂN</h3>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <span>
-                  Đã khám sàn lọc: <strong>Chưa</strong>
-                </span>
-              </Col>
-            </Row>
-            <Form>
+      {loading || provinceList.loading ? (
+        <Loader />
+      ) : error || provinceList.error ? (
+        <Message description={`${error} ${provinceList.error}`} />
+      ) : (
+        <Row justify="center">
+          {screenTestCreate?.error && <Message description={screenTestCreate.error} />}
+          {screenTestEdit?.error && <Message description={screenTestEdit.error} />}
+          {appointmentEdit?.error && <Message description={appointmentEdit.error} />}
+          {injectionCreate?.error && <Message description={injectionCreate.error} />}
+          {createSuccess && (
+            <Message type="success" description="Bạn đã tạo khám sàn lọc thành công!" />
+          )}
+          {appointmentEdit?.editSuccess && (
+            <Message type="success" description="Bạn đã cập nhật thông tin thành công!" />
+          )}
+          {createSuccess && (
+            <Message type="success" description="Bạn đã tạo khám sàn lọc thành công!" />
+          )}
+          {injectionCreate?.createSuccess && (
+            <Message type="success" description="Bạn đã tạo bảng tiêm thành công!" />
+          )}
+          <Col span={24}>
+            <Card className="appointment-details-card">
+              <h2 className="page-title">Thông tin chi tiết bệnh nhân</h2>
               <Row>
+                <Col>
+                  <h3>THÔNG TIN NGƯỜI TIÊM</h3>
+                </Col>
+              </Row>
+              <Row justify="space-between">
+                <Col span={12}>
+                  <span>
+                    Họ và tên người tiêm: <strong>{appointmentItem?.patient.patientName}</strong>
+                  </span>
+                </Col>
+                <Col span={12}>
+                  <span>
+                    Mã số bệnh nhân:
+                    <strong>{appointmentItem?.patient.patientCode}</strong>
+                  </span>
+                </Col>
+              </Row>
+              <Row justify="space-between">
                 <Col span={8}>
-                  <Form.Item name="isInjected" label=" Đã tiêm">
-                    <Checkbox />
-                  </Form.Item>
+                  <span>
+                    Giới tính: <strong>{gender}</strong>
+                  </span>
                 </Col>
+                <Col span={8}>
+                  <span>
+                    Ngày sinh: <strong>{birthday}</strong>
+                  </span>
+                </Col>
+                <Col span={8}>
+                  <span>
+                    Số điện thoại: <strong>{appointmentItem?.patient.phoneNumber}</strong>
+                  </span>
+                </Col>
+              </Row>
+              <Row>
                 <Col>
-                  <Form.Item name="" label="Phản ứng sau tiêm">
-                    <TextArea
-                      style={{
-                        height: 120,
-                        width: 380
+                  <span>
+                    Địa chỉ: <strong>{address}</strong>
+                  </span>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <h3>THÔNG TIN NGƯỜI LIÊN HỆ</h3>
+                </Col>
+              </Row>
+              <Row justify="space-between">
+                <Col span={12}>
+                  <span>
+                    Họ và tên người liên hệ: <strong>{appointmentItem?.user.name}</strong>
+                  </span>
+                </Col>
+              </Row>
+              <Row justify="space-between">
+                <Col span={8}>
+                  <span>
+                    Số điện thoại: <strong>{appointmentItem?.user.phoneNumber}</strong>
+                  </span>
+                </Col>
+                <Col span={8}>
+                  <span>
+                    Email: <strong>{appointmentItem?.user.email}</strong>
+                  </span>
+                </Col>
+                <Col span={8}>
+                  <span>
+                    Mối quan hệ với người tiêm: <strong>{appointmentItem?.relative}</strong>
+                  </span>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <h3>THÔNG TIN KHÁM SÀN LỌC</h3>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24}>
+                  <Collapse className="injection-history-list" style={{ background: '#bfd2f8' }}>
+                    <Panel header="THÔNG TIN KHÁM SÀN LỌC" key="1">
+                      <Row>
+                        <Col span={8}>
+                          <span>
+                            Họ và tên người tiêm: <strong>Nguyễn Văn C</strong>
+                          </span>
+                        </Col>
+                        <Col span={12}>
+                          <span>
+                            Mã số bệnh nhân (Nếu có): <strong>1111111S</strong>
+                          </span>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col span={8}>
+                          <span>
+                            Giới tính: <strong>Nữ</strong>
+                          </span>
+                        </Col>
+                        <Col span={8}>
+                          <span>
+                            Ngày sinh: <strong>10/12/2002</strong>
+                          </span>
+                        </Col>
+                        <Col span={8}>
+                          <span>
+                            Số điện thoại: <strong>111111</strong>
+                          </span>
+                        </Col>
+                      </Row>
+
+                      <Form form={screenTestFormRef} onFinish={handleUpdateScreenTest}>
+                        <Row>
+                          <Col span={24}>
+                            <Form.Item
+                              name="injectionHistory"
+                              label="Lịch sử tiêm chủng"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng nhập lịch sử tiêm chủng! ',
+                                  whitespace: true
+                                }
+                              ]}>
+                              <TextArea />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <h4>I. SÀN LỌC</h4>
+                        <Row justify="space-between">
+                          <Col span={8}>
+                            <Form.Item
+                              name="temperature"
+                              label="Nhiệt độ (độ C)"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng nhập nhiệt độ! ',
+                                  whitespace: true
+                                }
+                              ]}>
+                              <Input></Input>
+                            </Form.Item>
+                          </Col>
+                          <Col span={8}>
+                            <Form.Item
+                              name="circuit"
+                              label="Mạch (lần/phút)"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng nhập mạch! ',
+                                  whitespace: true
+                                }
+                              ]}>
+                              <Input />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Row justify="space-between">
+                          <Col span={8}>
+                            <Form.Item
+                              name="bloodPressure"
+                              label="Huyết áp (mmHg)"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng nhập huyết áp! ',
+                                  whitespace: true
+                                }
+                              ]}>
+                              <Input></Input>
+                            </Form.Item>
+                          </Col>
+                          <Col span={8}>
+                            <Form.Item
+                              name="breath"
+                              label="Nhịp thở (lần/phút)"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng nhập nhịp thở! ',
+                                  whitespace: true
+                                }
+                              ]}>
+                              <Input />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col span={24}>
+                            <Form.Item name="medicalHistory" label="Tiền sử bệnh (Nếu có)">
+                              <TextArea />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <h4>II. KẾT LUẬN</h4>
+                        <Row>
+                          <Col span={6}>
+                            <Form.Item
+                              name="isQualified"
+                              label="Được tiêm"
+                              rules={[
+                                {
+                                  required: true,
+                                  message: 'Vui lòng chọn! '
+                                }
+                              ]}>
+                              <Radio.Group>
+                                <Radio value={1}>Được tiêm</Radio>
+                                <Radio value={0}>Không được tiêm</Radio>
+                              </Radio.Group>
+                            </Form.Item>
+                          </Col>
+                          <Col span={18}>
+                            <Form.Item name="rejectReason" label="Lý do (Nếu không được tiêm)">
+                              <TextArea />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Divider />
+                        <Row justify="center">
+                          <Col>
+                            <Button
+                              type="primary"
+                              htmlType="submit"
+                              style={{
+                                background: '#bfd2f8',
+                                border: '#bfd2f8',
+                                color: '#1f2b6c'
+                              }}>
+                              Cập nhật hồ sơ khám sàn lọc
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Form>
+                    </Panel>
+                  </Collapse>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <h3>THÔNG TIN DỊCH VỤ</h3>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <span>
+                    Vắc xin mong muốn tiêm:{' '}
+                    <strong>
+                      {selectedVaccines?.map((item, index) => (
+                        <ul>
+                          <li>
+                            <strong>{`${index + 1}. ${item.name}-----${item.price} ₫`}</strong>
+                          </li>
+                        </ul>
+                      ))}
+                    </strong>
+                  </span>
+                </Col>
+              </Row>
+
+              <Form form={formRef} onFinish={handleUpdateAppointment}>
+                <Row justify="space-between">
+                  <Col span={24}>
+                    <Form.Item
+                      label="Chọn vắc xin"
+                      name="wishList"
+                      labelCol={{
+                        span: 24
                       }}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
+                      wrapperCol={{ span: 24 }}>
+                      <Row justify="space-between">
+                        <Col span={16}>
+                          <Select
+                            showSearch
+                            placeholder="Chọn vắc xin"
+                            onChange={onChangeVaccine}
+                            onSearch={onSearchVaccine}
+                            filterOption={(input, option) =>
+                              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            options={vaccineOptions}
+                          />
+                        </Col>
+                        <Col span={6}>
+                          <Button
+                            type="primary"
+                            style={{ background: '#1f2b6c', border: '#1f2b6c' }}
+                            onClick={handleAddVaccine}>
+                            Thêm vắc xin
+                          </Button>
+                        </Col>
+                      </Row>
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row justify="space-between">
+                  <Col span={24}>
+                    <div className="selected-vaccines-card">
+                      {selectedVaccines?.map((item) => (
+                        <Card
+                          key={item.id}
+                          extra={
+                            <CloseOutlined
+                              onClick={() => handleRemoveVaccine(item.id)}
+                              className="card-icon"
+                              style={{ cursor: 'pointer' }}
+                            />
+                          }
+                          hoverable
+                          style={{
+                            width: 300,
+                            margin: 10
+                          }}
+                          cover={
+                            <img
+                              className="vaccine-image-cover"
+                              alt="vaccine-image"
+                              src={item.image}
+                            />
+                          }>
+                          <Meta
+                            description={
+                              <>
+                                <h5 className="text text--card-title">{item.name}</h5>
+                                <p className="text text--card-desc">{item.description}</p>
+                              </>
+                            }
+                          />
+                        </Card>
+                      ))}
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={9}>
+                    <span>
+                      Ngày mong muốn tiêm:{' '}
+                      <strong>{moment(appointmentItem?.desiredDate).format('DD/MM/YYYY')}</strong>
+                    </span>
+                  </Col>
+                  <Col span={7}>
+                    <span>
+                      Khung giờ:
+                      <strong>{`${moment(moment(appointmentItem?.schedule.startAt, 'HH:mm')).format(
+                        'HH:mm'
+                      )}-${moment(moment(appointmentItem?.schedule.startAt, 'HH:mm'))
+                        .add(appointmentItem?.schedule.appointmentDuration, 'minutes')
+                        .format('HH:mm')}`}</strong>
+                    </span>
+                  </Col>
+                  <Col span={7}>
+                    <span>
+                      Giờ check in:
+                      <strong>
+                        {appointmentItem?.checkInAt &&
+                          moment(appointmentItem?.checkInAt).format('DD/MM/YYY HH:mm:ss')}
+                      </strong>
+                    </span>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <h3>TÌNH TRẠNG BỆNH NHÂN</h3>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={8}>
+                    <span>
+                      Đã khám sàn lọc:
+                      <strong>{appointmentItem?.screeningTest ? 'Rồi' : 'Chưa'}</strong>
+                    </span>
+                  </Col>
+                </Row>
 
-              <Divider />
-              <Row justify="center">
-                <Col span={4}>
-                  <Button
-                    onClick={() => navigate('/staff-home/appointments-on-day')}
-                    style={{ background: '#ffc107', border: '#ffc107', color: '#fff' }}>
-                    Trở về
-                  </Button>
-                </Col>
+                <Row>
+                  <Col span={8}>
+                    <span>
+                      Đã tiêm:
+                      <strong>{appointmentItem?.injections?.length ? 'Rồi' : 'Chưa'}</strong>
+                    </span>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item name="isPaid" label=" Đã thanh toán">
+                      <Checkbox.Group options={payOptions} />
+                    </Form.Item>
+                  </Col>
+                  <Col>
+                    <Form.Item name="postInjectionReaction" label="Phản ứng sau tiêm">
+                      <TextArea
+                        style={{
+                          height: 120,
+                          width: 380
+                        }}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
 
-                <Col span={4}>
-                  <Button
-                    htmlType="submit"
-                    style={{ background: '#1f2b6c', border: '#1f2b6c', color: '#fff' }}>
-                    Cập nhật
-                  </Button>
-                </Col>
-                <Col>
-                  <Button
-                    onClick={showModal}
-                    style={{ background: '#159eec', border: '#159eec', color: '#fff' }}>
-                    Khám sàn lọc
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
-          </Card>
-          <Modal
-            title="Khám sàng lọc"
-            open={isModalOpen}
-            onOk={handleOk}
-            onCancel={handleCancel}
-            width={1200}>
-            <Row>
-              <Col span={8}>
-                <span>
-                  Họ và tên người tiêm: <strong>Nguyễn Văn C</strong>
-                </span>
-              </Col>
-              <Col span={12}>
-                <span>
-                  Mã số bệnh nhân (Nếu có): <strong>1111111S</strong>
-                </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <span>
-                  Giới tính: <strong>Nữ</strong>
-                </span>
-              </Col>
-              <Col span={8}>
-                <span>
-                  Ngày sinh: <strong>10/12/2002</strong>
-                </span>
-              </Col>
-              <Col span={8}>
-                <span>
-                  Số điện thoại: <strong>111111</strong>
-                </span>
-              </Col>
-            </Row>
+                <Divider />
+                <Row justify="center">
+                  <Col span={4}>
+                    <Button
+                      onClick={() => navigate('/staff-home/appointments-on-day')}
+                      style={{ background: '#ffc107', border: '#ffc107', color: '#fff' }}>
+                      Trở về
+                    </Button>
+                  </Col>
 
-            <Form>
-              <Row>
-                <Col>Tình trạng tiêm chủng</Col>
-              </Row>
-              <h4>I. SÀN LỌC</h4>
-              <Table dataSource={dataSource} columns={columns} />
-              <h4>II. KẾT LUẬN</h4>
-              <Row>
-                <Col span={6}>
-                  <Form.Item name="dc_tiem" label="Được tiêm">
-                    <Checkbox />
-                  </Form.Item>
-                </Col>
-                <Col span={16}>
-                  <Form.Item name="li_do" label="Lý do (Nếu không được tiêm)">
-                    <TextArea />
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Form>
-          </Modal>
-        </Col>
-      </Row>
+                  <Col span={4}>
+                    <Button
+                      htmlType="submit"
+                      style={{ background: '#1f2b6c', border: '#1f2b6c', color: '#fff' }}>
+                      Cập nhật
+                    </Button>
+                  </Col>
+                  <Col span={4}>
+                    <Button
+                      onClick={handleInjection}
+                      style={{ background: '#53a336', border: '#53a336', color: '#fff' }}>
+                      Xác nhận tiêm
+                    </Button>
+                  </Col>
+                </Row>
+              </Form>
+            </Card>
+          </Col>
+        </Row>
+      )}
     </div>
   );
 };
