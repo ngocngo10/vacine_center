@@ -69,6 +69,10 @@ import {
   vaccineWareHouseCreateReducer
 } from './reducers/warehouse.reducer';
 
+import { screenTestCreateReducer, screenTestEditReducer } from './reducers/screen_test.reducer';
+
+import { patientListReducer } from './reducers/patient.reducer';
+
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
@@ -120,7 +124,12 @@ const reducer = combineReducers({
   injection: injectionReducer,
 
   vaccineListWareHouse: vaccineListWareHouseReducer,
-  vaccineWareHouseCreate: vaccineWareHouseCreateReducer
+  vaccineWareHouseCreate: vaccineWareHouseCreateReducer,
+
+  screenTestCreate: screenTestCreateReducer,
+  screenTestEdit: screenTestEditReducer,
+
+  patientList: patientListReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
@@ -135,10 +144,17 @@ const diseaseCategoriesFromStorage = localStorage.getItem('disease-categories')
   ? JSON.parse(localStorage.getItem('disease-categories'))
   : null;
 
+const patientsFromStorage = localStorage.getItem('patients')
+  ? JSON.parse(localStorage.getItem('patients'))
+  : null;
+
 const initialState = {
   userLogin: { userInfo: userInfoFromStorage },
   vaccineList: { vaccines: vaccineListFromStorage },
-  categoryList: { categories: diseaseCategoriesFromStorage }
+  categoryList: { categories: diseaseCategoriesFromStorage },
+  patientList: {
+    patients: patientsFromStorage
+  }
 };
 
 const middleware = [thunk];

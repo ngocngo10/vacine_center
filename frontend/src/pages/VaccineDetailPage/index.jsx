@@ -123,7 +123,8 @@ const VaccineDetailPage = () => {
                 <h2 className="vaccine-name">{vaccine.name}</h2>
                 <hr />
                 <p className="vaccine-des">{vaccine.description}</p>
-                <p className="vaccine_price">{/* 3.890.000₫ <del>3.590.000₫ </del> */}</p>
+                <br></br>
+                <p className="vaccine_price">{`${vaccine.price}  ₫`}</p>
               </div>
             </section>
             <section className="section-vaccine-detail-inform">

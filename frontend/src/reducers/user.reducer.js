@@ -57,7 +57,11 @@ export const userListReducer = (state = {}, action) => {
     case USER_LIST_REQUEST:
       return { loading: true };
     case USER_LIST_SUCCESS:
-      return { loading: false, users: action.payload.rows, totalItem: action.payload.count };
+      return {
+        loading: false,
+        users: action.payload.users.rows,
+        totalItem: action.payload.users.count
+      };
     case USER_LIST_FAIL:
       return { loading: false, error: action.payload };
     default:
@@ -70,7 +74,7 @@ export const userReducer = (state = {}, action) => {
     case USER_REQUEST:
       return { loading: true };
     case USER_SUCCESS:
-      return { loading: false, user: action.payload };
+      return { loading: false, userItem: action.payload.user };
     case USER_FAIL:
       return { loading: false, error: action.payload };
     default:

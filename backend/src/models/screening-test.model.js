@@ -10,6 +10,7 @@ module.exports = (sequelize, Sequelize) => {
         field: 'medical_history'
       },
       appointmentId: {
+        field: 'appointment_id',
         type: Sequelize.INTEGER
       },
       temperature: {

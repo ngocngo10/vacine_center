@@ -1,10 +1,58 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, Form, Input, Select, Row, Col, Card, Checkbox } from 'antd';
 import patterns from '../../constants/pattern.constant';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { editUser, getUser } from '../../actions/user.action';
+import Loader from '../../components/Loader';
+import Message from '../../components/Message';
 
 const AdminUpdateUserPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const formRef = useRef();
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const user = useSelector((state) => state.user);
+  const { loading, error, userItem } = user;
+
+  const userEdit = useSelector((state) => state.userEdit);
+  const { editSuccess } = userEdit;
+
+  const onFinish = (values) => {
+    console.log('values', values);
+    values.id = id;
+    values.gender = values.gender ? true : false;
+    values.isBlocked = values.isBlocked[0] ? true : false;
+    dispatch(editUser(values));
+  };
+
+  useEffect(() => {
+    if (userInfo && userInfo.user.roles.includes('admin')) {
+      dispatch(getUser(id));
+    } else {
+      navigate('/login');
+    }
+  }, [userInfo, id]);
+
+  useEffect(() => {
+    if (userInfo && userInfo.user.roles.includes('admin')) {
+      formRef?.current.setFieldsValue({
+        email: userItem?.email,
+        name: userItem?.name,
+        phoneNumber: userItem?.phoneNumber,
+        gender: (userItem?.gender && 'Nam') || (!userItem?.gender && 'Nữ'),
+        roles: userItem?.roles,
+        isBlocked: userItem?.isBlocked ? [true] : [false]
+      });
+    } else {
+      navigate('/login');
+    }
+  }, [userInfo, userItem]);
+
   const formItemLayout = {
     labelCol: {
       sm: {
@@ -36,20 +84,21 @@ const AdminUpdateUserPage = () => {
   const blockOptions = [
     {
       label: 'Khóa',
-      value: 'true'
+      value: true
     }
   ];
 
-  const onFinish = (values) => {
-    console.log('values', values);
-  };
-
   return (
     <div>
+      {loading && <Loader />}
+      {error && <Message description={error} />}
+      {editSuccess && <Message type="success" description="Bạn đã cập nhật tài khoản thành công" />}
+      {userEdit.error && <Message description={userEdit.error} />}
       <Card>
         <Row justify="center">
           <Col span={18}>
             <Form
+              ref={formRef}
               labelAlign="left"
               {...formItemLayout}
               name="register"
@@ -69,7 +118,7 @@ const AdminUpdateUserPage = () => {
                     message: 'Vui lòng nhập email!'
                   }
                 ]}>
-                <Input />
+                <Input disabled={true} />
               </Form.Item>
               <Form.Item name="name" label="Họ và tên">
                 <Input disabled={true} />
@@ -78,10 +127,7 @@ const AdminUpdateUserPage = () => {
                 <Input disabled={true} />
               </Form.Item>
               <Form.Item name="gender" label="Giới tính">
-                <Select disabled={true} placeholder="Chọn giới tính">
-                  <Option value="male">Male</Option>
-                  <Option value="female">Female</Option>
-                </Select>
+                <Input />
               </Form.Item>
               <Form.Item
                 name="password"
@@ -114,7 +160,7 @@ const AdminUpdateUserPage = () => {
                 ]}>
                 <Checkbox.Group options={roleOptions} />
               </Form.Item>
-              <Form.Item name="block" label="Tình trạng tài khoản">
+              <Form.Item name="isBlocked" label="Tình trạng tài khoản">
                 <Checkbox.Group options={blockOptions} />
               </Form.Item>
               <Row justify="center">

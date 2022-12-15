@@ -1,9 +1,10 @@
 import React from 'react';
 import { Row, Col, List, Table, Radio, Checkbox, Input } from 'antd';
+import moment from 'moment';
 
 const { TextArea } = Input;
 
-const InjectionHistoryItem = () => {
+const InjectionHistoryItem = ({ appointment }) => {
   const dataSource = [
     {
       key: '1',
@@ -107,24 +108,24 @@ const InjectionHistoryItem = () => {
       <Row justify="space-between">
         <Col span={12}>
           <span>
-            Họ và tên người liên hệ: <strong>Ngô Thị Ngọc</strong>
+            Họ và tên người liên hệ: <strong>{appointment.user.name}</strong>
           </span>
         </Col>
       </Row>
       <Row justify="space-between">
         <Col span={8}>
           <span>
-            Số điện thoại: <strong>0123456789</strong>
+            Số điện thoại: <strong>{appointment.user.phoneNumber}</strong>
           </span>
         </Col>
         <Col span={8}>
           <span>
-            Email: <strong>ngothingocbk99@gmail.com</strong>
+            Email: <strong>{appointment.user.email}</strong>
           </span>
         </Col>
         <Col span={8}>
           <span>
-            Mối quan hệ với người tiêm: <strong>Chị</strong>
+            Mối quan hệ với người tiêm: <strong>{appointment.relative}</strong>
           </span>
         </Col>
       </Row>
@@ -132,45 +133,94 @@ const InjectionHistoryItem = () => {
       <Row justify="center">
         <Col span={23}>
           <h4>I. SÀN LỌC</h4>
-          <Table dataSource={dataSource} columns={columns} />
+          <Row>
+            <Col>
+              <span>
+                Lịch sử tiêm chủng: <strong>{appointment.screeningTest?.injectionHistory}</strong>
+              </span>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={12}>
+              <span>
+                Nhiệt độ (độ C): <strong>{appointment.screeningTest?.temperature}</strong>
+              </span>
+            </Col>
+            <Col span={12}>
+              <span>
+                Mạch (lần/phút): <strong>{appointment.screeningTest?.circuit}</strong>
+              </span>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={12}>
+              <span>
+                Huyết áp (mmHg): <strong>{appointment.screeningTest?.bloodPressure}</strong>
+              </span>
+            </Col>
+            <Col span={12}>
+              <span>
+                Nhịp thở (lần/phút): <strong>{appointment.screeningTest?.breath}</strong>
+              </span>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <span>
+                Tiền sử bệnh (Nếu có): <strong>{appointment.screeningTest?.medicalHistory}</strong>
+              </span>
+            </Col>
+          </Row>
           <h4>II. KẾT LUẬN</h4>
           <Row>
             <Col span={6}>
-              <Checkbox>Được tiêm</Checkbox>
+              <span>
+                Được tiêm:{' '}
+                <strong>
+                  {appointment.screeningTest?.isQualified ? 'Được tiêm' : 'Không được tiêm'}
+                </strong>
+              </span>
             </Col>
             <Col span={16}>
-              <span>Lí do (Nếu không được tiêm)</span>
-              <TextArea />
+              <span>
+                Lí do (Nếu không được tiêm):{' '}
+                <strong>{appointment.screeningTest?.rejectReason}</strong>
+              </span>
             </Col>
           </Row>
         </Col>
       </Row>
 
       <h3>THÔNG TIN VẮC XIN</h3>
-      <Row justify="space-between">
-        <Col span={18}>
-          <span>
-            Vắc xin mong muốn tiêm: <strong>1 . Vắc xin abcdđ</strong>
-          </span>
-        </Col>
-        <Col span={6}>
-          <span>
-            Mũi tiêm thứ: <strong>1</strong>
-          </span>
-        </Col>
-      </Row>
-      <Row>
-        <Col span={12}>
-          <span>
-            Mã vắc xin: <strong>1222222</strong>
-          </span>
-        </Col>
-        <Col>
-          <span>
-            Lô vắc xin: <strong>1222222</strong>
-          </span>
-        </Col>
-      </Row>
+
+      {appointment.vaccines.map((item, index) => (
+        <>
+          <Row justify="space-between">
+            <Col span={18}>
+              <span>
+                Vắc xin mong muốn tiêm: <strong>{item.name}</strong>
+              </span>
+            </Col>
+            {/* <Col span={6}>
+      <span>
+        Mũi tiêm thứ: <strong>1</strong>
+      </span>
+    </Col> */}
+          </Row>
+          <Row>
+            <Col span={12}>
+              <span>
+                Mã vắc xin: <strong>{item.vaccineCode}</strong>
+              </span>
+            </Col>
+            {/* <Col>
+      <span>
+        Lô vắc xin: <strong>1222222</strong>
+      </span>
+    </Col> */}
+          </Row>
+        </>
+      ))}
 
       <Row>
         <Col>
@@ -182,14 +232,18 @@ const InjectionHistoryItem = () => {
           <Row>
             <Col>
               <span>
-                Ngày tiêm: <strong>9:00:01 11/11/2022</strong>
+                Ngày tiêm:{' '}
+                <strong>
+                  {appointment.injections?.injectionAt &&
+                    moment(appointment.injections?.injectionAt).format('DD/MM/YYYY')}
+                </strong>
               </span>
             </Col>
           </Row>
           <Row>
             <Col>
               <span>
-                Sức khỏe sau khi tiêm: <strong> jsjsskskskssksksksksk</strong>
+                Sức khỏe sau khi tiêm: <strong> {appointment.postInjectionReaction}</strong>
               </span>
             </Col>
           </Row>
@@ -203,7 +257,7 @@ const InjectionHistoryItem = () => {
       <Row>
         <Col>
           <span>
-            Tình trạng thanh toán: <strong>Chưa thanh toán</strong>
+            Tình trạng thanh toán: <strong>{appointment.isPaid ? 'Rồi' : 'Chưa'}</strong>
           </span>
         </Col>
       </Row>
@@ -212,9 +266,8 @@ const InjectionHistoryItem = () => {
         <Col span={10}>
           <List
             dataSource={[
-              { id: 1, name: 'Khám sàn lọc', price: '120000' },
-              { id: 2, name: 'Vắc xin a', price: '120000' },
-              { id: 3, name: 'Vắc xin a', price: '120000' },
+              { id: 2, name: 'Vắc xin abcdđ', price: '120000' },
+              // { id: 3, name: 'Vắc xin a', price: '120000' },
               { id: 4, name: 'Tổng cộng', price: '120000', className: 'checkout-total' }
             ]}
             renderItem={(item) => (

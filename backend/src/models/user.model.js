@@ -25,6 +25,11 @@ module.exports = (sequelize, Sequelize) => {
       },
       roles: {
         type: Sequelize.ARRAY(Sequelize.STRING)
+      },
+      isBlocked: {
+        type: Sequelize.BOOLEAN,
+        field: 'is_blocked',
+        defaultValue: false
       }
     },
     {
