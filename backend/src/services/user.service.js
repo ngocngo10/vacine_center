@@ -1,6 +1,7 @@
 const { UserRepository } = require('../repositories');
 const ErrorCreator = require('../utils/error_creator');
 const bcrypt = require('bcryptjs');
+const { Op } = require('sequelize');
 
 module.exports = class UserService {
   constructor() {
@@ -43,6 +44,10 @@ module.exports = class UserService {
 
       if (reqQuery.phoneNumber) {
         findOptions.where.phoneNumber = reqQuery.phoneNumber;
+      }
+
+      if (reqQuery.isBLocked) {
+        findOptions.where.isBLocked = true;
       }
 
       const page = reqQuery.page || 1;
