@@ -152,7 +152,7 @@ export const getUser = (id) => async (dispatch, getState) => {
       }
     };
 
-    const url = `${BASE_URL}/api/users?${id}`;
+    const url = `${BASE_URL}/api/users/${id}`;
 
     const { data } = await axios.get(url, config);
 

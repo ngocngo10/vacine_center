@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Table, Input, Button, Row, Col, Modal, Checkbox, Form, Card } from 'antd';
 import { CheckOutlined, CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import { useNavigate, Link } from 'react-router-dom';
-import { getUserList } from '../../actions/user.action';
+import { getUserList, createUser } from '../../actions/user.action';
 import patterns from '../../constants/pattern.constant';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
@@ -30,30 +30,15 @@ const AdminUsersPage = () => {
   };
 
   const onFinnish = (values) => {
-    console.log('values', values);
+    dispatch(createUser(values));
+    handleCancel();
   };
 
   const userList = useSelector((state) => state.userList);
   const { loading, error, users, totalItem } = userList;
-  console.log('users', users);
 
-  // const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_NUMBER);
-  // const scheduleOnDay = useSelector((state) => state.scheduleOnDay);
-  // const { schedules } = scheduleOnDay;
-  // let scheduleOptions = schedules?.map((item) => ({
-  //   key: item.id,
-  //   label: `${moment(moment(item.startAt, 'HH:mm')).format('HH:mm')} - ${moment(
-  //     moment(item.startAt, 'HH:mm')
-  //   )
-  //     .add(item.appointmentDuration, 'minutes')
-  //     .format('HH:mm')}`,
-  //   value: item.id
-  // }));
-
-  // const handleChangeDay = (date) => {
-  //   const selectedDay = moment(date).format('YYYY-MM-DD');
-  //   dispatch(getScheduleOnDay(selectedDay));
-  // };
+  const userCreate = useSelector((state) => state.userCreate);
+  const { createSuccess } = userCreate;
 
   const handleTableChange = (pagination) => {
     dispatch(getUserList({ perPage: 10, page: pagination.current }));
@@ -71,7 +56,7 @@ const AdminUsersPage = () => {
     } else {
       navigate('/login');
     }
-  }, [userInfo]);
+  }, [userInfo, createSuccess]);
   const roleOptions = [
     {
       label: 'Quản trị viên',
@@ -155,13 +140,15 @@ const AdminUsersPage = () => {
     name: item.name,
     email: item.email,
     phoneNumber: item.phoneNumber,
-    roles: ['user', 'staff'],
+    roles: item.roles,
     action: item.id,
-    block: item.isBlock
+    block: item.isBlocked
   }));
 
   return (
     <div>
+      {userCreate.error && <Message description={userCreate.error} />}
+      {createSuccess && <Message description="Đã tạo tài khoản mới thành công!" type="success" />}
       <Card style={{ borderRadius: 10 }}>
         <h2 className="page-title">Quản lí tài khoản người dùng</h2>
         <Row justify="space-between">

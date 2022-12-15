@@ -74,7 +74,7 @@ export const userReducer = (state = {}, action) => {
     case USER_REQUEST:
       return { loading: true };
     case USER_SUCCESS:
-      return { loading: false, user: action.payload };
+      return { loading: false, userItem: action.payload.user };
     case USER_FAIL:
       return { loading: false, error: action.payload };
     default:
