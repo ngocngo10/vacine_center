@@ -19,6 +19,10 @@ module.exports = class UserService {
       console.log('User is existed');
       throw new ErrorCreator('User is existed', 400);
     }
+    const isExistedEmail = await this.checkEmailExisted(userInfo.email);
+    if (isExistedEmail) {
+      throw new ErrorCreator('Email is existed', 400);
+    }
     const newUser = await this.repository.create(userInfo);
     return newUser;
   }
@@ -71,6 +75,14 @@ module.exports = class UserService {
 
   async checkUserExisted(phoneNumber) {
     return this.repository.findUserByPhoneNumber(phoneNumber);
+  }
+
+  async checkEmailExisted(email) {
+    return await this.repository.model.findOne({
+      where: {
+        email: email
+      }
+    })
   }
 
   async update(id, body) {

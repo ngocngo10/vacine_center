@@ -23,6 +23,11 @@ module.exports = class AuthService {
     if (isExist) {
       throw new ErrorCreator(constants.USER_EXISTED, 400);
     }
+    const isExistedEmail = await this.checkEmailExisted(userInfo.email);
+    if (isExistedEmail) {
+      throw new ErrorCreator('Email is existed', 400);
+    }
+
     const newUser = await this.repository.createUser(userInfo);
     const token = generateLoginToken({
       id: newUser.id,
@@ -128,5 +133,10 @@ module.exports = class AuthService {
   }
   async checkUserExisted(phoneNumber) {
     return await this.repository.findUser({ phoneNumber });
+  }
+  async checkEmailExisted(email) {
+    return await this.repository.model.findOne({ where: {
+      email: email
+    }})
   }
 };
