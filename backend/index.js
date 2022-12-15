@@ -25,6 +25,7 @@ const injectionRouter = require('./src/routes/injection');
 const screeningTestRouter = require('./src/routes/screening-test');
 const vaccineItemRouter = require('./src/routes/vaccine-item');
 const userRouter = require('./src/routes/users');
+const adminRouter = require('./src/routes/admin');
 const jobs = require('./src/jobs/create-schedule.job');
 
 var app = express();
@@ -70,6 +71,7 @@ app.use('/api/injections', injectionRouter);
 app.use('/api/screening-tests', screeningTestRouter);
 app.use('/api/vaccine-items', vaccineItemRouter);
 app.use('/api/users', userRouter);
+app.use('/api/admin', adminRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
