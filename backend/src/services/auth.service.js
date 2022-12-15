@@ -58,6 +58,9 @@ module.exports = class AuthService {
     if (!user) {
       throw new ErrorCreator(constants.INVALID_PHONE_OR_PASSWORD, 400);
     }
+    if (!user.isActive) {
+      throw new ErrorCreator('User is blocked', 400);
+    }
     const isCorrectPassword = bcrypt.compareSync(password, user.password);
     if (isCorrectPassword) {
       const token = generateLoginToken({
