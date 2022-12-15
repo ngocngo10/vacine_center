@@ -41,6 +41,10 @@ module.exports = class UserService {
         findOptions.where.phoneNumber = reqQuery.phoneNumber;
       }
 
+      if (reqQuery.isBLocked) {
+        findOptions.where.isBLocked = true;
+      }
+
       const page = reqQuery.page || 1;
       findOptions.limit = +reqQuery.perPage || 10;
       findOptions.offset = (page - 1) * findOptions.limit;
