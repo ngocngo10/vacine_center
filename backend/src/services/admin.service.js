@@ -15,9 +15,9 @@ module.exports = class AdminService {
   }
 
   async unblockMultiUser(ids) {
-    await this.repository.model.update({ where: { id: ids }}, { isBlocked: false });
+    await this.repository.model.update({ where: { id: ids } }, { isBlocked: false });
   }
- 
+
   async blockMultiUser(ids) {
     await this.repository.model.update({ where: { id: ids } }, { isBlocked: true });
   }
