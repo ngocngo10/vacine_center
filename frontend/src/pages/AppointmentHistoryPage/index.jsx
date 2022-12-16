@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { Tag, Badge } from 'antd';
+import { Tag, Badge, Table, Input, Row, Col } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import Loader from '../../components/Loader';
-import Header from '../../components/table/Header';
-import useDataTable from '../../components/table/DataTable';
 import Message from '../../components/Message';
 import Container from '../../layout/Container';
 import {
@@ -16,10 +14,14 @@ import {
 } from '../../actions/appointment.action';
 import './index.css';
 
+const { Search } = Input;
+
 const AppointmentHistoryPage = () => {
+  const DEFAULT_PAGE_NUMBER = 0;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_NUMBER);
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -31,6 +33,15 @@ const AppointmentHistoryPage = () => {
 
   const appointmentMultiDelete = useSelector((state) => state.appointmentMultiDelete);
   const { multiDeleteSuccess } = appointmentMultiDelete;
+
+  const handleTableChange = (pagination) => {
+    dispatch(getAppointmentHistories({ perPage: 10, page: pagination.current }));
+    setCurrentPage(pagination.current - 1);
+  };
+
+  const handleOnSearch = (name) => {
+    dispatch(getAppointmentHistories({ perPage: 10, patientName: name }));
+  };
 
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('user')) {
@@ -93,6 +104,12 @@ const AppointmentHistoryPage = () => {
             CHƯA XÁC NHẬN
           </Tag>
         )
+    },
+    {
+      title: 'Xem chi tiết',
+      dataIndex: 'action',
+      key: 'action',
+      render: (id) => <Link to={`$/appointment-history/details/${id}`}>Xem chi tiết</Link>
     }
   ];
 
@@ -100,7 +117,7 @@ const AppointmentHistoryPage = () => {
   data.totalElements = totalItem;
   data.content = appointmentHistories?.map((item, index) => ({
     key: item.id,
-    index: index + 1,
+    index: currentPage * 10 + index + 1,
     patientCode: item.patient.patientCode,
     patientName: item.patient.patientName,
     desiredDate: moment(item.desiredDate).format('DD-MM-YYYY'),
@@ -112,7 +129,8 @@ const AppointmentHistoryPage = () => {
     listType: item.listType,
     wishList: item.wishList,
     isConfirmed: item.isConfirmed,
-    isInjected: 'Chưa tiêm'
+    isInjected: 'Chưa tiêm',
+    action: item.id
   }));
 
   const handleDeleteSingleAppointment = (id) => {
@@ -127,26 +145,6 @@ const AppointmentHistoryPage = () => {
     dispatch(getAppointmentHistories({ perPage: 10, page: page }));
   };
 
-  const handleOnSearch = (name) => {
-    dispatch(getAppointmentHistories({ patientName: name, perPage: 10 }));
-  };
-
-  const {
-    DataTable,
-    hasSelected,
-    selectedRowKeys,
-    selectedRow,
-    currentPage,
-    pageSize,
-    resetPagination
-  } = useDataTable({
-    columns: columns,
-    dataSource: data,
-    updateEntityPath: 'appointment-history/update',
-    handleDelete: handleDeleteSingleAppointment,
-    handleChangePage: getAppointments
-  });
-
   return loading ? (
     <Loader />
   ) : error ? (
@@ -156,14 +154,35 @@ const AppointmentHistoryPage = () => {
       <Container>
         <>
           <h2 className="page-title">Lịch sử cuộc hẹn</h2>
-          <Header
-            addNewPath="register-appointment"
-            selectedRowKeys={selectedRowKeys}
-            hasSelected={hasSelected}
-            handleMultiDelete={handleDeleteMultiAppointments}
-            handleSearch={handleOnSearch}
+          <Row justify="center">
+            <Col span={12}>
+              <Search onSearch={handleOnSearch} placeholder="Tìm kiếm theo tên bệnh nhân" />
+            </Col>
+          </Row>
+
+          <Table
+            style={{ marginTop: 20 }}
+            rowKey={(record) => record.key}
+            onRow={(record) => {
+              return {
+                onClick: () => {
+                  console.log('record', record);
+                  navigate(`/staff-home/appointments/details/${record.key}`);
+                }
+              };
+            }}
+            dataSource={data.content}
+            columns={columns}
+            onChange={handleTableChange}
+            pagination={{
+              pageSize: 10,
+              current: currentPage + 1,
+              total: data.totalElements,
+              showTotal: (total, range) => {
+                return `${range[0]}-${range[1]} of ${total} items`;
+              }
+            }}
           />
-          <DataTable />
         </>
       </Container>
     </div>
