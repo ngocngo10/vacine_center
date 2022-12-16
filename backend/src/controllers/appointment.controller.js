@@ -29,8 +29,20 @@ async function find(req, res, next) {
 
 async function findOne(req, res, next) {
   try {
-    const schedule = await appointmentService.findOne(req.params.id);
-    return res.json({ schedule });
+    if (req.user?.roles?.includes('user')) {
+      const findOptions = {
+        userId: req.user.id,
+        id: req.params.id
+      }
+      const schedule = await appointmentService.findOne(findOptions);
+      return res.json({ schedule });
+    } else {
+      const findOptions = {
+        id: req.params.id
+      }
+      const schedule = await appointmentService.findOne(findOptions);
+      return res.json({ schedule });
+    }
   } catch (error) {
     next(error);
   }
