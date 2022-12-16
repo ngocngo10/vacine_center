@@ -32,14 +32,14 @@ async function findOne(req, res, next) {
     if (req.user?.roles?.includes('staff') || req.user?.roles?.includes('admin')) {
       const findOptions = {
         id: req.params.id
-      }
+      };
       const schedule = await appointmentService.findOne(findOptions);
       return res.json({ schedule });
     } else {
       const findOptions = {
         userId: req.user.id,
         id: req.params.id
-      }
+      };
       const schedule = await appointmentService.findOne(findOptions);
       return res.json({ schedule });
     }

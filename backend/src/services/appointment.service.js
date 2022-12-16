@@ -129,17 +129,15 @@ module.exports = class AppointmentService {
     return appointments;
   }
   async findOne(conditions) {
-    const appointment = await this.repository.model.findOne({
-      where: conditions
-    }, {
-      include: [
-        'schedule',
-        'user',
-        'patient',
-        'screeningTest',
-        'injections'
-      ] }
+    const appointment = await this.repository.model.findOne(
+      {
+        where: conditions
+      },
+      {
+        include: ['schedule', 'user', 'patient', 'screeningTest', 'injections']
+      }
     );
+    if (!appointment) throw new ErrorCreator('Appointment not found', 404);
     const vaccines = await this.vaccineRepo.model.findAll({
       where: {
         id: appointment.injections.map((item) => item.vaccineId)
