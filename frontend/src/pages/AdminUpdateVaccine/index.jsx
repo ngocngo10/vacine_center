@@ -45,6 +45,9 @@ const AdminUpdateVaccine = () => {
   const vaccineItem = useSelector((state) => state.vaccine);
   const { vaccine } = vaccineItem;
 
+  const vaccineEdit = useSelector((state) => state.vaccineEdit);
+  const { editSuccess } = vaccineEdit;
+
   const onChange = (e) => {
     let files = e.target.files;
     setImageFile(files[0]);
@@ -97,6 +100,8 @@ const AdminUpdateVaccine = () => {
     <Message description={error} />
   ) : (
     <Card loading={false} className="add-vaccine-card">
+      {vaccineEdit.error === 'Validation error' && <Message description="Mã vắc xin đã tồn tại!" />}
+      {editSuccess && <Message description="Bạn đã cập nhật vắc xin thành công!" />}
       <h2 className="page-title">Cập nhật vắc xin</h2>
       <Row justify="space-around">
         <Col span={6}>
@@ -165,8 +170,7 @@ const AdminUpdateVaccine = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Vui lòng nhập giá vắc xin!',
-                  whitespace: true
+                  message: 'Vui lòng nhập giá vắc xin!'
                 }
               ]}>
               <Input />
@@ -178,7 +182,6 @@ const AdminUpdateVaccine = () => {
                 {
                   required: true,
                   message: 'Vui lòng nhập số mũi theo phác đồ!'
-                  // whitespace: true
                 }
               ]}>
               <InputNumber min={1} max={10} />
