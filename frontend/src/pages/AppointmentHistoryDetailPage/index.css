@@ -1,0 +1,16 @@
+.price-total {
+  font-family: 'WorkSans-Medium';
+  font-size: 20px;
+  line-height: 1.4;
+  color: #d0021c;
+}
+
+.appointment-cancel {
+  font-family: 'WorkSans-Medium';
+  font-size: 20px;
+  line-height: 1.4;
+  color: #d0021c;
+  padding: 20px;
+  margin-top: 10px;
+  background-color: var(--color-secondary);
+}

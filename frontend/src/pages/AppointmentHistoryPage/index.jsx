@@ -7,11 +7,7 @@ import moment from 'moment';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import Container from '../../layout/Container';
-import {
-  getAppointmentHistories,
-  deleteAppointment,
-  deleteMultiAppointment
-} from '../../actions/appointment.action';
+import { getAppointmentHistories } from '../../actions/appointment.action';
 import './index.css';
 
 const { Search } = Input;
@@ -109,7 +105,7 @@ const AppointmentHistoryPage = () => {
       title: 'Xem chi tiết',
       dataIndex: 'action',
       key: 'action',
-      render: (id) => <Link to={`$/appointment-history/details/${id}`}>Xem chi tiết</Link>
+      render: (id) => <Link to={`/appointment-history/details/${id}`}>Xem chi tiết</Link>
     }
   ];
 
@@ -133,18 +129,6 @@ const AppointmentHistoryPage = () => {
     action: item.id
   }));
 
-  const handleDeleteSingleAppointment = (id) => {
-    dispatch(deleteAppointment(id));
-  };
-
-  const handleDeleteMultiAppointments = (ids) => {
-    dispatch(deleteMultiAppointment(ids));
-  };
-
-  const getAppointments = (page) => {
-    dispatch(getAppointmentHistories({ perPage: 10, page: page }));
-  };
-
   return loading ? (
     <Loader />
   ) : error ? (
@@ -163,14 +147,6 @@ const AppointmentHistoryPage = () => {
           <Table
             style={{ marginTop: 20 }}
             rowKey={(record) => record.key}
-            onRow={(record) => {
-              return {
-                onClick: () => {
-                  console.log('record', record);
-                  navigate(`/staff-home/appointments/details/${record.key}`);
-                }
-              };
-            }}
             dataSource={data.content}
             columns={columns}
             onChange={handleTableChange}
