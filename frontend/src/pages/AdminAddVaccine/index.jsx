@@ -38,6 +38,9 @@ const AdminAddVaccine = () => {
   const ageGroupsCategoryList = useSelector((state) => state.ageGroupsCategoryList);
   const { ageGroups } = ageGroupsCategoryList;
 
+  const vaccineCreate = useSelector((state) => state.vaccineCreate);
+  const { createSuccess } = vaccineCreate;
+
   const onChange = (e) => {
     let files = e.target.files;
     setImageFile(files[0]);
@@ -71,6 +74,10 @@ const AdminAddVaccine = () => {
   ) : (
     <>
       <Card loading={false} className="add-vaccine-card">
+        {vaccineCreate.error === 'Validation error' && (
+          <Message description="Mã vắc xin đã tồn tại!" />
+        )}
+        {createSuccess && <Message description="Bạn đã tạo vắc xin thành công!" />}
         <h2 className="page-title">Thêm vắc xin</h2>
         <Row justify="space-around">
           <Col span={6}>
