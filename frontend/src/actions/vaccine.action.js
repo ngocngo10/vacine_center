@@ -212,7 +212,6 @@ export const editVaccine = (vaccine) => async (dispatch, getState) => {
     const file = vaccine.imageFile;
     let sendData;
     if (file) {
-      console.log('vaccine', file.name);
       const fileName = file.name;
       const fileType = file.type;
       const uploadUrl = `${BASE_URL}/api/upload/get-s3-signed-url?file-name=${fileName}&file-type=${fileType}&bucket-name=vaccines`;
