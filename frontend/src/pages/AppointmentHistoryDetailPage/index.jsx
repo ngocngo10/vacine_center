@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Card, Row, Col, Divider, Button } from 'antd';
+import { Card, Row, Col, Divider, Button, Popconfirm } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getProvinceList } from '../../actions/province.action';
 import { editAppointment, getAppointment } from '../../actions/appointment.action';
@@ -235,9 +235,14 @@ const AppointmentHistoryDetailPage = () => {
                   <Col>
                     <Button
                       disabled={appointmentItem?.isCancelled ? true : false}
-                      onClick={handleCancelAppointment}
                       style={{ background: '#dc3545', border: '#dc3545', color: '#fff' }}>
-                      Hủy lịch hẹn
+                      <Popconfirm
+                        title="Bạn có chắc chắc hủy lịch hẹn không?"
+                        onConfirm={handleCancelAppointment}
+                        okText="Yes"
+                        cancelText="No">
+                        <a href="#">Hủy lịch hẹn</a>
+                      </Popconfirm>
                     </Button>
                   </Col>
                 </Row>
