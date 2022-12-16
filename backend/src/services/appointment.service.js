@@ -128,14 +128,18 @@ module.exports = class AppointmentService {
     });
     return appointments;
   }
-  async findOne(id) {
-    const appointment = await this.repository.findOne(id, [
-      'schedule',
-      'user',
-      'patient',
-      'screeningTest',
-      'injections'
-    ]);
+  async findOne(conditions) {
+    const appointment = await this.repository.model.findOne({
+      where: conditions
+    }, {
+      include: [
+        'schedule',
+        'user',
+        'patient',
+        'screeningTest',
+        'injections'
+      ] }
+    );
     const vaccines = await this.vaccineRepo.model.findAll({
       where: {
         id: appointment.injections.map((item) => item.vaccineId)
