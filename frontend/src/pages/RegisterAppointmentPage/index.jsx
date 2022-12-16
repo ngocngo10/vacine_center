@@ -171,7 +171,6 @@ const RegisterAppointmentPage = () => {
     }));
     values.birthday = values.birthday.format('YYYY-MM-DD');
     values.desiredDate = values.desiredDate.format('YYYY-MM-DD');
-    console.log('values', values);
     dispatch(createAppointment(values));
   };
 

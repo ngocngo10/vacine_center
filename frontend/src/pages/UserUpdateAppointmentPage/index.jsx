@@ -38,7 +38,7 @@ const UserUpdateAppointmentPage = () => {
   const [districtOptions, setDistrictOptions] = useState([]);
   const [wardOptions, setWardOptions] = useState([]);
 
-  const wishListPrice = selectedVaccines.reduce((total, crr) => total + crr.price, 0);
+  const wishListPrice = selectedVaccines?.reduce((total, crr) => total + crr.price, 0);
   const formRef = useRef();
 
   const provinceList = useSelector((state) => state.provinceList);
