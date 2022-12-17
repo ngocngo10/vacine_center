@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Card, Row, Col, Divider, Button } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -16,6 +16,8 @@ import moment from 'moment';
 const StaffAppointmentDetailPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isCheckInAction, setIsCheckInAction] = useState(false);
+  const [isConfirmAction, setIsConfirmAction] = useState(false);
   const { id } = useParams();
 
   const provinceList = useSelector((state) => state.provinceList);
@@ -25,12 +27,13 @@ const StaffAppointmentDetailPage = () => {
   const { userInfo } = userLogin;
 
   const { loading, error, appointmentItem } = useSelector((state) => state.appointment);
+  const wishListPrice = appointmentItem?.wishList.reduce(
+    (total, crr) => total + JSON.parse(crr).price,
+    0
+  );
 
   const appointmentEdit = useSelector((state) => state.appointmentEdit);
   const { editSuccess } = appointmentEdit;
-
-  const injectionCreate = useSelector((state) => state.injectionCreate);
-  const { createSuccess } = injectionCreate;
 
   const gender = appointmentItem?.patient.gender ? 'Nam' : 'Nữ';
   const birthday = moment(appointmentItem?.patient.birthday).format('DD/MM/YYYY');
@@ -42,14 +45,18 @@ const StaffAppointmentDetailPage = () => {
   const address = `${appointmentItem?.patient.street}, ${province?.name}, ${district?.name},  ${ward?.name}`;
 
   const appointmentConfirm = useSelector((state) => state.appointmentConfirm);
-  const { confirmSuccess } = appointmentEdit;
+  const { confirmSuccess } = appointmentConfirm;
 
   const handleCheckIn = () => {
     dispatch(editAppointment({ isCheckIn: true, id }));
+    setIsConfirmAction(false);
+    setIsCheckInAction(true);
   };
 
   const handleConfirm = () => {
     dispatch(confirmAppointment(id));
+    setIsCheckInAction(false);
+    setIsConfirmAction(true);
   };
 
   useEffect(() => {
@@ -67,11 +74,11 @@ const StaffAppointmentDetailPage = () => {
   ) : (
     <div>
       {appointmentEdit?.error && <Message description={appointmentEdit?.error} />}
-      {appointmentEdit?.editSuccess && createSuccess && (
+      {appointmentEdit?.editSuccess && isCheckInAction && (
         <Message type="success" description="Check in thành công!" />
       )}
       {appointmentConfirm?.error && <Message description={appointmentConfirm?.error} />}
-      {appointmentConfirm?.confirmSuccess && (
+      {confirmSuccess && isConfirmAction && (
         <Message type="success" description="Xác nhận cuộc hẹn thành công!" />
       )}
       <Row justify="center">
@@ -173,6 +180,13 @@ const StaffAppointmentDetailPage = () => {
               </Col>
             </Row>
             <Row>
+              <Col>
+                <p className="price-total">
+                  Tổng tiền: <strong>{`${wishListPrice}   ₫`}</strong>
+                </p>
+              </Col>
+            </Row>
+            <Row>
               <Col span={12}>
                 <span>
                   Ngày mong muốn tiêm:
@@ -212,7 +226,13 @@ const StaffAppointmentDetailPage = () => {
                 </span>
               </Col>
             </Row>
-
+            {appointmentItem?.isCancelled && (
+              <Row justify="center">
+                <Col>
+                  <p className="appointment-cancel">Cuộc hẹn đã bị hủy</p>
+                </Col>
+              </Row>
+            )}
             <Divider />
             <Row justify="center">
               <Col span={3}>
@@ -225,14 +245,18 @@ const StaffAppointmentDetailPage = () => {
               <Col span={4}>
                 <Button
                   onClick={handleConfirm}
-                  disabled={appointmentItem?.isConfirmed ? true : false}
+                  disabled={
+                    appointmentItem?.isConfirmed || appointmentItem?.isCancelled ? true : false
+                  }
                   style={{ background: '#1f2b6c', border: '#1f2b6c', color: '#fff' }}>
                   Xác nhận hẹn
                 </Button>
               </Col>
               <Col>
                 <Button
-                  disabled={appointmentItem?.checkInAt ? true : false}
+                  disabled={
+                    appointmentItem?.checkInAt || appointmentItem?.isCancelled ? true : false
+                  }
                   onClick={handleCheckIn}
                   style={{ background: '#dc3545', border: '#dc3545', color: '#fff' }}>
                   Xác nhận check in

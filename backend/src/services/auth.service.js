@@ -71,7 +71,8 @@ module.exports = class AuthService {
       const token = generateLoginToken({
         id: user.id,
         email: user.email,
-        phoneNumber: user.phoneNumber
+        phoneNumber: user.phoneNumber,
+        roles: user.roles
       });
       const refreshToken = generateRefreshToken({
         id: user.id,
