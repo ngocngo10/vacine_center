@@ -13,7 +13,7 @@ import {
 import { logout } from './user.action';
 import { BASE_URL } from '../constants/base_url.constant';
 
-export const getScheduleConfigs = () => async (dispatch) => {
+export const getScheduleConfigs = () => async (dispatch, getState) => {
   try {
     dispatch({
       type: SCHEDULE_CONFIGS_REQUEST
