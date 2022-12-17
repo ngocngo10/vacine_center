@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Table, Input, Button, Select, Row, Col, DatePicker, Card, Form } from 'antd';
+import { Table, Input, Button, Select, Row, Col, Card, Form } from 'antd';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getScheduleOnDay } from '../../actions/schedule.action';
 import { getAppointmentHistories } from '../../actions/appointment.action';
 import moment from 'moment';
 import './index.css';
-
-const { Search } = Input;
 
 const StaffAppointmentsOnDayPage = () => {
   const DEFAULT_PAGE_NUMBER = 0;
