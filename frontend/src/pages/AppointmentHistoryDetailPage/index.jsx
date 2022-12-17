@@ -234,7 +234,9 @@ const AppointmentHistoryDetailPage = () => {
                   </Col>
                   <Col>
                     <Button
-                      disabled={appointmentItem?.isCancelled ? true : false}
+                      disabled={
+                        appointmentItem?.isCancelled || appointmentItem?.checkInAt ? true : false
+                      }
                       style={{ background: '#dc3545', border: '#dc3545', color: '#fff' }}>
                       <Popconfirm
                         title="Bạn có chắc chắc hủy lịch hẹn không?"
