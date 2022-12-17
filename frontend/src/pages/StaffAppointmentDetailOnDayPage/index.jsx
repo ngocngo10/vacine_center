@@ -39,7 +39,9 @@ const StaffAppointmentDetailOnDayPage = () => {
   const navigate = useNavigate();
   const [selectedVaccines, setSelectedVaccines] = useState([]);
   const [changedVaccineId, setChangedVaccineId] = useState();
-
+  const [isEditAction, setIsEditAction] = useState(false);
+  const [isInjectionAction, setIsInjectionAction] = useState(false);
+  const [isScreenTestAction, setIsScreenTestAction] = useState(false);
   const provinceList = useSelector((state) => state.provinceList);
   const { provinces } = provinceList;
 
@@ -60,6 +62,7 @@ const StaffAppointmentDetailOnDayPage = () => {
 
   const vaccineList = useSelector((state) => state.vaccineList);
   const { vaccines } = vaccineList;
+  console.log('vaccines', vaccines);
 
   const screenTestCreate = useSelector((state) => state.screenTestCreate);
   const { createSuccess } = screenTestCreate;
@@ -76,6 +79,8 @@ const StaffAppointmentDetailOnDayPage = () => {
     value: item.id,
     key: item.id
   }));
+
+  const totalPrice = selectedVaccines?.reduce((total, crr) => total + crr.price, 0);
 
   const options = [
     {
@@ -108,6 +113,9 @@ const StaffAppointmentDetailOnDayPage = () => {
   };
 
   const handleUpdateScreenTest = (values) => {
+    setIsEditAction(false);
+    setIsInjectionAction(false);
+    setIsScreenTestAction(true);
     if (appointmentItem?.screeningTest || appointmentItem?.screeningTest?.length) {
       values.id = appointmentItem.screeningTest.id;
       dispatch(editScreenTest(values));
@@ -119,6 +127,9 @@ const StaffAppointmentDetailOnDayPage = () => {
   };
 
   const handleUpdateAppointment = (values) => {
+    setIsInjectionAction(false);
+    setIsScreenTestAction(false);
+    setIsEditAction(true);
     values.isPaid = values.isPaid == 1 ? true : false;
     dispatch(
       editAppointment({
@@ -130,6 +141,10 @@ const StaffAppointmentDetailOnDayPage = () => {
   };
 
   const handleInjection = () => {
+    setIsInjectionAction(false);
+    setIsEditAction(false);
+    setIsScreenTestAction(true);
+
     selectedVaccines;
     dispatch(
       createInjection({
@@ -168,17 +183,17 @@ const StaffAppointmentDetailOnDayPage = () => {
         id: JSON.parse(item).id
       }))
     );
-
-    screenTestFormRef.setFieldsValue({
-      injectionHistory: appointmentItem?.screeningTest?.injectionHistory || 'aaaa',
-      temperature: appointmentItem?.screeningTest?.temperature,
-      circuit: appointmentItem?.screeningTest?.circuit,
-      bloodPressure: appointmentItem?.screeningTest?.bloodPressure,
-      breath: appointmentItem?.screeningTest?.breath,
-      medicalHistory: appointmentItem?.screeningTest?.medicalHistory,
-      isQualified: appointmentItem?.screeningTest?.isQualified ? 1 : 0,
-      rejectReason: appointmentItem?.screeningTest?.rejectReason
-    });
+    if (appointmentItem?.screeningTest)
+      screenTestFormRef.setFieldsValue({
+        injectionHistory: appointmentItem.screeningTest.injectionHistory,
+        temperature: appointmentItem.screeningTest.temperature,
+        circuit: appointmentItem.screeningTest.circuit,
+        bloodPressure: appointmentItem.screeningTest.bloodPressure,
+        breath: appointmentItem.screeningTest.breath,
+        medicalHistory: appointmentItem.screeningTest.medicalHistory,
+        isQualified: appointmentItem.screeningTest.isQualified ? 1 : 0,
+        rejectReason: appointmentItem.screeningTest.rejectReason
+      });
   }, [appointmentItem]);
 
   useEffect(() => {
@@ -197,20 +212,23 @@ const StaffAppointmentDetailOnDayPage = () => {
         <Message description={`${error} ${provinceList.error}`} />
       ) : (
         <Row justify="center">
+          {changedVaccineId && !vaccines.find((item) => item.id == changedVaccineId)?.quantity && (
+            <Message description="Vắc xin hiện tại đã hết trong kho!" />
+          )}
           {screenTestCreate?.error && <Message description={screenTestCreate.error} />}
           {screenTestEdit?.error && <Message description={screenTestEdit.error} />}
           {appointmentEdit?.error && <Message description={appointmentEdit.error} />}
           {injectionCreate?.error && <Message description={injectionCreate.error} />}
-          {createSuccess && (
+          {screenTestCreate?.createSuccess && isScreenTestAction && (
             <Message type="success" description="Bạn đã tạo khám sàn lọc thành công!" />
           )}
-          {appointmentEdit?.editSuccess && (
+          {appointmentEdit?.editSuccess && isEditAction && (
             <Message type="success" description="Bạn đã cập nhật thông tin thành công!" />
           )}
-          {createSuccess && (
-            <Message type="success" description="Bạn đã tạo khám sàn lọc thành công!" />
+          {screenTestEdit.editSuccess && isScreenTestAction && (
+            <Message type="success" description="Bạn đã cập nhật khám sàn lọc thành công!" />
           )}
-          {injectionCreate?.createSuccess && (
+          {injectionCreate?.createSuccess && isInjectionAction && (
             <Message type="success" description="Bạn đã tạo bảng tiêm thành công!" />
           )}
           <Col span={24}>
@@ -477,7 +495,13 @@ const StaffAppointmentDetailOnDayPage = () => {
                   </span>
                 </Col>
               </Row>
-
+              <Row>
+                <Col>
+                  <p className="price-total">
+                    Tổng tiền: <strong>{`${totalPrice}   ₫`}</strong>
+                  </p>
+                </Col>
+              </Row>
               <Form form={formRef} onFinish={handleUpdateAppointment}>
                 <Row justify="space-between">
                   <Col span={24}>
@@ -635,9 +659,12 @@ const StaffAppointmentDetailOnDayPage = () => {
                   </Col>
                   <Col span={4}>
                     <Button
+                      disabled={
+                        !appointmentItem?.screeningTest || appointmentItem?.injections?.length
+                      }
                       onClick={handleInjection}
                       style={{ background: '#53a336', border: '#53a336', color: '#fff' }}>
-                      Xác nhận tiêm
+                      Xác nhận đã tiêm
                     </Button>
                   </Col>
                 </Row>

@@ -60,9 +60,10 @@ module.exports = class AppointmentService {
     };
     if (body.isCheckIn) {
       updateData.checkInAt = moment().format('YYYY-MM-DD HH:mm:ss');
-    } else {
-      updateData.checkInAt = null;
     }
+    // else {
+    //   updateData.checkInAt = null;
+    // }
     await this.repository.update(id, updateData);
     return;
   }
