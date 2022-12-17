@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { PatientRepository } = require('../repositories');
 
 module.exports = class PatientService {
@@ -19,12 +20,20 @@ module.exports = class PatientService {
 
   async find(reqQuery) {
     const findOptions = {
-      where: {},
-      include: ['representator']
+      where: {
+        '$appointments.check_in_at$': {
+          [Op.not]: null
+        }
+      },
+      include: ['representator', 'appointments']
     };
     if (reqQuery.representative) {
       findOptions.where.representative = reqQuery.representative;
     }
+    reqQuery.name &&
+      (findOptions.where.patientCode = {
+        [Op.like]: `%${reqQuery.name}%`
+      });
     if (reqQuery.page) {
       findOptions.limit = +reqQuery.perPage || 10;
       findOptions.offset = (+reqQuery.page - 1) * findOptions.limit;
