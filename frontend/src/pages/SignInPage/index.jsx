@@ -46,10 +46,10 @@ const SignInPage = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Vui lòng nhập số điện thoại!'
+                    message: 'Vui lòng nhập số điện thoại hoặc email!'
                   }
                 ]}>
-                <Input prefix={<PhoneOutlined />} placeholder="Số điện thoại" />
+                <Input prefix={<PhoneOutlined />} placeholder="Số điện thoại hoặc Email" />
               </Form.Item>
               <Form.Item
                 name="password"

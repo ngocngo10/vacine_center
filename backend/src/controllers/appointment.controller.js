@@ -15,11 +15,12 @@ async function create(req, res, next) {
 
 async function find(req, res, next) {
   try {
-    if (req.user?.roles?.includes('user')) {
-      const schedules = await appointmentService.find(req.query, req.user.id);
+    console.log('req.user?.roles--------------', req.user.roles);
+    if (req.user?.roles?.includes('staff') || req.user?.roles?.includes('admin')) {
+      const schedules = await appointmentService.find(req.query);
       return res.json(schedules);
     } else {
-      const schedules = await appointmentService.find(req.query);
+      const schedules = await appointmentService.find(req.query, req.user.id);
       return res.json(schedules);
     }
   } catch (error) {
@@ -29,8 +30,20 @@ async function find(req, res, next) {
 
 async function findOne(req, res, next) {
   try {
-    const schedule = await appointmentService.findOne(req.params.id);
-    return res.json({ schedule });
+    if (req.user?.roles?.includes('staff') || req.user?.roles?.includes('admin')) {
+      const findOptions = {
+        id: req.params.id
+      };
+      const schedule = await appointmentService.findOne(findOptions);
+      return res.json({ schedule });
+    } else {
+      const findOptions = {
+        userId: req.user.id,
+        id: req.params.id
+      };
+      const schedule = await appointmentService.findOne(findOptions);
+      return res.json({ schedule });
+    }
   } catch (error) {
     next(error);
   }

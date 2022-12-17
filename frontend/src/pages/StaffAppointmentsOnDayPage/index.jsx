@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Table, Tag, Badge, Input, Button, Select, Row, Col, DatePicker, Card, Form } from 'antd';
+import { Table, Input, Button, Select, Row, Col, Card, Form } from 'antd';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getScheduleOnDay } from '../../actions/schedule.action';
-import { getInjectionList } from '../../actions/injection.action';
+import { getAppointmentHistories } from '../../actions/appointment.action';
 import moment from 'moment';
 import './index.css';
-
-const { Search } = Input;
 
 const StaffAppointmentsOnDayPage = () => {
   const DEFAULT_PAGE_NUMBER = 0;
@@ -18,9 +16,8 @@ const StaffAppointmentsOnDayPage = () => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const injectionList = useSelector((state) => state.injectionList);
-  const { loading, error, injections, totalItem } = injectionList;
-  console.log('injections', injections);
+  const appointmentList = useSelector((state) => state.appointmentList);
+  const { loading, error, appointmentHistories, totalItem } = appointmentList;
 
   const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_NUMBER);
   const scheduleOnDay = useSelector((state) => state.scheduleOnDay);
@@ -37,10 +34,11 @@ const StaffAppointmentsOnDayPage = () => {
 
   const handleTableChange = (pagination) => {
     dispatch(
-      getInjectionList({
+      getAppointmentHistories({
         perPage: 10,
         page: pagination.current,
-        desiredDate: currentDay
+        desiredDate: currentDay,
+        isCheckIn: true
       })
     );
     setCurrentPage(pagination.current - 1);
@@ -49,11 +47,12 @@ const StaffAppointmentsOnDayPage = () => {
   const handleOnSearch = (values) => {
     console.log(values);
     dispatch(
-      getInjectionList({
+      getAppointmentHistories({
         perPage: 10,
+        desiredDate: currentDay,
+        isCheckIn: true,
         patientCode: values.patientCode,
         patientName: values.patientName,
-        desiredDate: currentDay,
         scheduleId: values.schedule
       })
     );
@@ -64,11 +63,19 @@ const StaffAppointmentsOnDayPage = () => {
     if (userInfo && userInfo.user.roles.includes('staff')) {
       dispatch(getScheduleOnDay(currentDay));
       dispatch(
-        getInjectionList({
+        getAppointmentHistories({
           perPage: 10,
-          desiredDate: '2022-12-13'
+          desiredDate: currentDay,
+          isCheckIn: true
         })
       );
+      // dispatch(
+      //   getAppointmentHistories({
+      //     perPage: 10,
+      //     desiredDate: '2022-12-14',
+      //     isCheckIn: true
+      //   })
+      // );
     } else {
       navigate('/login');
     }
@@ -107,17 +114,17 @@ const StaffAppointmentsOnDayPage = () => {
       render: (wishList) =>
         wishList?.map((item, index) => (
           <ol>
-            <li>{`${index + 1}. ${item.trim()}`}</li>
+            <li>{`${index + 1}. ${JSON.parse(item).name}`}</li>
           </ol>
         ))
     },
     {
       title: 'Đã khám sàn lọc',
-      dataIndex: 'isConfirmed',
-      key: 'isConfirmed',
+      dataIndex: 'screeningTest',
+      key: 'screeningTest',
       align: 'center',
-      render: (isConfirmed) =>
-        isConfirmed ? (
+      render: (value) =>
+        value ? (
           <CheckOutlined style={{ color: 'blue' }} />
         ) : (
           <CloseOutlined style={{ color: 'red' }} />
@@ -125,11 +132,11 @@ const StaffAppointmentsOnDayPage = () => {
     },
     {
       title: 'Đã tiêm',
-      dataIndex: 'checkInDate',
+      dataIndex: 'injections',
       align: 'center',
-      key: 'checkInDate',
+      key: 'injections',
       render: (value) =>
-        value ? (
+        value?.length ? (
           <CheckOutlined style={{ color: 'blue' }} />
         ) : (
           <CloseOutlined style={{ color: 'red' }} />
@@ -138,21 +145,20 @@ const StaffAppointmentsOnDayPage = () => {
   ];
   const data = {};
   data.totalElements = totalItem;
-  data.content = injections?.map((item, index) => ({
+  data.content = appointmentHistories?.map((item, index) => ({
     key: item.id,
     index: index + 1,
-    // code: item.patient.patientCode,
-    // patientName: item.patient.patientName,
+    code: item.patient.patientCode,
+    patientName: item.patient.patientName,
     desiredDate: moment(item.desiredDate).format('DD/MM/YYYY'),
     schedule: `${moment(moment(item.schedule?.startAt, 'HH:mm')).format('HH:mm')}-${moment(
       moment(item.schedule?.startAt, 'HH:mm')
     )
       .add(item.schedule?.appointmentDuration, 'minutes')
       .format('HH:mm')}`,
-    // listType: item.listType,
-    wishList: item.wishList
-    // isConfirmed: item.isConfirmed,
-    // checkInDate: item.checkInAt
+    wishList: item.wishList,
+    screeningTest: item.screeningTest,
+    injections: item.injections
   }));
 
   return (
@@ -193,6 +199,7 @@ const StaffAppointmentsOnDayPage = () => {
         </Form>
 
         <Table
+          bordered
           style={{ marginTop: 20 }}
           rowKey={(record) => record.key}
           onRow={(record) => {

@@ -23,6 +23,8 @@ import AdminScheduleConfig from './pages/AdminScheduleConfig';
 import RegisterAppointmentPage from './pages/RegisterAppointmentPage';
 import HomePage from './pages/HomePage';
 import AppointmentHistoryPage from './pages/AppointmentHistoryPage';
+import UserUpdateAppointmentPage from './pages/UserUpdateAppointmentPage';
+import AppointmentHistoryDetailPage from './pages/AppointmentHistoryDetailPage';
 
 import StaffMain from './layout/StaffMain';
 import StaffAppointmentPage from './pages/StaffAppointmentPage';
@@ -49,6 +51,8 @@ const Routing = () => {
 
         <Route path="register-appointment" element={<RegisterAppointmentPage />} />
         <Route path="appointment-history" element={<AppointmentHistoryPage />} />
+        <Route path="appointment-history/update/:id" element={<UserUpdateAppointmentPage />} />
+        <Route path="appointment-history/details/:id" element={<AppointmentHistoryDetailPage />} />
       </Route>
 
       <Route exact path="/admin-home" element={<AdminMain />}>
@@ -85,7 +89,7 @@ const Routing = () => {
         />
         <Route path="appointments-history" element={<StaffInjectionHistoryPage />} />
         <Route
-          path="appointments-history/details/:patientId"
+          path="appointments-history/details/:id"
           element={<StaffInjectionHistoryDetailPage />}
         />
       </Route>

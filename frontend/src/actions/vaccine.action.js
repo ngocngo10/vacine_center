@@ -155,20 +155,22 @@ export const createVaccine = (vaccine) => async (dispatch, getState) => {
     dispatch({
       type: VACCINE_CREATE_REQUEST
     });
+    let sendData = vaccine;
+    if (vaccine.image) {
+      const fileName = vaccine.image.name;
+      const fileType = vaccine.image.type;
+      const uploadUrl = `${BASE_URL}/api/upload/get-s3-signed-url?file-name=${fileName}&file-type=${fileType}&bucket-name=vaccines`;
+      const { data } = await axios.get(uploadUrl);
+      sendData = { ...vaccine, image: data.url };
 
-    const fileName = vaccine.image.name;
-    const fileType = vaccine.image.type;
-    const uploadUrl = `${BASE_URL}/api/upload/get-s3-signed-url?file-name=${fileName}&file-type=${fileType}&bucket-name=vaccines`;
-    const { data } = await axios.get(uploadUrl);
-    const sendData = { ...vaccine, image: data.url };
+      const uploadConfig = {
+        headers: {
+          'Content-Type': fileType
+        }
+      };
 
-    const uploadConfig = {
-      headers: {
-        'Content-Type': fileType
-      }
-    };
-
-    await axios.put(data.signedRequest, vaccine.image, uploadConfig);
+      await axios.put(data.signedRequest, vaccine.image, uploadConfig);
+    }
 
     const {
       userLogin: { userInfo }
@@ -210,7 +212,6 @@ export const editVaccine = (vaccine) => async (dispatch, getState) => {
     const file = vaccine.imageFile;
     let sendData;
     if (file) {
-      console.log('vaccine', file.name);
       const fileName = file.name;
       const fileType = file.type;
       const uploadUrl = `${BASE_URL}/api/upload/get-s3-signed-url?file-name=${fileName}&file-type=${fileType}&bucket-name=vaccines`;

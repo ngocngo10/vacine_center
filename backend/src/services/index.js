@@ -13,6 +13,7 @@ const InjectionService = require('./injection.service');
 const ScreeningTestService = require('./screening-test.service');
 const VaccineItemService = require('./vaccine-item.service');
 const UploadService = require('./upload.service');
+const AdminService = require('./admin.service');
 
 module.exports = {
   UserService,
@@ -29,5 +30,6 @@ module.exports = {
   InjectionService,
   ScreeningTestService,
   VaccineItemService,
-  UploadService
+  UploadService,
+  AdminService
 };

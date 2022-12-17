@@ -142,7 +142,7 @@ VaccineItem.afterCreate(async (vaccineItem, options) => {
   );
 });
 
-Appointment.hasOne(ScreeningTest, { as: 'screeningTest' });
+Appointment.hasOne(ScreeningTest, { as: 'screeningTest', foreignKey: 'appointment_id' });
 ScreeningTest.belongsTo(Appointment, {
   foreignKey: 'appointment_id',
   as: 'appointment'

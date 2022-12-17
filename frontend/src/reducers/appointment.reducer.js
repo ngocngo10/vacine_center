@@ -78,7 +78,7 @@ export const appointmentReducer = (state = {}, action) => {
     case APPOINTMENT_SUCCESS:
       return {
         loading: false,
-        appointment: action.payload.schedule
+        appointmentItem: action.payload.schedule
       };
     case APPOINTMENT_FAIL:
       return { loading: false, error: action.payload };

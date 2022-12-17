@@ -14,6 +14,7 @@ module.exports = class BaseRepository {
     findOptions.order = findOptions.order
       ? [['updatedAt', 'DESC'], findOptions.order]
       : [['updatedAt', 'DESC']];
+    findOptions.distinct = true;
     return this.model.findAndCountAll(findOptions);
   }
 

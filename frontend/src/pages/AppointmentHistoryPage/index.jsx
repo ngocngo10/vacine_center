@@ -1,25 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { Tag, Badge } from 'antd';
+import { Tag, Badge, Table, Input, Row, Col, Form, Select, Button } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import Loader from '../../components/Loader';
-import Header from '../../components/table/Header';
-import useDataTable from '../../components/table/DataTable';
 import Message from '../../components/Message';
 import Container from '../../layout/Container';
-import {
-  getAppointmentHistories,
-  deleteAppointment,
-  deleteMultiAppointment
-} from '../../actions/appointment.action';
+import { getAppointmentHistories } from '../../actions/appointment.action';
 import './index.css';
 
+const { Search } = Input;
+
 const AppointmentHistoryPage = () => {
+  const DEFAULT_PAGE_NUMBER = 0;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_NUMBER);
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -32,6 +30,29 @@ const AppointmentHistoryPage = () => {
   const appointmentMultiDelete = useSelector((state) => state.appointmentMultiDelete);
   const { multiDeleteSuccess } = appointmentMultiDelete;
 
+  const handleTableChange = (pagination) => {
+    dispatch(getAppointmentHistories({ perPage: 10, page: pagination.current }));
+    setCurrentPage(pagination.current - 1);
+  };
+
+  const handleOnSearch = (values) => {
+    let query = {
+      perPage: 10,
+      patientCode: values.patientCode,
+      patientName: values.patientName
+    };
+    if (values.status === 1) {
+      query = { ...query, isConfirmed: 'false', isCancelled: 'false' };
+    }
+    if (values.status === 2) {
+      query = { ...query, isConfirmed: 'true', isCancelled: 'false' };
+    }
+    if (values.status === 3) {
+      query = { ...query, isCancelled: 'true' };
+    }
+    dispatch(getAppointmentHistories(query));
+  };
+
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('user')) {
       dispatch(getAppointmentHistories({ perPage: 10 }));
@@ -40,6 +61,11 @@ const AppointmentHistoryPage = () => {
     }
   }, [deleteSuccess, userInfo, multiDeleteSuccess]);
 
+  const statusOptions = [
+    { label: 'Chưa xác nhận', value: 1 },
+    { label: 'Đã xác nhận', value: 2 },
+    { label: 'Đã hủy', value: 3 }
+  ];
   const columns = [
     {
       title: '#',
@@ -47,25 +73,15 @@ const AppointmentHistoryPage = () => {
       key: 'key'
     },
     {
+      title: 'Mã định danh',
+      dataIndex: 'patientCode',
+      key: 'patientCode'
+    },
+    {
       title: 'Tên người tiêm',
       dataIndex: 'patientName',
       key: 'patientName'
     },
-    // {
-    //   title: 'Ngày sinh',
-    //   key: 'birthday',
-    //   dataIndex: 'birthday'
-    // },
-    // {
-    //   title: 'Giới tính',
-    //   dataIndex: 'gender',
-    //   key: 'gender'
-    // },
-    // {
-    //   title: 'Số điện thoại',
-    //   dataIndex: 'phoneNumber',
-    //   key: 'phoneNumber'
-    // },
     {
       title: 'Ngày hẹn',
       dataIndex: 'desiredDate',
@@ -78,14 +94,6 @@ const AppointmentHistoryPage = () => {
     },
 
     {
-      title: 'Loại vắc xin ',
-      dataIndex: 'listType',
-      key: 'listType',
-      render: (listType) =>
-        listType == 1 ? <Tag color="green">VẮC XIN GÓI</Tag> : <Tag color="purple">VẮC XIN LẺ</Tag>
-    },
-
-    {
       title: 'Tên vắc xin',
       dataIndex: 'wishList',
       key: 'wishList',
@@ -93,7 +101,7 @@ const AppointmentHistoryPage = () => {
         wishList.map((item, index) => (
           <p>
             <Badge status="success" style={{ marginRight: 10 }} />
-            {item}
+            {JSON.parse(item).name}
           </p>
         ))
     },
@@ -113,9 +121,10 @@ const AppointmentHistoryPage = () => {
         )
     },
     {
-      title: 'Đã tiêm',
-      dataIndex: 'isInjected',
-      key: 'isInjected'
+      title: 'Xem chi tiết',
+      dataIndex: 'action',
+      key: 'action',
+      render: (id) => <Link to={`/appointment-history/details/${id}`}>Xem chi tiết</Link>
     }
   ];
 
@@ -123,52 +132,21 @@ const AppointmentHistoryPage = () => {
   data.totalElements = totalItem;
   data.content = appointmentHistories?.map((item, index) => ({
     key: item.id,
-    index: index + 1,
-    patientName: item.patientName,
-    // birthday: moment(moment(item.birthday, 'DD-MM-YYYY')).format('DD-MM-YYYY'),
-    // birthday: item.birthday,
-    // gender: item.gender,
-    // phoneNumber: item.phoneNumber,
+    index: currentPage * 10 + index + 1,
+    patientCode: item.patient.patientCode,
+    patientName: item.patient.patientName,
     desiredDate: moment(item.desiredDate).format('DD-MM-YYYY'),
-    // desiredDate: moment(moment(item.desiredDate, 'DD-MM-YYYY')).format('DD-MM-YYYY'),
-    schedule: moment(moment(item.schedule?.startAt, 'HH:mm')).format('HH:mm'),
+    schedule: `${moment(moment(item.schedule?.startAt, 'HH:mm')).format('HH:mm')}-${moment(
+      moment(item.schedule?.startAt, 'HH:mm')
+    )
+      .add(item.schedule?.appointmentDuration, 'minutes')
+      .format('HH:mm')}`,
     listType: item.listType,
     wishList: item.wishList,
     isConfirmed: item.isConfirmed,
-    isInjected: 'Chưa tiêm'
+    isInjected: 'Chưa tiêm',
+    action: item.id
   }));
-
-  const handleDeleteSingleAppointment = (id) => {
-    dispatch(deleteAppointment(id));
-  };
-
-  const handleDeleteMultiAppointments = (ids) => {
-    dispatch(deleteMultiAppointment(ids));
-  };
-
-  const getAppointments = (page) => {
-    dispatch(getAppointmentHistories({ perPage: 10, page: page }));
-  };
-
-  const handleOnSearch = (name) => {
-    dispatch(getAppointments({ desiredDate: name, perPage: 10 }));
-  };
-
-  const {
-    DataTable,
-    hasSelected,
-    selectedRowKeys,
-    selectedRow,
-    currentPage,
-    pageSize,
-    resetPagination
-  } = useDataTable({
-    columns: columns,
-    dataSource: data,
-    updateEntityPath: 'admin-home/vaccines/update-vaccine',
-    handleDelete: handleDeleteSingleAppointment,
-    handleChangePage: getAppointments
-  });
 
   return loading ? (
     <Loader />
@@ -179,14 +157,54 @@ const AppointmentHistoryPage = () => {
       <Container>
         <>
           <h2 className="page-title">Lịch sử cuộc hẹn</h2>
-          <Header
-            addNewPath="register-appointment"
-            selectedRowKeys={selectedRowKeys}
-            hasSelected={hasSelected}
-            handleMultiDelete={handleDeleteMultiAppointments}
-            handleSearch={handleOnSearch}
+          <Form onFinish={handleOnSearch}>
+            <Row justify="space-evenly">
+              <Col>
+                <Form.Item name="patientCode">
+                  <Input placeholder="Tìm theo mã định danh" style={{ float: 'left' }} />
+                </Form.Item>
+              </Col>
+              <Col>
+                <Form.Item name="patientName">
+                  <Input placeholder="Tìm tên người tiêm" style={{ float: 'left', width: 250 }} />
+                </Form.Item>
+              </Col>
+              <Col span={3}>
+                <Form.Item name="status">
+                  <Select
+                    showSearch
+                    placeholder="Trạng thái"
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
+                    options={statusOptions}
+                  />
+                </Form.Item>
+              </Col>
+              <Col>
+                <Button type="primary" htmlType="submit">
+                  Tìm kiếm
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+
+          <Table
+            style={{ marginTop: 20 }}
+            rowKey={(record) => record.key}
+            dataSource={data.content}
+            columns={columns}
+            onChange={handleTableChange}
+            pagination={{
+              pageSize: 10,
+              current: currentPage + 1,
+              total: data.totalElements,
+              showTotal: (total, range) => {
+                return `${range[0]}-${range[1]} of ${total} items`;
+              }
+            }}
           />
-          <DataTable />
         </>
       </Container>
     </div>

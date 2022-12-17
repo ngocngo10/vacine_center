@@ -23,9 +23,7 @@ const VaccineListPage = () => {
   const categoryList = useSelector((state) => state.categoryList);
   const { categories } = categoryList;
 
-  const categoryTotal = categories?.concat(ageGroups);
-
-  const [carouselCategories, setCarouselCategories] = useState(categoryTotal);
+  const [carouselCategories, setCarouselCategories] = useState();
 
   const handleOnSearch = (name) => {
     dispatch(getVaccineList({ name, perPage: 8 }));
@@ -38,6 +36,10 @@ const VaccineListPage = () => {
   const handleOnClickAgeGroups = () => {
     setCarouselCategories(ageGroups);
   };
+  useEffect(() => {
+    const categoryTotal = categories?.concat(ageGroups);
+    setCarouselCategories(categoryTotal);
+  }, [ageGroups, categories]);
 
   useEffect(() => {
     dispatch(getCategoryList({}));

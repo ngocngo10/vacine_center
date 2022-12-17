@@ -5,8 +5,8 @@ const { authMiddleware } = require('../middlewares/index');
 
 /* GET users listing. */
 router.post('/', authMiddleware.validateToken, AppointmentController.create);
-router.get('/', AppointmentController.find);
-router.get('/:id', AppointmentController.findOne);
+router.get('/', authMiddleware.validateToken, AppointmentController.find);
+router.get('/:id', authMiddleware.validateToken, AppointmentController.findOne);
 router.put(
   '/:id',
   authMiddleware.validateToken,

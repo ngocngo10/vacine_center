@@ -60,9 +60,10 @@ module.exports = class AppointmentService {
     };
     if (body.isCheckIn) {
       updateData.checkInAt = moment().format('YYYY-MM-DD HH:mm:ss');
-    } else {
-      updateData.checkInAt = null;
     }
+    // else {
+    //   updateData.checkInAt = null;
+    // }
     await this.repository.update(id, updateData);
     return;
   }
@@ -109,7 +110,10 @@ module.exports = class AppointmentService {
     findOptions.include = ['schedule', 'user', 'patient', 'screeningTest', 'injections'];
 
     if (reqQuery.isConfirmed) {
-      findOptions.where.isConfirmed = reqQuery.isConfirmed;
+      findOptions.where.isConfirmed = reqQuery.isConfirmed == 'true';
+    }
+    if (reqQuery.isCancelled) {
+      findOptions.where.isCancelled = reqQuery.isCancelled == 'true';
     }
 
     const appointments = await this.repository.find(findOptions);
@@ -128,14 +132,12 @@ module.exports = class AppointmentService {
     });
     return appointments;
   }
-  async findOne(id) {
-    const appointment = await this.repository.findOne(id, [
-      'schedule',
-      'user',
-      'patient',
-      'screeningTest',
-      'injections'
-    ]);
+  async findOne(conditions) {
+    const appointment = await this.repository.model.findOne({
+      where: conditions,
+      include: ['schedule', 'user', 'patient', 'screeningTest', 'injections']
+    });
+    if (!appointment) throw new ErrorCreator('Appointment not found', 404);
     const vaccines = await this.vaccineRepo.model.findAll({
       where: {
         id: appointment.injections.map((item) => item.vaccineId)
