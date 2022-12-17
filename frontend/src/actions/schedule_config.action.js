@@ -19,9 +19,20 @@ export const getScheduleConfigs = () => async (dispatch) => {
       type: SCHEDULE_CONFIGS_REQUEST
     });
 
+    const {
+      userLogin: { userInfo }
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json'
+      }
+    };
+
     const url = `${BASE_URL}/api/schedule-configs`;
 
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(url, config);
 
     dispatch({
       type: SCHEDULE_CONFIGS_SUCCESS,
