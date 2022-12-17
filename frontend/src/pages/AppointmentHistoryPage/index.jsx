@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { Tag, Badge, Table, Input, Row, Col } from 'antd';
+import { Tag, Badge, Table, Input, Row, Col, Form, Select, Button } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import Loader from '../../components/Loader';
@@ -35,8 +35,22 @@ const AppointmentHistoryPage = () => {
     setCurrentPage(pagination.current - 1);
   };
 
-  const handleOnSearch = (name) => {
-    dispatch(getAppointmentHistories({ perPage: 10, patientName: name }));
+  const handleOnSearch = (values) => {
+    let query = {
+      perPage: 10,
+      patientCode: values.patientCode,
+      patientName: values.patientName
+    };
+    if (values.status === 1) {
+      query = { ...query, isConfirmed: 'false', isCancelled: 'false' };
+    }
+    if (values.status === 2) {
+      query = { ...query, isConfirmed: 'true', isCancelled: 'false' };
+    }
+    if (values.status === 3) {
+      query = { ...query, isCancelled: 'true' };
+    }
+    dispatch(getAppointmentHistories(query));
   };
 
   useEffect(() => {
@@ -47,6 +61,11 @@ const AppointmentHistoryPage = () => {
     }
   }, [deleteSuccess, userInfo, multiDeleteSuccess]);
 
+  const statusOptions = [
+    { label: 'Chưa xác nhận', value: 1 },
+    { label: 'Đã xác nhận', value: 2 },
+    { label: 'Đã hủy', value: 3 }
+  ];
   const columns = [
     {
       title: '#',
@@ -138,11 +157,38 @@ const AppointmentHistoryPage = () => {
       <Container>
         <>
           <h2 className="page-title">Lịch sử cuộc hẹn</h2>
-          <Row justify="center">
-            <Col span={12}>
-              <Search onSearch={handleOnSearch} placeholder="Tìm kiếm theo tên bệnh nhân" />
-            </Col>
-          </Row>
+          <Form onFinish={handleOnSearch}>
+            <Row justify="space-evenly">
+              <Col>
+                <Form.Item name="patientCode">
+                  <Input placeholder="Tìm theo mã định danh" style={{ float: 'left' }} />
+                </Form.Item>
+              </Col>
+              <Col>
+                <Form.Item name="patientName">
+                  <Input placeholder="Tìm tên người tiêm" style={{ float: 'left', width: 250 }} />
+                </Form.Item>
+              </Col>
+              <Col span={3}>
+                <Form.Item name="status">
+                  <Select
+                    showSearch
+                    placeholder="Trạng thái"
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
+                    options={statusOptions}
+                  />
+                </Form.Item>
+              </Col>
+              <Col>
+                <Button type="primary" htmlType="submit">
+                  Tìm kiếm
+                </Button>
+              </Col>
+            </Row>
+          </Form>
 
           <Table
             style={{ marginTop: 20 }}

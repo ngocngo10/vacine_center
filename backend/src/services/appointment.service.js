@@ -109,7 +109,10 @@ module.exports = class AppointmentService {
     findOptions.include = ['schedule', 'user', 'patient', 'screeningTest', 'injections'];
 
     if (reqQuery.isConfirmed) {
-      findOptions.where.isConfirmed = reqQuery.isConfirmed;
+      findOptions.where.isConfirmed = reqQuery.isConfirmed == 'true';
+    }
+    if (reqQuery.isCancelled) {
+      findOptions.where.isCancelled = reqQuery.isCancelled == 'true';
     }
 
     const appointments = await this.repository.find(findOptions);
@@ -129,14 +132,10 @@ module.exports = class AppointmentService {
     return appointments;
   }
   async findOne(conditions) {
-    const appointment = await this.repository.model.findOne(
-      {
-        where: conditions
-      },
-      {
-        include: ['schedule', 'user', 'patient', 'screeningTest', 'injections']
-      }
-    );
+    const appointment = await this.repository.model.findOne({
+      where: conditions,
+      include: ['schedule', 'user', 'patient', 'screeningTest', 'injections']
+    });
     if (!appointment) throw new ErrorCreator('Appointment not found', 404);
     const vaccines = await this.vaccineRepo.model.findAll({
       where: {

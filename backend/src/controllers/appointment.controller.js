@@ -15,6 +15,7 @@ async function create(req, res, next) {
 
 async function find(req, res, next) {
   try {
+    console.log('req.user?.roles--------------', req.user.roles);
     if (req.user?.roles?.includes('staff') || req.user?.roles?.includes('admin')) {
       const schedules = await appointmentService.find(req.query);
       return res.json(schedules);
