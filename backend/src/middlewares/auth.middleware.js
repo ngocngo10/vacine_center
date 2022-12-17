@@ -7,13 +7,13 @@ const { User } = require('../models/index');
 
 async function validateToken(req, res, next) {
   try {
-    console.log(req.headers);
     const token = (req.headers.authorization || req.headers.authorization).replace('Bearer ', '');
     const decoded = jwt.verify(token, JWT_TOKEN_KEY);
     if (decoded.user.email && decoded.secret === SECRET_PAYLOAD) {
       req.user = {
         ...decoded.user
       };
+      console.log('req.user,', req.user);
       return next();
     }
 

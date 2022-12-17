@@ -10,7 +10,6 @@ import {
   DatePicker,
   Button,
   Tag,
-  Radio,
   Card,
   Result
 } from 'antd';
@@ -39,6 +38,7 @@ const UserUpdateAppointmentPage = () => {
   const [districtOptions, setDistrictOptions] = useState([]);
   const [wardOptions, setWardOptions] = useState([]);
 
+  const wishListPrice = selectedVaccines?.reduce((total, crr) => total + crr.price, 0);
   const formRef = useRef();
 
   const provinceList = useSelector((state) => state.provinceList);
@@ -581,6 +581,7 @@ const UserUpdateAppointmentPage = () => {
                                   description={
                                     <>
                                       <h5 className="text text--card-title">{item.name}</h5>
+                                      <strong className="text text--card-price">{`${item.price}  ₫`}</strong>
                                       <p className="text text--card-desc">{item.description}</p>
                                     </>
                                   }
@@ -588,6 +589,13 @@ const UserUpdateAppointmentPage = () => {
                               </Card>
                             ))}
                           </div>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <p className="wish-list-price">
+                            Tổng tiền: <strong>{`${wishListPrice}   ₫`}</strong>
+                          </p>
                         </Col>
                       </Row>
                       <Row justify="space-between">

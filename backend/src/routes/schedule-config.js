@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
 const { ScheduleConfig } = require('../controllers');
+const { authMiddleware } = require('../middlewares');
 
-/* GET users listing. */
-router.post('/', ScheduleConfig.create);
-router.get('/', ScheduleConfig.findOne);
-router.put('/:id', ScheduleConfig.update);
+router.post('/', authMiddleware.validateToken, authMiddleware.isAdmin, ScheduleConfig.create);
+
+router.get('/', authMiddleware.validateToken, authMiddleware.isAdmin, ScheduleConfig.findOne);
+
+router.put('/:id', authMiddleware.validateToken, authMiddleware.isAdmin, ScheduleConfig.update);
 
 module.exports = router;

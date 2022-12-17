@@ -19,8 +19,18 @@ router.put(
   InjectionController.update
 );
 
-router.delete('/:id', authMiddleware.validateToken, InjectionController.deleteInjection);
+router.delete(
+  '/:id',
+  authMiddleware.validateToken,
+  authMiddleware.isStaff,
+  InjectionController.deleteInjection
+);
 
-router.delete('/', authMiddleware.validateToken, InjectionController.deleteMulti);
+router.delete(
+  '/',
+  authMiddleware.validateToken,
+  authMiddleware.isStaff,
+  InjectionController.deleteMulti
+);
 
 module.exports = router;

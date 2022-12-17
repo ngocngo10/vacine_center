@@ -36,6 +36,7 @@ const RegisterAppointmentPage = () => {
   const [selectedVaccines, setSelectedVaccines] = useState([]);
   const [changedVaccineId, setChangedVaccineId] = useState();
 
+  const wishListPrice = selectedVaccines.reduce((total, crr) => total + crr.price, 0);
   const formRef = useRef();
 
   const provinceList = useSelector((state) => state.provinceList);
@@ -170,7 +171,6 @@ const RegisterAppointmentPage = () => {
     }));
     values.birthday = values.birthday.format('YYYY-MM-DD');
     values.desiredDate = values.desiredDate.format('YYYY-MM-DD');
-    console.log('values', values);
     dispatch(createAppointment(values));
   };
 
@@ -205,7 +205,7 @@ const RegisterAppointmentPage = () => {
                 <Result
                   status="success"
                   title="ĐĂNG KÝ THÀNH CÔNG!"
-                  subTitle="Quý khách đã đăng kí thông tin tiêm chủng thành công. Việc đăng kí thông tin đầy đủ sẽ giúp Quý khách tiết kiệm thời gian khi làm thủ tục tại quầy lễ tân. Kính mời quí khách đến Trung tâm MEDDICAL để được phục vụ và xin vui lòng đến đúng khung giờ qui định. Rất mong được đón tiếp Quý khách .Trân trọng."
+                  subTitle="Quý khách đã đăng kí thông tin tiêm chủng thành công. Việc đăng kí thông tin đầy đủ sẽ giúp Quý khách tiết kiệm thời gian khi làm thủ tục tại quầy lễ tân. Quý khách lưu ý điện thoại để nhân viên bên chúng tôi xác nhận lịch hẹn và gửi mã QRCode để check in. Kính mời quí khách đến Trung tâm MEDDICAL để được phục vụ và xin vui lòng đến đúng khung giờ qui định. Rất mong được đón tiếp Quý khách .Trân trọng."
                   extra={[
                     <Button type="primary" onClick={() => navigate('/')}>
                       Quay về trang trủ
@@ -547,6 +547,7 @@ const RegisterAppointmentPage = () => {
                                     description={
                                       <>
                                         <h5 className="text text--card-title">{item.name}</h5>
+                                        <strong className="text text--card-price">{`${item.price}  ₫`}</strong>
                                         <p className="text text--card-desc">{item.description}</p>
                                       </>
                                     }
@@ -554,6 +555,13 @@ const RegisterAppointmentPage = () => {
                                 </Card>
                               ))}
                             </div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <p className="wish-list-price">
+                              Tổng tiền: <strong>{`${wishListPrice}   ₫`}</strong>
+                            </p>
                           </Col>
                         </Row>
                         <Row justify="space-between">

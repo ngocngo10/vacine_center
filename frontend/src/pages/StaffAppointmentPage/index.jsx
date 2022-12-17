@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Table, Tag, Badge, Input, Button, Select, Row, Col, DatePicker, Card, Form } from 'antd';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { Table, Input, Button, Select, Row, Col, DatePicker, Card, Form } from 'antd';
+import { CheckOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getScheduleOnDay } from '../../actions/schedule.action';
 import { getAppointmentHistories } from '../../actions/appointment.action';
@@ -32,6 +32,12 @@ const StaffAppointmentPage = () => {
     value: item.id
   }));
 
+  const statusOptions = [
+    { label: 'Chưa xác nhận', value: 1 },
+    { label: 'Đã xác nhận', value: 2 },
+    { label: 'Đã hủy', value: 3 }
+  ];
+
   const handleChangeDay = (date) => {
     const selectedDay = moment(date).format('YYYY-MM-DD');
     dispatch(getScheduleOnDay(selectedDay));
@@ -43,16 +49,23 @@ const StaffAppointmentPage = () => {
   };
 
   const handleOnSearch = (values) => {
-    console.log(values, 'values');
-    dispatch(
-      getAppointmentHistories({
-        perPage: 10,
-        patientCode: values.patientCode,
-        patientName: values.patientName,
-        desiredDate: values.desiredDate ? moment(values.desiredDate).format('YYYY-MM-DD') : null,
-        scheduleId: values.schedule
-      })
-    );
+    let query = {
+      perPage: 10,
+      patientCode: values.patientCode,
+      patientName: values.patientName,
+      desiredDate: values.desiredDate ? moment(values.desiredDate).format('YYYY-MM-DD') : null,
+      scheduleId: values.schedule
+    };
+    if (values.status === 1) {
+      query = { ...query, isConfirmed: 'false', isCancelled: 'false' };
+    }
+    if (values.status === 2) {
+      query = { ...query, isConfirmed: 'true', isCancelled: 'false' };
+    }
+    if (values.status === 3) {
+      query = { ...query, isCancelled: 'true' };
+    }
+    dispatch(getAppointmentHistories(query));
   };
 
   useEffect(() => {
@@ -110,18 +123,14 @@ const StaffAppointmentPage = () => {
       dataIndex: 'isConfirmed',
       key: 'isConfirmed',
       align: 'center',
-      render: (value) =>
-        value ? (
-          <CheckOutlined style={{ color: 'blue' }} />
-        ) : (
-          <CloseOutlined style={{ color: 'red' }} />
-        )
+      render: (value) => value && <CheckOutlined style={{ color: 'blue' }} />
     },
     {
-      title: 'Giờ check in',
-      dataIndex: 'checkInDate',
+      title: 'Đã hủy',
+      dataIndex: 'isCancelled',
       align: 'center',
-      key: 'checkInDate'
+      key: 'isCancelled',
+      render: (value) => value && <CheckOutlined style={{ color: 'blue' }} />
     }
   ];
   const data = {};
@@ -137,10 +146,9 @@ const StaffAppointmentPage = () => {
     )
       .add(item.schedule?.appointmentDuration, 'minutes')
       .format('HH:mm')}`,
-    // listType: item.listType,
     wishList: item.wishList,
     isConfirmed: item.isConfirmed,
-    checkInDate: item.checkInAt ? moment(item.checkInAt).format('HH:mm:ss') : 'Chưa check in'
+    isCancelled: item.isCancelled
   }));
 
   return (
@@ -148,7 +156,7 @@ const StaffAppointmentPage = () => {
       <h2 className="page-title">Quản lí đăng kí tiêm trực tuyến</h2>
       <Card style={{ borderRadius: 10 }}>
         <Form onFinish={handleOnSearch}>
-          <Row justify="space-evenly">
+          <Row justify="space-between">
             <Col>
               <Form.Item name="patientCode">
                 <Input placeholder="Tìm theo mã định danh" style={{ float: 'left' }} />
@@ -174,6 +182,19 @@ const StaffAppointmentPage = () => {
                     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                   }
                   options={scheduleOptions}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={3}>
+              <Form.Item name="status">
+                <Select
+                  showSearch
+                  placeholder="Trạng thái"
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                  }
+                  options={statusOptions}
                 />
               </Form.Item>
             </Col>
