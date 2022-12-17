@@ -1,4 +1,5 @@
-const { ScheduleRepository, AppointmentRepository } = require('../repositories');
+const { Op } = require('sequelize');
+const { ScheduleRepository, AppointmentRepository, PatientRepository } = require('../repositories');
 const { sendEmailConfirmAppointment } = require('../utils/send_mail');
 
 module.exports = class StaffService {
@@ -12,10 +13,7 @@ module.exports = class StaffService {
     console.log(appointment);
     appointment.isConfirmed = true;
     await appointment.save();
-    const data = {
-      patientName: appointment.patientName,
-      startAt: appointment.schedule.startAt
-    };
+    const data = `http://datn-vaccine-center.website:8080/staff-home/appointments/details/${appointment.id}`
     sendEmailConfirmAppointment(appointment.user.email, data);
     return;
   }

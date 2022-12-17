@@ -5,7 +5,7 @@ const S3_BUCKET = process.env.S3_BUCKET;
 aws.config.region = 'ap-southeast-1';
 
 async function generateQRcodeImage(data) {
-  const url = await uploadQRCode(JSON.stringify(data));
+  const url = await uploadQRCode(data);
   const img = `<img src="${url}" />`;
   return img;
 }
