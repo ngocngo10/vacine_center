@@ -18,7 +18,7 @@ module.exports = class PatientService {
     return;
   }
 
-  async find(reqQuery) {
+  async find(reqQuery, userId = 0) {
     const findOptions = {
       where: {
         '$appointments.check_in_at$': {
@@ -45,11 +45,14 @@ module.exports = class PatientService {
     if (reqQuery.patientCode) {
       findOptions.where.patientCode = reqQuery.patientCode;
     }
+    if (userId) {
+      findOptions.where.representative = userId;
+    }
     return await this.repository.find(findOptions);
   }
 
   async findOne(id) {
-    return await this.repository.findOne(id, ['representator']);
+    return await this.repository.findOne(id, ['representator', 'appointments']);
   }
 
   async deletePatient(id) {
