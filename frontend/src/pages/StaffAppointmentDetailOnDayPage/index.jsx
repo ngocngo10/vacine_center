@@ -153,11 +153,12 @@ const StaffAppointmentDetailOnDayPage = () => {
   };
 
   const handleUpdateAppointment = (values) => {
-    console.log('values', values);
     if (appointmentItem?.injections?.length) {
       //update injection (remove/add)
       const ids = appointmentItem.injections.map((item) => item.id);
       dispatch(deleteMultiInjection(ids));
+      handleCreateInjection();
+    } else {
       handleCreateInjection();
     }
     setIsScreenTestAction(false);
@@ -626,7 +627,7 @@ const StaffAppointmentDetailOnDayPage = () => {
                                 <strong>{`${item.price} ₫`}</strong>
                               </Col>
                               <Col span={5}>
-                                <Form.Item label=" Mũi tiêm thứ" name={`injectionTime${id}`}>
+                                <Form.Item label=" Mũi tiêm thứ" name={`injectionTime${item.id}`}>
                                   <InputNumber
                                     defaultValue={item.injectionTime}
                                     min={1}
