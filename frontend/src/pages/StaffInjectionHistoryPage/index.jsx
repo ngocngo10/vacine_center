@@ -45,7 +45,6 @@ const StaffInjectionHistoryPage = () => {
   };
 
   const onSearchPatientCode = (value) => {
-    console.log(value);
     dispatch(
       getPatientList({
         perPage: 10,
@@ -55,7 +54,6 @@ const StaffInjectionHistoryPage = () => {
   };
 
   const onSearchPatientName = (value) => {
-    console.log(value);
     dispatch(
       getPatientList({
         perPage: 10,
@@ -85,7 +83,7 @@ const StaffInjectionHistoryPage = () => {
       align: 'center'
     },
     {
-      title: 'Tên người tiêm',
+      title: 'Tên bệnh nhân',
       dataIndex: 'patientName',
       key: 'patientName',
       align: 'center'

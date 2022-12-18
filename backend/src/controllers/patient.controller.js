@@ -18,8 +18,13 @@ async function create(req, res, next) {
 
 async function find(req, res, next) {
   try {
-    const patients = await patientService.find(req.query);
-    return res.json(patients);
+    if (req.user?.roles?.includes('staff') || req.user?.roles?.includes('admin')) {
+      const patients = await patientService.find(req.query);
+      return res.json(patients);
+    } else {
+      const patients = await patientService.find(req.query, req.user.id);
+      return res.json(patients);
+    }
   } catch (error) {
     next(error);
   }

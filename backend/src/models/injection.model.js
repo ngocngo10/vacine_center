@@ -24,6 +24,15 @@ module.exports = (sequelize, Sequelize) => {
       },
       price: {
         type: Sequelize.FLOAT
+      },
+      injectionTime: {
+        field: 'injection_time',
+        type: Sequelize.INTEGER
+      },
+      isInjected: {
+        field: 'is_injected',
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       }
     },
     {

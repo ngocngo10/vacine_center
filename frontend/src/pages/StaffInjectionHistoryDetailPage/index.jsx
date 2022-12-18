@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
-import { Row, Col, Card, Collapse } from 'antd';
+import { Row, Col, Card, Collapse, Skeleton } from 'antd';
 import InjectionHistoryItem from '../../components/InjectionHistoryItem';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getAppointmentHistories } from '../../actions/appointment.action';
-import './index.css';
+import { getPatient } from '../../actions/patient.action';
+import { getProvinceList } from '../../actions/province.action';
 import moment from 'moment';
+import './index.css';
+import Message from '../../components/Message';
 
 const { Panel } = Collapse;
 
@@ -16,21 +18,24 @@ const StaffInjectionHistoryDetailPage = () => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const patientList = useSelector((state) => state.patientList);
-  const { patients } = patientList;
-  const patient = patients?.find((item) => item.id == id);
+  const patient = useSelector((state) => state.patient);
+  const { patientItem, error, loading } = patient;
 
-  const appointmentList = useSelector((state) => state.appointmentList);
-  const { appointmentHistories } = appointmentList;
-  console.log('appointmentHistories', appointmentHistories);
+  const provinceList = useSelector((state) => state.provinceList);
+  const { provinces } = provinceList;
+  const province = provinces?.find((item) => item.code == +patientItem?.province);
+  const district = province?.districts?.find((item) => item.code == +patientItem?.district);
+  const ward = district?.wards?.find((item) => item.code == patientItem?.ward);
+  const address = `${patientItem?.street}, ${province?.name}, ${district?.name},  ${ward?.name}`;
 
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('staff')) {
-      dispatch(getAppointmentHistories({ patientCode: patient.patientCode }));
+      dispatch(getProvinceList());
+      dispatch(getPatient(id));
     } else {
       navigate('/login');
     }
-  }, [userInfo, patient]);
+  }, [userInfo, id]);
   return (
     <div>
       <Row justify="center">
@@ -42,175 +47,77 @@ const StaffInjectionHistoryDetailPage = () => {
                 <h3>THÔNG TIN BỆNH NHÂN</h3>
               </Col>
             </Row>
-            <Row justify="space-between">
-              <Col span={12}>
-                <span>
-                  Họ và tên người tiêm: <strong>{patient?.patientName}</strong>
-                </span>
-              </Col>
-              <Col span={12}>
-                <span>
-                  Mã số bệnh nhân: <strong>{patient?.patientCode}</strong>
-                </span>
-              </Col>
-            </Row>
-            <Row justify="space-between">
-              <Col span={8}>
-                <span>
-                  Giới tính: <strong>{patient?.gender ? 'Name' : 'Nữ'}</strong>
-                </span>
-              </Col>
-              <Col span={8}>
-                <span>
-                  Ngày sinh:{' '}
-                  <strong>
-                    {patient?.birthday && moment(patient?.birthday).format('DD/MM/YYYY')}
-                  </strong>
-                </span>
-              </Col>
-              <Col span={8}>
-                <span>
-                  Số điện thoại: <strong>{patient?.phoneNumber}</strong>
-                </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <span>
-                  Địa chỉ: <strong>Số nhà 29 thôn phú đông</strong>
-                </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <h3>LỊCH SỬ TIÊM</h3>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <Collapse
-                  className="injection-history-list"
-                  defaultActiveKey={['1']}
-                  style={{ background: '#bfd2f8' }}>
-                  {appointmentHistories?.map((item, index) => (
-                    <Panel header={index + 1} key={index}>
-                      <InjectionHistoryItem appointment={item} />
-                    </Panel>
-                  ))}
-                </Collapse>
-              </Col>
-            </Row>
-
-            {/*
-            <Row justify="space-between">
-              <Col span={12}>
-                <span>
-                  Họ và tên người liên hệ: <strong>{appointment?.user.name}</strong>
-                </span>
-              </Col>
-            </Row>
-            <Row justify="space-between">
-              <Col span={8}>
-                <span>
-                  Số điện thoại: <strong>{appointment?.user.phoneNumber}</strong>
-                </span>
-              </Col>
-              <Col span={8}>
-                <span>
-                  Email: <strong>{appointment?.user.email}</strong>
-                </span>
-              </Col>
-              <Col span={8}>
-                <span>
-                  Mối quan hệ với người tiêm: <strong>{appointment?.relative}</strong>
-                </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <h3>THÔNG TIN DỊCH VỤ</h3>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <span>
-                  Vắc xin mong muốn tiêm:
-                  {appointment?.wishList.map((item) => (
-                    <>
-                      <strong>{JSON.parse(item).name}</strong>
-                      <br />
-                    </>
-                  ))}
-                </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={12}>
-                <span>
-                  Ngày mong muốn tiêm:
-                  <strong>{moment(appointment?.desiredDate).format('DD/MM/YYYY')}</strong>
-                </span>
-              </Col>
-              <Col span={12}>
-                <span>
-                  Khung giờ:
-                  <strong>{`${moment(moment(appointment?.schedule.startAt, 'HH:mm')).format(
-                    'HH:mm'
-                  )}-${moment(moment(appointment?.schedule.startAt, 'HH:mm'))
-                    .add(appointment?.schedule.appointmentDuration, 'minutes')
-                    .format('HH:mm')}`}</strong>
-                </span>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <h3>TRẠNG THÁI CUỘC HẸN</h3>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={12}>
-                <span>
-                  Trạng thái xác nhận:
-                  <strong>{appointment?.isConfirmed ? 'Đã xác nhận' : 'Chưa xác nhận'}</strong>
-                </span>
-              </Col>
-              <Col>
-                <span>
-                  Giờ check in:
-                  <strong>
-                    {appointment?.checkInAt &&
-                      moment(appointment?.checkInAt).format('DD/MM/YYY HH:mm:ss')}
-                  </strong>
-                </span>
-              </Col>
-            </Row>
-            <Divider />
-            <Row justify="center">
-              <Col span={3}>
-                <Button
-                  onClick={() => navigate('/staff-home/appointments')}
-                  style={{ background: '#ffc107', border: '#ffc107', color: '#fff' }}>
-                  Trở về
-                </Button>
-              </Col>
-              <Col span={4}>
-                <Button
-                  onClick={handleConfirm}
-                  disabled={appointment?.isConfirmed ? true : false}
-                  style={{ background: '#1f2b6c', border: '#1f2b6c', color: '#fff' }}>
-                  Xác nhận hẹn
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  disabled={appointment?.checkInAt ? true : false}
-                  onClick={handleCheckIn}
-                  style={{ background: '#dc3545', border: '#dc3545', color: '#fff' }}>
-                  Xác nhận check in
-                </Button>
-              </Col>
-            </Row>{' '}
-            */}
+            {loading && provinceList.loading ? (
+              <Skeleton />
+            ) : error && provinceList.error ? (
+              <Message description={error} />
+            ) : (
+              <>
+                <Row justify="space-between">
+                  <Col span={12}>
+                    <span>
+                      Họ và tên người tiêm: <strong>{patientItem?.patientName}</strong>
+                    </span>
+                  </Col>
+                  <Col span={12}>
+                    <span>
+                      Mã số bệnh nhân: <strong>{patientItem?.patientCode}</strong>
+                    </span>
+                  </Col>
+                </Row>
+                <Row justify="space-between">
+                  <Col span={8}>
+                    <span>
+                      Giới tính: <strong>{patientItem?.gender ? 'Nam' : 'Nữ'}</strong>
+                    </span>
+                  </Col>
+                  <Col span={8}>
+                    <span>
+                      Ngày sinh:{' '}
+                      <strong>
+                        {patientItem?.birthday &&
+                          moment(patientItem?.birthday).format('DD/MM/YYYY')}
+                      </strong>
+                    </span>
+                  </Col>
+                  <Col span={8}>
+                    <span>
+                      Số điện thoại: <strong>{patientItem?.phoneNumber}</strong>
+                    </span>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <span>
+                      Địa chỉ: <strong>{address}</strong>
+                    </span>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <h3>LỊCH SỬ TIÊM</h3>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={24}>
+                    <Collapse
+                      className="injection-history-list"
+                      defaultActiveKey={['1']}
+                      style={{ background: '#bfd2f8' }}>
+                      {patientItem?.appointments?.map((item, index) => (
+                        <Panel
+                          header={`${index + 1}.   Ngày ${
+                            item.desiredDate && moment(item.desiredDate).format('DD/MM/YYYY')
+                          }`}
+                          key={index}>
+                          <InjectionHistoryItem appointment={item} />
+                        </Panel>
+                      ))}
+                    </Collapse>
+                  </Col>
+                </Row>
+              </>
+            )}
           </Card>
         </Col>
       </Row>
