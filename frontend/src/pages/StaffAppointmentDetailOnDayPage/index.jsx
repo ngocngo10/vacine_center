@@ -204,12 +204,6 @@ const StaffAppointmentDetailOnDayPage = () => {
     });
   }, [appointmentItem]);
 
-  console.log(
-    'CV',
-    changedVaccineId,
-    changedVaccineId && !vaccines.find((item) => item.id == changedVaccineId)?.quantity
-  );
-
   return (
     <div>
       {loading || provinceList.loading ? (
