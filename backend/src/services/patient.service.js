@@ -58,9 +58,9 @@ module.exports = class PatientService {
     if (reqQuery.representative) {
       findOptions.where.representative = reqQuery.representative;
     }
-    reqQuery.name &&
-      (findOptions.where.patientCode = {
-        [Op.like]: `%${reqQuery.name}%`
+    reqQuery.patientName &&
+      (findOptions.where.patientName = {
+        [Op.like]: `%${reqQuery.patientName}%`
       });
     if (reqQuery.page) {
       findOptions.limit = +reqQuery.perPage || 10;
