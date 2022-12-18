@@ -61,7 +61,8 @@ import {
 import {
   injectionCreateReducer,
   injectionListReducer,
-  injectionReducer
+  injectionReducer,
+  injectionDeleteMultiReducer
 } from './reducers/injection.reducer';
 
 import {
@@ -71,7 +72,7 @@ import {
 
 import { screenTestCreateReducer, screenTestEditReducer } from './reducers/screen_test.reducer';
 
-import { patientListReducer } from './reducers/patient.reducer';
+import { patientListReducer, patientReducer } from './reducers/patient.reducer';
 
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
@@ -129,7 +130,9 @@ const reducer = combineReducers({
   screenTestCreate: screenTestCreateReducer,
   screenTestEdit: screenTestEditReducer,
 
-  patientList: patientListReducer
+  patientList: patientListReducer,
+  patient: patientReducer,
+  injectionDeleteMulti: injectionDeleteMultiReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

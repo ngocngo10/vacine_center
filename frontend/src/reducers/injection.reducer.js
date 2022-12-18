@@ -7,7 +7,10 @@ import {
   INJECTION_FAIL,
   INJECTION_CREATE_REQUEST,
   INJECTION_CREATE_SUCCESS,
-  INJECTION_CREATE_FAIL
+  INJECTION_CREATE_FAIL,
+  INJECTION_DELETE_MULTI_REQUEST,
+  INJECTION_DELETE_MULTI_SUCCESS,
+  INJECTION_DELETE_MULTI_FAIL
 } from '../constants/injection.constant';
 
 export const injectionCreateReducer = (state = {}, action) => {
@@ -59,50 +62,18 @@ export const injectionReducer = (state = {}, action) => {
   }
 };
 
-// export const appointmentEditReducer = (state = {}, action) => {
-//   switch (action.type) {
-//     case APPOINTMENT_EDIT_REQUEST:
-//       return { loading: true };
-//     case APPOINTMENT_EDIT_SUCCESS:
-//       return {
-//         loading: false,
-//         editSuccess: true
-//       };
-//     case APPOINTMENT_EDIT_FAIL:
-//       return { loading: false, error: action.payload };
-//     default:
-//       return state;
-//   }
-// };
-
-// export const appointmentDeleteReducer = (state = {}, action) => {
-//   switch (action.type) {
-//     case APPOINTMENT_DELETE_REQUEST:
-//       return { loading: true };
-//     case APPOINTMENT_DELETE_SUCCESS:
-//       return {
-//         loading: false,
-//         deleteSuccess: true
-//       };
-//     case APPOINTMENT_DELETE_FAIL:
-//       return { loading: false, error: action.payload };
-//     default:
-//       return state;
-//   }
-// };
-
-// export const appointmentMultiDeleteReducer = (state = {}, action) => {
-//   switch (action.type) {
-//     case APPOINTMENT_MULTI_DELETE_REQUEST:
-//       return { loading: true };
-//     case APPOINTMENT_MULTI_DELETE_SUCCESS:
-//       return {
-//         loading: false,
-//         multiDeleteSuccess: true
-//       };
-//     case APPOINTMENT_MULTI_DELETE_FAIL:
-//       return { loading: false, error: action.payload };
-//     default:
-//       return state;
-//   }
-// };
+export const injectionDeleteMultiReducer = (state = {}, action) => {
+  switch (action.type) {
+    case INJECTION_DELETE_MULTI_REQUEST:
+      return { loading: true };
+    case INJECTION_DELETE_MULTI_SUCCESS:
+      return {
+        loading: false,
+        deleteMultiSuccess: true
+      };
+    case INJECTION_DELETE_MULTI_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};

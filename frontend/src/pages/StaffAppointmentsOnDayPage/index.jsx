@@ -45,7 +45,6 @@ const StaffAppointmentsOnDayPage = () => {
   };
 
   const handleOnSearch = (values) => {
-    console.log(values);
     dispatch(
       getAppointmentHistories({
         perPage: 10,
@@ -62,20 +61,20 @@ const StaffAppointmentsOnDayPage = () => {
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('staff')) {
       dispatch(getScheduleOnDay(currentDay));
-      dispatch(
-        getAppointmentHistories({
-          perPage: 10,
-          desiredDate: currentDay,
-          isCheckIn: true
-        })
-      );
       // dispatch(
       //   getAppointmentHistories({
       //     perPage: 10,
-      //     desiredDate: '2022-12-14',
+      //     desiredDate: currentDay,
       //     isCheckIn: true
       //   })
       // );
+      dispatch(
+        getAppointmentHistories({
+          perPage: 10,
+          desiredDate: '2022-12-17',
+          isCheckIn: true
+        })
+      );
     } else {
       navigate('/login');
     }
@@ -99,7 +98,12 @@ const StaffAppointmentsOnDayPage = () => {
       key: 'patientName',
       align: 'center'
     },
-
+    {
+      title: 'Ngày sinh',
+      dataIndex: 'birthday',
+      key: 'birthday',
+      align: 'center'
+    },
     {
       title: 'Thời gian',
       dataIndex: 'schedule',
@@ -129,19 +133,19 @@ const StaffAppointmentsOnDayPage = () => {
         ) : (
           <CloseOutlined style={{ color: 'red' }} />
         )
-    },
-    {
-      title: 'Đã tiêm',
-      dataIndex: 'injections',
-      align: 'center',
-      key: 'injections',
-      render: (value) =>
-        value?.length ? (
-          <CheckOutlined style={{ color: 'blue' }} />
-        ) : (
-          <CloseOutlined style={{ color: 'red' }} />
-        )
     }
+    // {
+    //   title: 'Đã tiêm',
+    //   dataIndex: 'injections',
+    //   align: 'center',
+    //   key: 'injections',
+    //   render: (value) =>
+    //     value?.length ? (
+    //       <CheckOutlined style={{ color: 'blue' }} />
+    //     ) : (
+    //       <CloseOutlined style={{ color: 'red' }} />
+    //     )
+    // }
   ];
   const data = {};
   data.totalElements = totalItem;
@@ -150,15 +154,15 @@ const StaffAppointmentsOnDayPage = () => {
     index: index + 1,
     code: item.patient.patientCode,
     patientName: item.patient.patientName,
-    desiredDate: moment(item.desiredDate).format('DD/MM/YYYY'),
+    birthday: moment(item.birthday).format('DD/MM/YYYY'),
     schedule: `${moment(moment(item.schedule?.startAt, 'HH:mm')).format('HH:mm')}-${moment(
       moment(item.schedule?.startAt, 'HH:mm')
     )
       .add(item.schedule?.appointmentDuration, 'minutes')
       .format('HH:mm')}`,
     wishList: item.wishList,
-    screeningTest: item.screeningTest,
-    injections: item.injections
+    screeningTest: item.screeningTest
+    // injections: item.injections
   }));
 
   return (

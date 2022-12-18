@@ -28,6 +28,11 @@ module.exports = (sequelize, Sequelize) => {
       injectionTime: {
         field: 'injection_time',
         type: Sequelize.INTEGER
+      },
+      isInjected: {
+        field: 'is_injected',
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       }
     },
     {
