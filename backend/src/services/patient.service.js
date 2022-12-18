@@ -1,9 +1,11 @@
 const { Op } = require('sequelize');
-const { PatientRepository } = require('../repositories');
-
+const { PatientRepository, AppointmentRepository } = require('../repositories');
+const { sequelize, User, Appointment, ScreeningTest, Injection, Vaccine } = require('../models')
 module.exports = class PatientService {
   constructor() {
     this.repository = new PatientRepository();
+    this.appointmentRepo = new AppointmentRepository();
+    this.sequelize = sequelize;
   }
   async create(data) {
     await this.repository.create(data);
@@ -25,7 +27,33 @@ module.exports = class PatientService {
           [Op.not]: null
         }
       },
-      include: ['representator', 'appointments']
+      include: [
+        {
+          model: Appointment,
+          as: 'appointments',
+          include: [
+            {
+              model: User,
+              as: 'user',
+              attributes: ['id', 'name', 'email', 'phoneNumber']
+            },
+            {
+              model: ScreeningTest,
+              as: 'screeningTest',
+            },
+            {
+              model: Injection,
+              as: 'injections',
+              include: [
+                {
+                  model: Vaccine,
+                  as: 'vaccine'
+                }
+              ]
+            },
+          ]
+        }
+      ]
     };
     if (reqQuery.representative) {
       findOptions.where.representative = reqQuery.representative;
@@ -52,7 +80,33 @@ module.exports = class PatientService {
   }
 
   async findOne(id) {
-    return await this.repository.findOne(id, ['representator', 'appointments']);
+    return await this.repository.findOne(id, [
+      {
+        model: Appointment,
+        as: 'appointments',
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'name', 'email', 'phoneNumber']
+          },
+          {
+            model: ScreeningTest,
+            as: 'screeningTest',
+          },
+          {
+            model: Injection,
+            as: 'injections',
+            include: [
+              {
+                model: Vaccine,
+                as: 'vaccine'
+              }
+            ]
+          },
+        ]
+      }
+    ]);
   }
 
   async deletePatient(id) {
