@@ -61,20 +61,20 @@ const StaffAppointmentsOnDayPage = () => {
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('staff')) {
       dispatch(getScheduleOnDay(currentDay));
-      // dispatch(
-      //   getAppointmentHistories({
-      //     perPage: 10,
-      //     desiredDate: currentDay,
-      //     isCheckIn: true
-      //   })
-      // );
       dispatch(
         getAppointmentHistories({
           perPage: 10,
-          desiredDate: '2022-12-17',
+          desiredDate: currentDay,
           isCheckIn: true
         })
       );
+      // dispatch(
+      //   getAppointmentHistories({
+      //     perPage: 10,
+      //     desiredDate: '2022-12-17',
+      //     isCheckIn: true
+      //   })
+      // );
     } else {
       navigate('/login');
     }
