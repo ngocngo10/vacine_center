@@ -98,7 +98,6 @@ Injection.belongsTo(Vaccine, {
 // Appointment.belongsToMany(Vaccine, {
 //   through: Injection,
 //   as: 'injectionVaccines',
-//   uniqueKey: 'appointment_vaccine_unique'
 // });
 
 VaccineItem.hasMany(Injection, { as: 'injections' });
@@ -154,7 +153,6 @@ module.exports = {
   Vaccine,
   User,
   Patient,
-  Appointment,
   Category,
   AgeGroup,
   VaccineDetail,
