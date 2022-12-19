@@ -1,5 +1,10 @@
 const { Op } = require('sequelize');
-const { PatientRepository, AppointmentRepository, VaccineRepository, InjectionRepository } = require('../repositories');
+const {
+  PatientRepository,
+  AppointmentRepository,
+  VaccineRepository,
+  InjectionRepository
+} = require('../repositories');
 const { sequelize, User, Appointment, ScreeningTest, Injection, Vaccine } = require('../models');
 module.exports = class PatientService {
   constructor() {
@@ -41,7 +46,7 @@ module.exports = class PatientService {
             },
             {
               model: ScreeningTest,
-              as: 'screeningTest',
+              as: 'screeningTest'
             },
             {
               model: Injection,
@@ -52,7 +57,7 @@ module.exports = class PatientService {
                   as: 'vaccine'
                 }
               ]
-            },
+            }
           ]
         }
       ]
@@ -94,7 +99,7 @@ module.exports = class PatientService {
           },
           {
             model: ScreeningTest,
-            as: 'screeningTest',
+            as: 'screeningTest'
           },
           {
             model: Injection,
@@ -105,7 +110,7 @@ module.exports = class PatientService {
                 as: 'vaccine'
               }
             ]
-          },
+          }
         ]
       }
     ]);
@@ -126,10 +131,9 @@ module.exports = class PatientService {
     if (reqQuery.vaccineName) {
       findOptions.where[`$vaccine.name$`] = {
         [Op.like]: `%${reqQuery.vaccineName}%`
-      }
+      };
     }
-    reqQuery.vaccineCode &&
-      (findOptions.where[`$vaccine.vaccine_code$`] = reqQuery.vaccineCode);
+    reqQuery.vaccineCode && (findOptions.where[`$vaccine.vaccine_code$`] = reqQuery.vaccineCode);
 
     if (reqQuery.page) {
       findOptions.limit = +reqQuery.perPage || 10;
@@ -137,21 +141,20 @@ module.exports = class PatientService {
     }
     console.log(findOptions);
     const vaccines = await this.injectionRepo.model.findAndCountAll(findOptions);
-    const histories = await vaccines.rows.map(item => {
+    const histories = await vaccines.rows.map((item) => {
       return {
         vaccineId: item.vaccine.id,
         vaccineCode: item.vaccine.vaccineCode,
         vaccineName: item.vaccine.name,
         injectionTime: item.injectionTime,
         price: item.price,
-        injectionAt: item.createdAt,
-      }
+        injectionAt: item.createdAt
+      };
     });
 
     return {
       count: vaccines.count,
       rows: histories
-    }
+    };
   }
-}
-
+};
