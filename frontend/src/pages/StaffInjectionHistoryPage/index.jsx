@@ -89,6 +89,12 @@ const StaffInjectionHistoryPage = () => {
       align: 'center'
     },
     {
+      title: 'Ngày sinh',
+      dataIndex: 'birthday',
+      key: 'birthday',
+      align: 'center'
+    },
+    {
       title: 'Số điện thoại',
       dataIndex: 'phoneNumber',
       key: 'phoneNumber',
@@ -110,6 +116,7 @@ const StaffInjectionHistoryPage = () => {
     code: item.patientCode,
     phoneNumber: item.phoneNumber,
     patientName: item.patientName,
+    birthday: moment(item.birthday).format('DD/MM/YYYY'),
     action: `details/${item.id}`
   }));
 
