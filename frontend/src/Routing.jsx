@@ -25,6 +25,8 @@ import HomePage from './pages/HomePage';
 import AppointmentHistoryPage from './pages/AppointmentHistoryPage';
 import UserUpdateAppointmentPage from './pages/UserUpdateAppointmentPage';
 import AppointmentHistoryDetailPage from './pages/AppointmentHistoryDetailPage';
+import InjectionHistoryPage from './pages/InjectionHistoryPage';
+import InjectionHistoryDetailPage from './pages/InjectionHistoryDetailPage';
 
 import StaffMain from './layout/StaffMain';
 import StaffAppointmentPage from './pages/StaffAppointmentPage';
@@ -53,6 +55,8 @@ const Routing = () => {
         <Route path="appointment-history" element={<AppointmentHistoryPage />} />
         <Route path="appointment-history/update/:id" element={<UserUpdateAppointmentPage />} />
         <Route path="appointment-history/details/:id" element={<AppointmentHistoryDetailPage />} />
+        <Route path="injection-history" element={<InjectionHistoryPage />} />
+        <Route path="injection-history/details/:id" element={<InjectionHistoryDetailPage />} />
       </Route>
 
       <Route exact path="/admin-home" element={<AdminMain />}>
