@@ -53,7 +53,7 @@ const VaccineListPage = () => {
     <Message description={ageGroupsCategoryList.error + categoryList.error} />
   ) : (
     <>
-      <main className="main-page">
+      <div className="main-page">
         <section className="section-slideshow">
           <Container>
             <nav className="slideshow-nav">
@@ -97,7 +97,7 @@ const VaccineListPage = () => {
             <VaccineList />
           </Container>
         </section>
-      </main>
+      </div>
     </>
   );
 };

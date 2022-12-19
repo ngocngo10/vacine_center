@@ -1,0 +1,14 @@
+.home-page-footer {
+  background-color: var(--color-primary);
+  color: var(--color-third);
+  padding-block: 30px;
+  width: 100%;
+}
+
+.footer-contact {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  line-height: 1.4;
+  font-family: 'WorkSans-Regular';
+}
