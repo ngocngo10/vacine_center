@@ -8,7 +8,10 @@ import {
   INJECTION_FAIL,
   INJECTION_CREATE_REQUEST,
   INJECTION_CREATE_SUCCESS,
-  INJECTION_CREATE_FAIL
+  INJECTION_CREATE_FAIL,
+  INJECTION_DELETE_MULTI_REQUEST,
+  INJECTION_DELETE_MULTI_SUCCESS,
+  INJECTION_DELETE_MULTI_FAIL
 } from '../constants/injection.constant';
 
 import { logout } from './user.action';
@@ -45,6 +48,43 @@ export const createInjection = (injection) => async (dispatch, getState) => {
     }
     dispatch({
       type: INJECTION_CREATE_FAIL,
+      payload: error.response ? error.response.data.error : error.message
+    });
+  }
+};
+
+export const deleteMultiInjection = (ids) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: INJECTION_DELETE_MULTI_REQUEST
+    });
+
+    const {
+      userLogin: { userInfo }
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json'
+      },
+      data: { ids }
+    };
+
+    const url = `${BASE_URL}/api/injections`;
+
+    const { result } = await axios.delete(url, config);
+
+    dispatch({
+      type: INJECTION_DELETE_MULTI_SUCCESS,
+      payload: result
+    });
+  } catch (error) {
+    if (error.response?.status == 401 || error.response?.status == 403) {
+      dispatch(logout());
+    }
+    dispatch({
+      type: INJECTION_DELETE_MULTI_FAIL,
       payload: error.response ? error.response.data.error : error.message
     });
   }

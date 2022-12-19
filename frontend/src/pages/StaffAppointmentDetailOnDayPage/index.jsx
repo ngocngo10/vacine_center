@@ -10,13 +10,14 @@ import {
   Form,
   Input,
   Collapse,
-  Select
+  Select,
+  InputNumber
 } from 'antd';
-import { CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAppointment, editAppointment } from '../../actions/appointment.action';
-import { createInjection } from '../../actions/injection.action';
+import { createInjection, deleteMultiInjection } from '../../actions/injection.action';
 import { getProvinceList } from '../../actions/province.action';
 import { getVaccineList } from '../../actions/vaccine.action';
 import { createScreenTest, editScreenTest } from '../../actions/screen_test.action';
@@ -31,17 +32,16 @@ const { Panel } = Collapse;
 
 const StaffAppointmentDetailOnDayPage = () => {
   const { id } = useParams();
-  // const formRef = useRef();
   const [formRef] = Form.useForm();
   const [screenTestFormRef] = Form.useForm();
-  // const screenTestFormRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [selectedVaccines, setSelectedVaccines] = useState([]);
   const [changedVaccineId, setChangedVaccineId] = useState();
   const [isEditAction, setIsEditAction] = useState(false);
-  const [isInjectionAction, setIsInjectionAction] = useState(false);
+
   const [isScreenTestAction, setIsScreenTestAction] = useState(false);
+
   const provinceList = useSelector((state) => state.provinceList);
   const { provinces } = provinceList;
 
@@ -62,7 +62,6 @@ const StaffAppointmentDetailOnDayPage = () => {
 
   const vaccineList = useSelector((state) => state.vaccineList);
   const { vaccines } = vaccineList;
-  console.log('vaccines', vaccines);
 
   const screenTestCreate = useSelector((state) => state.screenTestCreate);
   const { createSuccess } = screenTestCreate;
@@ -73,6 +72,8 @@ const StaffAppointmentDetailOnDayPage = () => {
   const appointmentEdit = useSelector((state) => state.appointmentEdit);
 
   const injectionCreate = useSelector((state) => state.injectionCreate);
+
+  const injectionDeleteMulti = useSelector((state) => state.injectionDeleteMulti);
 
   const vaccineOptions = vaccines?.map((item) => ({
     label: item.name,
@@ -112,22 +113,52 @@ const StaffAppointmentDetailOnDayPage = () => {
     if (vaccine) setSelectedVaccines(selectedVaccines.concat(vaccine));
   };
 
+  const handleCreateInjection = () => {
+    dispatch(
+      createInjection({
+        injections: selectedVaccines?.map((item) => ({
+          appointmentId: id,
+          vaccineId: item.id,
+          vaccineItemId: null,
+          price: item.price,
+          injectionTime: item.injectionTime,
+          isInjected: item.isInjected || false
+        }))
+      })
+    );
+  };
+
   const handleUpdateScreenTest = (values) => {
     setIsEditAction(false);
-    setIsInjectionAction(false);
+
     setIsScreenTestAction(true);
+    if (!appointmentItem?.injections?.length && values.isQualified == 1) {
+      //add injection
+      handleCreateInjection();
+    }
+    if (appointmentItem?.injections?.length && values.isQualified == 0) {
+      //remove injection id
+      const ids = appointmentItem.injections.map((item) => item.id);
+      dispatch(deleteMultiInjection(ids));
+    }
     if (appointmentItem?.screeningTest || appointmentItem?.screeningTest?.length) {
       values.id = appointmentItem.screeningTest.id;
       dispatch(editScreenTest(values));
     } else {
-      //call api tao
       values.appointmentId = id;
       dispatch(createScreenTest(values));
     }
   };
 
   const handleUpdateAppointment = (values) => {
-    setIsInjectionAction(false);
+    if (appointmentItem?.injections?.length) {
+      //update injection (remove/add)
+      const ids = appointmentItem.injections.map((item) => item.id);
+      dispatch(deleteMultiInjection(ids));
+      handleCreateInjection();
+    } else {
+      handleCreateInjection();
+    }
     setIsScreenTestAction(false);
     setIsEditAction(true);
     values.isPaid = values.isPaid == 1 ? true : false;
@@ -140,23 +171,6 @@ const StaffAppointmentDetailOnDayPage = () => {
     );
   };
 
-  const handleInjection = () => {
-    setIsInjectionAction(false);
-    setIsEditAction(false);
-    setIsScreenTestAction(true);
-
-    selectedVaccines;
-    dispatch(
-      createInjection({
-        injections: selectedVaccines?.map((item) => ({
-          appointmentId: id,
-          vaccineId: item.id,
-          vaccineItemId: null,
-          price: item.price
-        }))
-      })
-    );
-  };
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('staff')) {
       dispatch(getProvinceList());
@@ -171,18 +185,36 @@ const StaffAppointmentDetailOnDayPage = () => {
     screenTestCreate.createSuccess,
     screenTestCreate.editSuccess,
     appointmentEdit.editSuccess,
-    injectionCreate.createSuccess
+    injectionCreate.createSuccess,
+    injectionDeleteMulti.deleteMultiSuccess
   ]);
 
   useEffect(() => {
-    setSelectedVaccines(
-      appointmentItem?.wishList.map((item, index) => ({
-        name: JSON.parse(item).name,
-        image: JSON.parse(item).image,
-        price: JSON.parse(item).price,
-        id: JSON.parse(item).id
-      }))
-    );
+    if (appointmentItem?.injections?.length) {
+      setSelectedVaccines(
+        appointmentItem.vaccines.map((item) => {
+          const injection = appointmentItem.injections.find((i) => i.vaccineId == item.id);
+          return {
+            name: item.name,
+            image: item.image,
+            price: injection.price,
+            id: item.id,
+            injectionTime: injection.injectionTime,
+            isInjected: injection.isInjected
+          };
+        })
+      );
+    } else {
+      setSelectedVaccines(
+        appointmentItem?.wishList.map((item, index) => ({
+          name: JSON.parse(item).name,
+          image: JSON.parse(item).image,
+          price: JSON.parse(item).price,
+          id: JSON.parse(item).id
+        }))
+      );
+    }
+
     if (appointmentItem?.screeningTest)
       screenTestFormRef.setFieldsValue({
         injectionHistory: appointmentItem.screeningTest.injectionHistory,
@@ -202,13 +234,12 @@ const StaffAppointmentDetailOnDayPage = () => {
       postInjectionReaction: appointmentItem?.postInjectionReaction,
       isPaid: appointmentItem?.isPaid ? '1' : '0'
     });
+    // appointmentItem?.injections.forEach((item, index) => {
+    //   const obj = {};
+    //   obj[`injectionTime${item.id}`] = item.injectionTime;
+    //   return formRef.setFieldsValue(obj);
+    // });
   }, [appointmentItem]);
-
-  console.log(
-    'CV',
-    changedVaccineId,
-    changedVaccineId && !vaccines.find((item) => item.id == changedVaccineId)?.quantity
-  );
 
   return (
     <div>
@@ -234,11 +265,9 @@ const StaffAppointmentDetailOnDayPage = () => {
           {screenTestEdit.editSuccess && isScreenTestAction && (
             <Message type="success" description="Bạn đã cập nhật khám sàn lọc thành công!" />
           )}
-          {injectionCreate?.createSuccess && isInjectionAction && (
-            <Message type="success" description="Bạn đã tạo bảng tiêm thành công!" />
-          )}
+
           <Col span={24}>
-            <Card className="appointment-details-card">
+            <Card className="appointment-on-day-details-card">
               <h2 className="page-title">Thông tin chi tiết bệnh nhân</h2>
               <Row>
                 <Col>
@@ -279,6 +308,27 @@ const StaffAppointmentDetailOnDayPage = () => {
                 <Col>
                   <span>
                     Địa chỉ: <strong>{address}</strong>
+                  </span>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={12}>
+                  <span>
+                    Khung giờ hẹn:
+                    <strong>{`${moment(moment(appointmentItem?.schedule.startAt, 'HH:mm')).format(
+                      'HH:mm'
+                    )}-${moment(moment(appointmentItem?.schedule.startAt, 'HH:mm'))
+                      .add(appointmentItem?.schedule.appointmentDuration, 'minutes')
+                      .format('HH:mm')}`}</strong>
+                  </span>
+                </Col>
+                <Col span={7}>
+                  <span>
+                    Giờ check in:
+                    <strong>
+                      {appointmentItem?.checkInAt &&
+                        moment(appointmentItem?.checkInAt).format('DD/MM/YYY HH:mm:ss')}
+                    </strong>
                   </span>
                 </Col>
               </Row>
@@ -350,7 +400,10 @@ const StaffAppointmentDetailOnDayPage = () => {
                         </Col>
                       </Row>
 
-                      <Form form={screenTestFormRef} onFinish={handleUpdateScreenTest}>
+                      <Form
+                        form={screenTestFormRef}
+                        onFinish={handleUpdateScreenTest}
+                        className="injection-form">
                         <Row>
                           <Col span={24}>
                             <Form.Item
@@ -484,130 +537,133 @@ const StaffAppointmentDetailOnDayPage = () => {
                   <h3>THÔNG TIN DỊCH VỤ</h3>
                 </Col>
               </Row>
-
-              <Row>
-                <Col>
-                  <span>
-                    Vắc xin mong muốn tiêm:{' '}
-                    <strong>
-                      {selectedVaccines?.map((item, index) => (
-                        <ul>
-                          <li>
-                            <strong>{`${index + 1}. ${item.name}-----${item.price} ₫`}</strong>
-                          </li>
-                        </ul>
-                      ))}
-                    </strong>
-                  </span>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <p className="price-total">
-                    Tổng tiền: <strong>{`${totalPrice}   ₫`}</strong>
-                  </p>
-                </Col>
-              </Row>
-              <Form form={formRef} onFinish={handleUpdateAppointment}>
-                <Row justify="space-between">
-                  <Col span={24}>
-                    <Form.Item
-                      label="Chọn vắc xin"
-                      name="wishList"
-                      labelCol={{
-                        span: 24
-                      }}
-                      wrapperCol={{ span: 24 }}>
-                      <Row justify="space-between">
-                        <Col span={16}>
-                          <Select
-                            showSearch
-                            placeholder="Chọn vắc xin"
-                            onChange={onChangeVaccine}
-                            onSearch={onSearchVaccine}
-                            filterOption={(input, option) =>
-                              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                            options={vaccineOptions}
-                          />
-                        </Col>
-                        <Col span={6}>
-                          <Button
-                            type="primary"
-                            style={{ background: '#1f2b6c', border: '#1f2b6c' }}
-                            onClick={handleAddVaccine}>
-                            Thêm vắc xin
-                          </Button>
-                        </Col>
-                      </Row>
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row justify="space-between">
-                  <Col span={24}>
-                    <div className="selected-vaccines-card">
-                      {selectedVaccines?.map((item) => (
-                        <Card
-                          key={item.id}
-                          extra={
-                            <CloseOutlined
-                              onClick={() => handleRemoveVaccine(item.id)}
-                              className="card-icon"
-                              style={{ cursor: 'pointer' }}
-                            />
+              <Row justify="space-between">
+                <Col span={24}>
+                  <Form.Item
+                    label="Chọn vắc xin"
+                    name="wishList"
+                    labelCol={{
+                      span: 24
+                    }}
+                    wrapperCol={{ span: 24 }}>
+                    <Row justify="space-between">
+                      <Col span={16}>
+                        <Select
+                          showSearch
+                          placeholder="Chọn vắc xin"
+                          onChange={onChangeVaccine}
+                          onSearch={onSearchVaccine}
+                          filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                           }
-                          hoverable
-                          style={{
-                            width: 300,
-                            margin: 10
-                          }}
-                          cover={
-                            <img
-                              className="vaccine-image-cover"
-                              alt="vaccine-image"
-                              src={item.image}
-                            />
-                          }>
-                          <Meta
-                            description={
-                              <>
-                                <h5 className="text text--card-title">{item.name}</h5>
-                                <p className="text text--card-desc">{item.description}</p>
-                              </>
-                            }
+                          options={vaccineOptions}
+                        />
+                      </Col>
+                      <Col span={6}>
+                        <Button
+                          type="primary"
+                          style={{ background: '#1f2b6c', border: '#1f2b6c' }}
+                          onClick={handleAddVaccine}>
+                          Thêm vắc xin
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row justify="space-between">
+                <Col span={24}>
+                  <div className="selected-vaccines-card">
+                    {selectedVaccines?.map((item) => (
+                      <Card
+                        key={item.id}
+                        extra={
+                          <CloseOutlined
+                            onClick={() => handleRemoveVaccine(item.id)}
+                            className="card-icon"
+                            style={{ cursor: 'pointer' }}
                           />
-                        </Card>
-                      ))}
-                    </div>
-                  </Col>
-                </Row>
+                        }
+                        hoverable
+                        style={{
+                          width: 300,
+                          margin: 10
+                        }}
+                        cover={
+                          <img
+                            className="vaccine-image-cover"
+                            alt="vaccine-image"
+                            src={item.image}
+                          />
+                        }>
+                        <Meta
+                          description={
+                            <>
+                              <h5 className="text text--card-title">{item.name}</h5>
+                              <p className="text text--card-desc">{item.description}</p>
+                            </>
+                          }
+                        />
+                      </Card>
+                    ))}
+                  </div>
+                </Col>
+              </Row>
+              <Form form={formRef} onFinish={handleUpdateAppointment} className="injection-form">
                 <Row>
-                  <Col span={9}>
-                    <span>
-                      Ngày mong muốn tiêm:{' '}
-                      <strong>{moment(appointmentItem?.desiredDate).format('DD/MM/YYYY')}</strong>
-                    </span>
-                  </Col>
-                  <Col span={7}>
-                    <span>
-                      Khung giờ:
-                      <strong>{`${moment(moment(appointmentItem?.schedule.startAt, 'HH:mm')).format(
-                        'HH:mm'
-                      )}-${moment(moment(appointmentItem?.schedule.startAt, 'HH:mm'))
-                        .add(appointmentItem?.schedule.appointmentDuration, 'minutes')
-                        .format('HH:mm')}`}</strong>
-                    </span>
-                  </Col>
-                  <Col span={7}>
-                    <span>
-                      Giờ check in:
+                  <Col span={24}>
+                    <p>
+                      Vắc xin mong muốn tiêm:{' '}
                       <strong>
-                        {appointmentItem?.checkInAt &&
-                          moment(appointmentItem?.checkInAt).format('DD/MM/YYY HH:mm:ss')}
+                        <ul>
+                          {selectedVaccines?.map((item, index) => (
+                            <Row>
+                              <Col key={item.id} span={12}>
+                                <strong>{`${index + 1}. ${item.name}`}</strong>
+                              </Col>
+                              <Col span={3}>
+                                <strong>{`${item.price} ₫`}</strong>
+                              </Col>
+                              <Col span={5}>
+                                <Form.Item label=" Mũi tiêm thứ" name={`injectionTime${item.id}`}>
+                                  <InputNumber
+                                    defaultValue={item.injectionTime}
+                                    min={1}
+                                    max={10}
+                                    onChange={(values) =>
+                                      (selectedVaccines[index].injectionTime = values)
+                                    }
+                                  />
+                                </Form.Item>
+                              </Col>
+                              <Col>
+                                <Form.Item name={`isInjected${id}`} label=" Đã tiêm">
+                                  <Checkbox
+                                    defaultChecked={item.isInjected}
+                                    onChange={(e) => {
+                                      selectedVaccines[index].isInjected = e.target.checked;
+                                    }}
+                                  />
+                                </Form.Item>
+                              </Col>
+                            </Row>
+                          ))}
+                        </ul>
                       </strong>
-                    </span>
+                    </p>
                   </Col>
                 </Row>
+
+                <Row>
+                  <Col span={12}>
+                    <strong className="checkout-total">Tổng tiền: </strong>
+                  </Col>
+
+                  <Col>
+                    <strong className="checkout-total">{`${totalPrice}   ₫`}</strong>
+                  </Col>
+                </Row>
+
                 <Row>
                   <Col>
                     <h3>TÌNH TRẠNG BỆNH NHÂN</h3>
@@ -617,18 +673,18 @@ const StaffAppointmentDetailOnDayPage = () => {
                   <Col span={8}>
                     <span>
                       Đã khám sàn lọc:
-                      <strong>{appointmentItem?.screeningTest ? 'Rồi' : 'Chưa'}</strong>
+                      <strong>
+                        {appointmentItem?.screeningTest ? (
+                          <CheckOutlined style={{ color: 'blue' }} />
+                        ) : (
+                          <CloseOutlined style={{ color: 'red' }} />
+                        )}
+                      </strong>
                     </span>
                   </Col>
                 </Row>
 
                 <Row>
-                  <Col span={8}>
-                    <span>
-                      Đã tiêm:
-                      <strong>{appointmentItem?.injections?.length ? 'Rồi' : 'Chưa'}</strong>
-                    </span>
-                  </Col>
                   <Col span={8}>
                     <Form.Item name="isPaid" label=" Đã thanh toán">
                       <Checkbox.Group options={payOptions} />
@@ -661,16 +717,6 @@ const StaffAppointmentDetailOnDayPage = () => {
                       htmlType="submit"
                       style={{ background: '#1f2b6c', border: '#1f2b6c', color: '#fff' }}>
                       Cập nhật
-                    </Button>
-                  </Col>
-                  <Col span={4}>
-                    <Button
-                      disabled={
-                        !appointmentItem?.screeningTest || appointmentItem?.injections?.length
-                      }
-                      onClick={handleInjection}
-                      style={{ background: '#53a336', border: '#53a336', color: '#fff' }}>
-                      Xác nhận đã tiêm
                     </Button>
                   </Col>
                 </Row>

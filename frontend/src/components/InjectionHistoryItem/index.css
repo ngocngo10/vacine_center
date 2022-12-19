@@ -1,0 +1,16 @@
+.injection-history-item h4 {
+  font-family: 'WorkSans-Medium';
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.vaccine-item-price {
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.total-price {
+  color: red;
+  background-color: var(--color-secondary);
+}

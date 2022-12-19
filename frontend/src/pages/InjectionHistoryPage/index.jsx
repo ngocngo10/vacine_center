@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Table, Input, Row, Col, Card } from 'antd';
+import { Table, Input, Row, Col } from 'antd';
 import { useNavigate, Link } from 'react-router-dom';
-import { getScheduleOnDay } from '../../actions/schedule.action';
 import { getPatientList } from '../../actions/patient.action';
 import moment from 'moment';
+import Container from '../../layout/Container';
 import './index.css';
 
 const { Search } = Input;
 
-const StaffInjectionHistoryPage = () => {
+const InjectionHistoryPage = () => {
   const DEFAULT_PAGE_NUMBER = 0;
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -21,22 +21,6 @@ const StaffInjectionHistoryPage = () => {
   const { loading, error, patients, totalItem } = patientList;
 
   const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_NUMBER);
-  const scheduleOnDay = useSelector((state) => state.scheduleOnDay);
-  const { schedules } = scheduleOnDay;
-  let scheduleOptions = schedules?.map((item) => ({
-    key: item.id,
-    label: `${moment(moment(item.startAt, 'HH:mm')).format('HH:mm')} - ${moment(
-      moment(item.startAt, 'HH:mm')
-    )
-      .add(item.appointmentDuration, 'minutes')
-      .format('HH:mm')}`,
-    value: item.id
-  }));
-
-  const handleChangeDay = (date) => {
-    const selectedDay = moment(date).format('YYYY-MM-DD');
-    dispatch(getScheduleOnDay(selectedDay));
-  };
 
   const handleTableChange = (pagination) => {
     dispatch(getPatientList({ perPage: 10, page: pagination.current }));
@@ -62,7 +46,7 @@ const StaffInjectionHistoryPage = () => {
   };
 
   useEffect(() => {
-    if (userInfo && userInfo.user.roles.includes('staff')) {
+    if (userInfo && userInfo.user.roles.includes('user')) {
       dispatch(getPatientList({ perPage: 10 }));
     } else {
       navigate('/login');
@@ -120,9 +104,9 @@ const StaffInjectionHistoryPage = () => {
   }));
 
   return (
-    <div>
-      <Card style={{ borderRadius: 10 }}>
-        <h2 className="page-title">Hồ sơ tiêm chủng bệnh nhân</h2>
+    <div className="injection-history-page">
+      <Container>
+        <h2 className="page-title">Lịch sử tiêm chủng của người thân</h2>
         <Row justify="space-evenly">
           <Col span={8}>
             <Search onSearch={onSearchPatientCode} placeholder="Tìm theo mã định danh" />
@@ -147,9 +131,9 @@ const StaffInjectionHistoryPage = () => {
             }
           }}
         />
-      </Card>
+      </Container>
     </div>
   );
 };
 
-export default StaffInjectionHistoryPage;
+export default InjectionHistoryPage;
