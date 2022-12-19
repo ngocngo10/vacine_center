@@ -114,7 +114,6 @@ const StaffAppointmentDetailOnDayPage = () => {
   };
 
   const handleCreateInjection = () => {
-    console.log('selectedVaccines', selectedVaccines);
     dispatch(
       createInjection({
         injections: selectedVaccines?.map((item) => ({
@@ -130,7 +129,6 @@ const StaffAppointmentDetailOnDayPage = () => {
   };
 
   const handleUpdateScreenTest = (values) => {
-    console.log('values', values);
     setIsEditAction(false);
 
     setIsScreenTestAction(true);
