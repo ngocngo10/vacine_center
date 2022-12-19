@@ -104,7 +104,7 @@ const InjectionHistoryPage = () => {
   }));
 
   return (
-    <div>
+    <div className="injection-history-page">
       <Container>
         <h2 className="page-title">Lịch sử tiêm chủng của người thân</h2>
         <Row justify="space-evenly">

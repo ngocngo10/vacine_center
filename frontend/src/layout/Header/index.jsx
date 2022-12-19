@@ -115,7 +115,7 @@ const Header = () => {
               </li>
               <li className="header-menu__item">
                 <Link to="/vaccine-list" className="header-menu-item__link">
-                  Thông tin vắc xin
+                  Danh mục vắc xin
                 </Link>
               </li>
               {/* <Link className="header-menu__item">
