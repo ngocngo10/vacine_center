@@ -1,0 +1,21 @@
+.injection-history-page {
+  font-family: 'WorkSans-Regular';
+  font-size: 16px;
+  line-height: 2;
+  border-radius: 10px;
+  margin-top: 15px;
+  margin-bottom: 50px;
+}
+
+.injection-history-page strong {
+  font-family: 'WorkSans-Medium';
+  margin-left: 10px;
+}
+
+.injection-history-page h3 {
+  font-family: 'WorkSans-Medium';
+  font-size: 20px;
+  line-height: 1.4;
+  margin-block: 15px;
+  color: var(--color-primary);
+}

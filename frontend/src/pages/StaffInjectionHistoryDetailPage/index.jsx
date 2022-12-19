@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Row, Col, Card, Collapse, Skeleton } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Card, Collapse, Skeleton, Table, Button, Input } from 'antd';
 import InjectionHistoryItem from '../../components/InjectionHistoryItem';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -10,16 +10,30 @@ import './index.css';
 import Message from '../../components/Message';
 
 const { Panel } = Collapse;
+const { Search } = Input;
 
 const StaffInjectionHistoryDetailPage = () => {
+  const DEFAULT_PAGE_NUMBER = 0;
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_NUMBER);
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   const patient = useSelector((state) => state.patient);
   const { patientItem, error, loading } = patient;
+  const injections = [];
+  patientItem?.appointments?.forEach((appointment, index) => {
+    if (appointment.injections.length) {
+      const desiredDate = appointment.desiredDate;
+      appointment.injections.forEach((injection) => {
+        if (injection.isInjected == true) {
+          injections.push({ ...injection, desiredDate: desiredDate });
+        }
+      });
+    }
+  });
 
   const provinceList = useSelector((state) => state.provinceList);
   const { provinces } = provinceList;
@@ -27,6 +41,31 @@ const StaffInjectionHistoryDetailPage = () => {
   const district = province?.districts?.find((item) => item.code == +patientItem?.district);
   const ward = district?.wards?.find((item) => item.code == patientItem?.ward);
   const address = `${patientItem?.street}, ${province?.name}, ${district?.name},  ${ward?.name}`;
+
+  const handleTableChange = (pagination) => {
+    // dispatch(getPatientList({ perPage: 10, page: pagination.current }));
+    setCurrentPage(pagination.current - 1);
+  };
+
+  const onSearchPatientCode = (value) => {
+    console.log('value', value);
+    // dispatch(
+    //   getPatientList({
+    //     perPage: 10,
+    //     patientCode: value
+    //   })
+    // );
+  };
+
+  const onSearchPatientName = (value) => {
+    console.log('value', value);
+    // dispatch(
+    //   getPatientList({
+    //     perPage: 10,
+    //     patientName: value
+    //   })
+    // );
+  };
 
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('staff')) {
@@ -36,6 +75,55 @@ const StaffInjectionHistoryDetailPage = () => {
       navigate('/login');
     }
   }, [userInfo, id]);
+  const columns = [
+    {
+      title: '#',
+      dataIndex: 'index',
+      key: 'key',
+      align: 'center'
+    },
+    {
+      title: 'Mã vắc xin',
+      dataIndex: 'vaccineCode',
+      key: 'vaccineCode',
+      align: 'center'
+    },
+    {
+      title: 'Tên vắc xin',
+      dataIndex: 'name',
+      key: 'name',
+      align: 'center'
+    },
+    {
+      title: 'Mũi tiêm thứ',
+      dataIndex: 'injectionTime',
+      key: 'injectionTime',
+      align: 'center'
+    },
+    {
+      title: 'Giá',
+      dataIndex: 'price',
+      key: 'price',
+      align: 'center'
+    },
+    {
+      title: 'Ngày tiêm',
+      dataIndex: 'day',
+      key: 'day',
+      align: 'center'
+    }
+  ];
+  const data = {};
+  data.totalElements = injections.length;
+  data.content = injections?.map((item, index) => ({
+    key: item.id,
+    index: currentPage * 10 + index + 1,
+    vaccineCode: item.vaccine.vaccineCode,
+    name: item.vaccine.name,
+    price: item.price,
+    injectionTime: item.injectionTime,
+    day: moment(item.desiredDate).format('DD/MM/YYYY')
+  }));
   return (
     <div>
       <Row justify="center">
@@ -98,6 +186,30 @@ const StaffInjectionHistoryDetailPage = () => {
                     <h3>LỊCH SỬ TIÊM</h3>
                   </Col>
                 </Row>
+                <br></br>
+                <Row justify="space-evenly">
+                  <Col span={8}>
+                    <Search onSearch={onSearchPatientCode} placeholder="Tìm theo mã vắc xin" />
+                  </Col>
+                  <Col span={8}>
+                    <Search onSearch={onSearchPatientName} placeholder="Tìm theo tên vắc xin" />
+                  </Col>
+                </Row>
+                <Table
+                  style={{ marginTop: 20 }}
+                  rowKey={(record) => record.key}
+                  dataSource={data.content}
+                  columns={columns}
+                  onChange={handleTableChange}
+                  pagination={{
+                    pageSize: 10,
+                    current: currentPage + 1,
+                    total: data.totalElements,
+                    showTotal: (total, range) => {
+                      return `${range[0]}-${range[1]} of ${total} items`;
+                    }
+                  }}
+                />
                 <Row>
                   <Col span={24}>
                     <Collapse

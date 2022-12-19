@@ -6,7 +6,8 @@ import {
   UserOutlined,
   LogoutOutlined,
   ScheduleOutlined,
-  CalendarOutlined
+  CalendarOutlined,
+  ApiOutlined
 } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import Container from '../../layout/Container';
@@ -159,6 +160,14 @@ const Header = () => {
                       onClick={() => navigate('/appointment-history')}>
                       <ScheduleOutlined />
                       Lịch sử hẹn
+                    </Button>
+                    <Button
+                      type="primary"
+                      className="appointment-register-btn"
+                      style={{ background: '#e7e7e7', border: '#e7e7e7', color: '#1f2b6c' }}
+                      onClick={() => navigate('/injection-history')}>
+                      <ApiOutlined />
+                      Lịch sử tiêm
                     </Button>
                     <Dropdown menu={{ items }}>
                       <div>
