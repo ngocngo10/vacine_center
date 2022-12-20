@@ -55,7 +55,8 @@ import {
   appointmentDeleteReducer,
   appointmentMultiDeleteReducer,
   appointmentReducer,
-  appointmentConfirmReducer
+  appointmentConfirmReducer,
+  appointmentUnConfirmReducer
 } from './reducers/appointment.reducer';
 
 import {
@@ -123,6 +124,7 @@ const reducer = combineReducers({
   appointmentMultiDelete: appointmentMultiDeleteReducer,
   appointment: appointmentReducer,
   appointmentConfirm: appointmentConfirmReducer,
+  appointmentUnConfirm: appointmentUnConfirmReducer,
 
   injectionCreate: injectionCreateReducer,
   injectionList: injectionListReducer,

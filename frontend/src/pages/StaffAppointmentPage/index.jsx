@@ -56,14 +56,24 @@ const StaffAppointmentPage = () => {
       desiredDate: values.desiredDate ? moment(values.desiredDate).format('YYYY-MM-DD') : null,
       scheduleId: values.schedule
     };
+    // if (values.status === 1) {
+    //   query = { ...query, isConfirmed: 'false', isCancelled: 'false' };
+    // }
+    // if (values.status === 2) {
+    //   query = { ...query, isConfirmed: 'true', isCancelled: 'false' };
+    // }
+    // if (values.status === 3) {
+    //   query = { ...query, isCancelled: 'true' };
+    // }
+
     if (values.status === 1) {
-      query = { ...query, isConfirmed: 'false', isCancelled: 'false' };
+      query = { ...query, isConfirmed: 'null', isCancelled: 'false' };
     }
     if (values.status === 2) {
       query = { ...query, isConfirmed: 'true', isCancelled: 'false' };
     }
     if (values.status === 3) {
-      query = { ...query, isCancelled: 'true' };
+      query = { ...query, isCancelled: 'trueOrFalseConfirm' };
     }
     dispatch(getAppointmentHistories(query));
   };
@@ -148,7 +158,7 @@ const StaffAppointmentPage = () => {
       .format('HH:mm')}`,
     wishList: item.wishList,
     isConfirmed: item.isConfirmed,
-    isCancelled: item.isCancelled
+    isCancelled: item.isCancelled || (typeof item.isConfirmed === 'boolean' && !item.isConfirmed)
   }));
 
   return (
