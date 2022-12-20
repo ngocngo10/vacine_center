@@ -44,7 +44,7 @@ const StaffInjectionHistoryDetailPage = () => {
 
   const patientInjections = useSelector((state) => state.patientInjections);
   const { patientInjectionsList, totalItem } = patientInjections;
-  console.log('patientInjectionsList', patientInjectionsList);
+
   const handleTableChange = (pagination) => {
     dispatch(getPatientInjections({ query: { perPage: 10, page: pagination.current }, id: id }));
     setCurrentPage(pagination.current - 1);
