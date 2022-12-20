@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Form, Input, Image, Row, Col, Card, Checkbox } from 'antd';
+import { Button, Form, Input, Image, Row, Col, Select, Checkbox } from 'antd';
 import patterns from '../../constants/pattern.constant';
 import { useNavigate } from 'react-router-dom';
 import { editUser, getUser } from '../../actions/user.action';
@@ -109,20 +109,7 @@ const ProfilePage = () => {
               onFinish={onFinish}
               scrollToFirstError>
               <h2 className="page-title">Thông tin tài khoản cá nhân</h2>
-              <Form.Item
-                name="email"
-                label="E-mail"
-                // rules={[
-                //   {
-                //     type: 'email',
-                //     message: 'Email không đúng!'
-                //   },
-                //   {
-                //     required: true,
-                //     message: 'Vui lòng nhập email!'
-                //   }
-                // ]}
-              >
+              <Form.Item name="email" label="E-mail">
                 <Input disabled={true} />
               </Form.Item>
               <Form.Item
@@ -133,7 +120,17 @@ const ProfilePage = () => {
                     required: true,
                     message: 'Vui lòng nhập họ và tên!',
                     whitespace: true
-                  }
+                  },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value?.trim() || patterns.FULL_NAME_PATTERN.test(value?.trim())) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error('Họ và tên có ít nhất 3 kí tự và tối đa 40 kí tự!')
+                      );
+                    }
+                  })
                 ]}>
                 <Input />
               </Form.Item>
@@ -165,7 +162,10 @@ const ProfilePage = () => {
                     message: 'Vui lòng chọn giới tinh!'
                   }
                 ]}>
-                <Input />
+                <Select placeholder="Chọn giới tính">
+                  <Option value="male">Male</Option>
+                  <Option value="female">Female</Option>
+                </Select>
               </Form.Item>
               <Form.Item
                 name="password"
@@ -199,7 +199,7 @@ const ProfilePage = () => {
                   // },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
-                      if (!value || getFieldValue('password') === value) {
+                      if (getFieldValue('password') === value) {
                         return Promise.resolve();
                       }
                       return Promise.reject(new Error('Mật khẩu nhập lại không khớp!'));

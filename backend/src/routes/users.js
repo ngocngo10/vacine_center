@@ -5,9 +5,9 @@ const { authMiddleware } = require('../middlewares');
 
 /* GET users listing. */
 router.post('/', authMiddleware.validateToken, authMiddleware.isAdmin, UserController.register);
-router.get('/', UserController.find);
-router.get('/:id', UserController.findOne);
-router.put('/:id', UserController.update);
+router.get('/', authMiddleware.validateToken, authMiddleware.isAdmin, UserController.find);
+router.get('/:id', authMiddleware.validateToken, UserController.findOne);
+router.put('/:id', authMiddleware.validateToken, UserController.update);
 router.delete(
   '/:id',
   authMiddleware.validateToken,

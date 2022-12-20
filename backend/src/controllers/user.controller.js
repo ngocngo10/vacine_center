@@ -1,4 +1,5 @@
 const { UserService } = require('../services');
+const ErrorCreator = require('../utils/error_creator');
 const service = new UserService();
 async function register(req, res, next) {
   try {
@@ -22,15 +23,30 @@ async function find(req, res, next) {
 
 async function findOne(req, res, next) {
   try {
-    const user = await service.findOne(req.params.id);
-    res.json({ user });
+    if (req.user?.roles?.includes('admin')) {
+      const user = await service.findOne(req.params.id);
+      res.json({ user });
+    } else {
+      if (req.user.id != req.params.id) {
+        throw new ErrorCreator('Permission deny', 403);
+      }
+      const user = await service.findOne(req.params.id);
+      res.json({ user });
+    }
   } catch (error) {
     next(error);
   }
 }
 async function update(req, res, next) {
   try {
-    await service.update(req.params.id, req.body);
+    if (req.user?.roles?.includes('admin')) {
+      await service.update(req.params.id, req.body);
+    } else {
+      if (req.user.id != req.params.id) {
+        throw new ErrorCreator('Permission deny', 403);
+      }
+      await service.update(req.params.id, req.body);
+    }
     res.json({ message: 'updated.' });
   } catch (error) {
     next(error);
