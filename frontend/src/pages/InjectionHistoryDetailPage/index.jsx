@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Table, Input, Row, Col, Skeleton, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { getPatient } from '../../actions/patient.action';
+import { getPatient, getPatientInjections } from '../../actions/patient.action';
 import moment from 'moment';
 import Container from '../../layout/Container';
 import Message from '../../components/Message';
@@ -33,36 +33,27 @@ const InjectionHistoryDetailPage = () => {
       });
     }
   });
-  console.log('injections2', injections);
+
+  const patientInjections = useSelector((state) => state.patientInjections);
+  const { patientInjectionsList, totalItem } = patientInjections;
 
   const handleTableChange = (pagination) => {
-    // dispatch(getPatientList({ perPage: 10, page: pagination.current }));
+    dispatch(getPatientInjections({ query: { perPage: 10, page: pagination.current }, id: id }));
     setCurrentPage(pagination.current - 1);
   };
 
-  const onSearchPatientCode = (value) => {
-    console.log('value', value);
-    // dispatch(
-    //   getPatientList({
-    //     perPage: 10,
-    //     patientCode: value
-    //   })
-    // );
+  const onSearchVaccineCode = (value) => {
+    dispatch(getPatientInjections({ query: { perPage: 10, vaccineCode: value }, id: id }));
   };
 
-  const onSearchPatientName = (value) => {
-    console.log('value', value);
-    // dispatch(
-    //   getPatientList({
-    //     perPage: 10,
-    //     patientName: value
-    //   })
-    // );
+  const onSearchVaccineName = (value) => {
+    dispatch(getPatientInjections({ query: { perPage: 10, vaccineName: value }, id: id }));
   };
 
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('user')) {
       dispatch(getPatient(id));
+      dispatch(getPatientInjections({ query: { perPage: 10 }, id: id }));
     } else {
       navigate('/login');
     }
@@ -106,15 +97,15 @@ const InjectionHistoryDetailPage = () => {
     }
   ];
   const data = {};
-  data.totalElements = injections.length;
-  data.content = injections?.map((item, index) => ({
-    key: item.id,
+  data.totalElements = totalItem;
+  data.content = patientInjectionsList?.map((item, index) => ({
+    key: item.vaccineId,
     index: currentPage * 10 + index + 1,
-    vaccineCode: item.vaccine.vaccineCode,
-    name: item.vaccine.name,
+    vaccineCode: item.vaccineCode,
+    name: item.vaccineName,
     price: item.price,
     injectionTime: item.injectionTime,
-    day: moment(item.desiredDate).format('DD/MM/YYYY')
+    day: moment(item.injectionAt).format('DD/MM/YYYY')
   }));
 
   return (
@@ -167,10 +158,10 @@ const InjectionHistoryDetailPage = () => {
             <br></br>
             <Row justify="space-evenly">
               <Col span={8}>
-                <Search onSearch={onSearchPatientCode} placeholder="Tìm theo mã vắc xin" />
+                <Search onSearch={onSearchVaccineCode} placeholder="Tìm theo mã vắc xin" />
               </Col>
               <Col span={8}>
-                <Search onSearch={onSearchPatientName} placeholder="Tìm theo tên vắc xin" />
+                <Search onSearch={onSearchVaccineName} placeholder="Tìm theo tên vắc xin" />
               </Col>
             </Row>
             <Table

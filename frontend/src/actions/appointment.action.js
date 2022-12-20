@@ -20,7 +20,10 @@ import {
   APPOINTMENT_FAIL,
   CONFIRM_APPOINTMENT_REQUEST,
   CONFIRM_APPOINTMENT_SUCCESS,
-  CONFIRM_APPOINTMENT_FAIL
+  CONFIRM_APPOINTMENT_FAIL,
+  UN_CONFIRM_APPOINTMENT_REQUEST,
+  UN_CONFIRM_APPOINTMENT_SUCCESS,
+  UN_CONFIRM_APPOINTMENT_FAIL
 } from '../constants/appointment.constant';
 
 import { logout } from './user.action';
@@ -89,10 +92,46 @@ export const confirmAppointment = (id) => async (dispatch, getState) => {
     });
   } catch (error) {
     if (error.response?.status == 401 || error.response?.status == 403) {
-      // dispatch(logout());
+      dispatch(logout());
     }
     dispatch({
       type: CONFIRM_APPOINTMENT_FAIL,
+      payload: error.response ? error.response.data.error : error.message
+    });
+  }
+};
+
+export const unConfirmAppointment = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: UN_CONFIRM_APPOINTMENT_REQUEST
+    });
+
+    const {
+      userLogin: { userInfo }
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const url = `${BASE_URL}/api/staffs/appointments/un-confirm/${id}`;
+
+    const { result } = await axios.put(url, {}, config);
+
+    dispatch({
+      type: UN_CONFIRM_APPOINTMENT_SUCCESS,
+      payload: result
+    });
+  } catch (error) {
+    if (error.response?.status == 401 || error.response?.status == 403) {
+      dispatch(logout());
+    }
+    dispatch({
+      type: UN_CONFIRM_APPOINTMENT_FAIL,
       payload: error.response ? error.response.data.error : error.message
     });
   }
