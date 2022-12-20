@@ -120,6 +120,17 @@ module.exports = class AppointmentService {
       findOptions.where.isCancelled = reqQuery.isCancelled == 'true';
     }
 
+    if (reqQuery.isCancelled == 'trueOrFalseConfirm') {
+      findOptions.where[Op.or] = [
+        {
+          isCancelled: true
+        },
+        {
+          isConfirmed: false
+        }
+      ]
+    }
+
     const appointments = await this.repository.find(findOptions);
     const injections = appointments.rows.map((item) => item.injections);
     const vaccines = await Promise.all(
