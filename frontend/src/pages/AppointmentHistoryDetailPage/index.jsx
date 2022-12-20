@@ -202,7 +202,11 @@ const AppointmentHistoryDetailPage = () => {
                     <span>
                       Trạng thái xác nhận:
                       <strong>
-                        {appointmentItem?.isConfirmed ? 'Đã xác nhận' : 'Chưa xác nhận'}
+                        {appointmentItem?.isConfirmed
+                          ? 'Đã xác nhận'
+                          : typeof appointmentItem?.isConfirmed === 'boolean'
+                          ? 'Đã từ chối'
+                          : 'Chưa xác nhận'}
                       </strong>
                     </span>
                   </Col>

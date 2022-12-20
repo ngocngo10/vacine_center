@@ -234,7 +234,7 @@ const StaffAppointmentDetailPage = () => {
                     {appointmentItem?.isConfirmed
                       ? 'Đã xác nhận'
                       : typeof appointmentItem?.isConfirmed === 'boolean'
-                      ? 'Đã hủy'
+                      ? 'Đã từ chối'
                       : 'Chưa xác nhận'}
                   </strong>
                 </span>
