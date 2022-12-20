@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Avatar, Button, Dropdown } from 'antd';
 import 'antd/dist/antd.css';
@@ -7,7 +7,8 @@ import {
   LogoutOutlined,
   ScheduleOutlined,
   CalendarOutlined,
-  ApiOutlined
+  ApiOutlined,
+  ProfileOutlined
 } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import Container from '../../layout/Container';
@@ -26,6 +27,18 @@ const Header = () => {
 
   const items = [
     {
+      label: <Link to="/profile">Tài khoản cá nhân</Link>,
+      key: 'profile',
+      icon: (
+        <ProfileOutlined
+          style={{
+            fontSize: '20px'
+          }}
+        />
+      ),
+      className: 'dropdown-account__item'
+    },
+    {
       label: (
         <Link
           to="/login"
@@ -37,27 +50,6 @@ const Header = () => {
         </Link>
       ),
       key: 'log-out',
-      icon: (
-        <LogoutOutlined
-          style={{
-            fontSize: '20px'
-          }}
-        />
-      ),
-      className: 'dropdown-account__item'
-    },
-    {
-      label: (
-        <Link
-          to=""
-          onClick={(e) => {
-            e.preventDefault();
-            handleLogout(e);
-          }}>
-          Tài khoản
-        </Link>
-      ),
-      key: 'profile',
       icon: (
         <LogoutOutlined
           style={{

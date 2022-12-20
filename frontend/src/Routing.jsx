@@ -41,6 +41,8 @@ import AdminUsersPage from './pages/AdminUsersPage';
 import AdminUpdateUserPage from './pages/AdminUpdateUserPage';
 import AdminWarehousePage from './pages/AdminWarehousePage';
 import Main from './components/Main';
+
+import ProfilePage from './pages/ProfilePage';
 const Routing = () => {
   return (
     <Routes>
@@ -48,6 +50,8 @@ const Routing = () => {
         <Route index element={<HomePage />} />
         <Route exact path="register" element={<SignUpPage />} />
         <Route exact path="login" element={<SignInPage />} />
+        <Route exact path="profile" element={<ProfilePage />} />
+
         <Route path="vaccine-list" element={<VaccineListPage />} />
         <Route path="vaccine-detail/:vaccineId" element={<VaccineDetailPage />} />
 

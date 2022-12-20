@@ -1,4 +1,4 @@
-const INVALID_PHONE_OR_PASSWORD = 'Phone number or password is incorrect.';
+const INVALID_PHONE_OR_PASSWORD = 'Email or password is incorrect.';
 const USER_EXISTED = 'User is existed.';
 const TOKEN_EXPIRED_ERROR = 'TokenExpiredError';
 const INVALID_REFRESH_TOKEN = 'Refresh token is invalid.';

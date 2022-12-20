@@ -19,10 +19,10 @@ module.exports = class AuthService {
       password,
       roles: requestBody.roles || ['user']
     };
-    const isExist = await this.checkUserExisted(userInfo.phoneNumber);
-    if (isExist) {
-      throw new ErrorCreator(constants.USER_EXISTED, 400);
-    }
+    // const isExist = await this.checkUserExisted(userInfo.phoneNumber);
+    // if (isExist) {
+    //   throw new ErrorCreator(constants.USER_EXISTED, 400);
+    // }
     const isExistedEmail = await this.checkEmailExisted(userInfo.email);
     if (isExistedEmail) {
       throw new ErrorCreator('Email is existed', 400);
@@ -54,10 +54,10 @@ module.exports = class AuthService {
   }
 
   async login(requestBody) {
-    const { phoneNumber, password } = requestBody;
+    const { email, password } = requestBody;
     const user = await this.repository.model.findOne({
       where: {
-        [Op.or]: [{ phoneNumber: phoneNumber }, { email: phoneNumber }]
+        [Op.or]: [{ email: email }]
       }
     });
     if (!user) {

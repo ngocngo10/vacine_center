@@ -55,7 +55,7 @@ export const register = (values) => async (dispatch) => {
   }
 };
 
-export const login = (phoneNumber, password) => async (dispatch) => {
+export const login = (sendData) => async (dispatch) => {
   try {
     dispatch({
       type: USER_LOGIN_REQUEST
@@ -67,7 +67,7 @@ export const login = (phoneNumber, password) => async (dispatch) => {
       }
     };
 
-    const { data } = await axios.post(`${BASE_URL}/auth/login`, { phoneNumber, password }, config);
+    const { data } = await axios.post(`${BASE_URL}/auth/login`, sendData, config);
 
     dispatch({
       type: USER_LOGIN_SUCCESS,
