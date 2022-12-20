@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { Tag, Badge, Table, Input, Row, Col, Form, Select, Button } from 'antd';
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, CloseCircleOutlined, CheckOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
@@ -42,13 +42,13 @@ const AppointmentHistoryPage = () => {
       patientName: values.patientName
     };
     if (values.status === 1) {
-      query = { ...query, isConfirmed: 'false', isCancelled: 'false' };
+      query = { ...query, isConfirmed: 'null', isCancelled: 'false' };
     }
     if (values.status === 2) {
       query = { ...query, isConfirmed: 'true', isCancelled: 'false' };
     }
     if (values.status === 3) {
-      query = { ...query, isCancelled: 'true' };
+      query = { ...query, isCancelled: 'trueOrFalseConfirm' };
     }
     dispatch(getAppointmentHistories(query));
   };
@@ -114,11 +114,22 @@ const AppointmentHistoryPage = () => {
           <Tag icon={<CheckCircleOutlined />} color="success">
             ĐÃ XÁC NHẬN
           </Tag>
-        ) : (
+        ) : typeof isConfirmed === 'boolean' && !isConfirmed ? (
           <Tag icon={<CloseCircleOutlined />} color="error">
+            ĐÃ TỪ CHỐI
+          </Tag>
+        ) : (
+          <Tag icon={<CloseCircleOutlined />} color="purple">
             CHƯA XÁC NHẬN
           </Tag>
         )
+    },
+    {
+      title: 'Đã tự hủy',
+      dataIndex: 'isCancelled',
+      align: 'center',
+      key: 'isCancelled',
+      render: (value) => value && <CheckOutlined style={{ color: 'blue' }} />
     },
     {
       title: 'Xem chi tiết',
@@ -144,6 +155,7 @@ const AppointmentHistoryPage = () => {
     listType: item.listType,
     wishList: item.wishList,
     isConfirmed: item.isConfirmed,
+    isCancelled: item.isCancelled,
     isInjected: 'Chưa tiêm',
     action: item.id
   }));
