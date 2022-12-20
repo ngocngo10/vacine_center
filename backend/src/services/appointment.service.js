@@ -7,6 +7,7 @@ const {
 } = require('../repositories');
 const ErrorCreator = require('../utils/error_creator');
 const moment = require('moment');
+const { Sequelize } = require('../models');
 
 module.exports = class AppointmentService {
   constructor() {
@@ -55,15 +56,18 @@ module.exports = class AppointmentService {
   }
 
   async update(id, body) {
+    const appointment = await this.repository.findOne(id);
     const updateData = {
       ...body
     };
     if (body.isCheckIn) {
       updateData.checkInAt = moment().format('YYYY-MM-DD HH:mm:ss');
     }
-    // else {
-    //   updateData.checkInAt = null;
-    // }
+    if (body.isCancelled) {
+      await this.scheduleRepository.update(appointment.scheduleId, {
+        totalParticipant: Sequelize.literal(`total_participant + 1`)
+      });
+    }
     await this.repository.update(id, updateData);
     return;
   }

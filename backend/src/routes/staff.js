@@ -11,4 +11,11 @@ router.put(
   StaffController.confirmAppointment
 );
 
+router.put(
+  '/appointments/un-confirm/:id',
+  authMiddleware.validateToken,
+  authMiddleware.isStaff,
+  StaffController.unConfirmAppointment
+);
+
 module.exports = router;
