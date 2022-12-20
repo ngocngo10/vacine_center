@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Image, Form, Card, Row, Col, Input, Divider, Button } from 'antd';
+import { Image, Form, Card, Row, Col, Input, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { getSignedRequest } from '../../actions/upload.action';
 import './index.css';

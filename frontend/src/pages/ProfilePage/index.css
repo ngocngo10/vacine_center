@@ -1,0 +1,15 @@
+.preview-profile-image {
+  border-radius: 50% 50%;
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+}
+
+.profile-avatar {
+  margin: 50px 0px;
+  height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}

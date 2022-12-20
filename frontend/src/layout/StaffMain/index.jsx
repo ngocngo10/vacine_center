@@ -3,7 +3,7 @@ import React from 'react';
 import 'antd/dist/antd.css';
 const { Header, Footer, Sider, Content } = Layout;
 import StaffSideNav from '../StaffSideNav';
-import AdminHeader from '../AdminHeader';
+import StaffHeader from '../StaffHeader';
 import { Outlet } from 'react-router-dom';
 
 const StaffMain = () => (
@@ -13,7 +13,7 @@ const StaffMain = () => (
     </Sider>
     <Layout style={{ minHeight: '100vh' }}>
       <Header className="admin-header">
-        <AdminHeader />
+        <StaffHeader />
       </Header>
       <Content className="admin-content">
         <Outlet />
