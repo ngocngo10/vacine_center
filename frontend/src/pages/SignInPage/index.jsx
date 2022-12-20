@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
-import { LockOutlined, PhoneOutlined } from '@ant-design/icons';
+import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import Container from '../../layout/Container';
@@ -30,8 +30,7 @@ const SignInPage = () => {
   }, [userInfo]);
 
   const onFinish = (values) => {
-    const { phoneNumber, password } = values;
-    dispatch(login(phoneNumber, password));
+    dispatch(login(values));
   };
   return (
     <>
@@ -42,14 +41,19 @@ const SignInPage = () => {
             <h2 className="login-form-title">Đăng nhập</h2>
             <Form name="login-form" className="login-form" onFinish={onFinish}>
               <Form.Item
-                name="phoneNumber"
+                name="email"
                 rules={[
                   {
                     required: true,
-                    message: 'Vui lòng nhập số điện thoại hoặc email!'
+                    message: 'Vui lòng nhập email!',
+                    whitespace: true
+                  },
+                  {
+                    type: 'email',
+                    message: 'Email không đúng!'
                   }
                 ]}>
-                <Input prefix={<PhoneOutlined />} placeholder="Số điện thoại hoặc Email" />
+                <Input prefix={<MailOutlined />} placeholder=" Email" />
               </Form.Item>
               <Form.Item
                 name="password"

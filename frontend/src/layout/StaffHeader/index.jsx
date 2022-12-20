@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../actions/user.action';
 import './index.css';
 
-const AdminHeader = () => {
+const StaffHeader = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -18,7 +18,7 @@ const AdminHeader = () => {
   };
   const items = [
     {
-      label: <Link to="/admin-home/profile">Tài khoản cá nhân</Link>,
+      label: <Link to="/staff-home/profile">Tài khoản cá nhân</Link>,
       key: 'profile',
       icon: (
         <ProfileOutlined
@@ -72,4 +72,4 @@ const AdminHeader = () => {
   );
 };
 
-export default AdminHeader;
+export default StaffHeader;

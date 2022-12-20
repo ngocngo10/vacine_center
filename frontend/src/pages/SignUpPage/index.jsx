@@ -64,6 +64,21 @@ const SignUpPage = () => {
               scrollToFirstError>
               <h3 className="form-title">Đăng kí</h3>
               <Form.Item
+                name="email"
+                label="E-mail"
+                rules={[
+                  {
+                    type: 'email',
+                    message: 'Email không đúng!'
+                  },
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập email!'
+                  }
+                ]}>
+                <Input />
+              </Form.Item>
+              <Form.Item
                 name="phoneNumber"
                 label="Số điện thoại"
                 rules={[
@@ -163,21 +178,7 @@ const SignUpPage = () => {
                 ]}>
                 <Input.Password />
               </Form.Item>
-              <Form.Item
-                name="email"
-                label="E-mail"
-                rules={[
-                  {
-                    type: 'email',
-                    message: 'Email không đúng!'
-                  },
-                  {
-                    required: true,
-                    message: 'Vui lòng nhập email!'
-                  }
-                ]}>
-                <Input />
-              </Form.Item>
+
               <Form.Item>
                 <Button type="primary" htmlType="submit" className="sign-up-btn">
                   Đăng kí

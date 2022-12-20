@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Avatar, Button, Dropdown } from 'antd';
+import { Avatar, Button, Dropdown, Image } from 'antd';
 import 'antd/dist/antd.css';
 import {
   UserOutlined,
   LogoutOutlined,
   ScheduleOutlined,
   CalendarOutlined,
-  ApiOutlined
+  ApiOutlined,
+  ProfileOutlined
 } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import Container from '../../layout/Container';
@@ -26,6 +27,18 @@ const Header = () => {
 
   const items = [
     {
+      label: <Link to="/profile">Tài khoản cá nhân</Link>,
+      key: 'profile',
+      icon: (
+        <ProfileOutlined
+          style={{
+            fontSize: '20px'
+          }}
+        />
+      ),
+      className: 'dropdown-account__item'
+    },
+    {
       label: (
         <Link
           to="/login"
@@ -37,27 +50,6 @@ const Header = () => {
         </Link>
       ),
       key: 'log-out',
-      icon: (
-        <LogoutOutlined
-          style={{
-            fontSize: '20px'
-          }}
-        />
-      ),
-      className: 'dropdown-account__item'
-    },
-    {
-      label: (
-        <Link
-          to=""
-          onClick={(e) => {
-            e.preventDefault();
-            handleLogout(e);
-          }}>
-          Tài khoản
-        </Link>
-      ),
-      key: 'profile',
       icon: (
         <LogoutOutlined
           style={{
@@ -118,28 +110,6 @@ const Header = () => {
                   Danh mục vắc xin
                 </Link>
               </li>
-              {/* <Link className="header-menu__item">
-                <a to="#" className="header-menu-item__link">
-                  Gói tiêm
-                </a>
-              </Link> */}
-              {/* <li className="header-menu__item">
-                <a href="#" className="header-menu-item__link">
-                  Cẩm nang
-                </a>
-                <ul className="header-menu-sub">
-                  <li className="header-menu-sub__item">
-                    <a href="/vaccine-list" className="menu-sub-item__link">
-                      Thông tin vắc xin
-                    </a>
-                  </li>
-                  <li className="header-menu-sub__item">
-                    <a href="" className="menu-sub-item__link">
-                      Bảng giá
-                    </a>
-                  </li>
-                </ul>
-              </li> */}
             </ul>
             <div className="header-user-action">
               <Button
@@ -172,7 +142,15 @@ const Header = () => {
                     <Dropdown menu={{ items }}>
                       <div>
                         <span className="user-info__name">{userInfo.user.name}</span>
-                        <Avatar size="large" icon={<UserOutlined />} />
+                        {userInfo.user.avatar ? (
+                          <Avatar
+                            src={<Image src={userInfo.user.avatar} />}
+                            size="large"
+                            icon={<UserOutlined />}
+                          />
+                        ) : (
+                          <Avatar size="large" icon={<UserOutlined />} />
+                        )}
                       </div>
                     </Dropdown>
                   </>
