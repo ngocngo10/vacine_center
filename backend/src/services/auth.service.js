@@ -45,10 +45,12 @@ module.exports = class AuthService {
       token,
       refreshToken,
       user: {
+        id: newUser.id,
         name: newUser.name,
         roles: newUser.roles,
         email: newUser.email,
-        phoneNumber: newUser.phoneNumber
+        phoneNumber: newUser.phoneNumber,
+        avatar: newUser.avatar
       }
     };
   }
@@ -88,7 +90,8 @@ module.exports = class AuthService {
           name: user.name,
           roles: user.roles,
           email: user.email,
-          phoneNumber: user.phoneNumber
+          phoneNumber: user.phoneNumber,
+          avatar: user.avatar
         }
       };
     }

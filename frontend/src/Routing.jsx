@@ -84,6 +84,8 @@ const Routing = () => {
         <Route path="users/:id" element={<AdminUpdateUserPage />} />
 
         <Route path="warehouse" element={<AdminWarehousePage />} />
+
+        <Route exact path="profile" element={<ProfilePage />} />
       </Route>
 
       <Route exact path="/staff-home" element={<StaffMain />}>
@@ -100,6 +102,8 @@ const Routing = () => {
           path="appointments-history/details/:id"
           element={<StaffInjectionHistoryDetailPage />}
         />
+
+        <Route exact path="profile" element={<ProfilePage />} />
       </Route>
     </Routes>
   );
