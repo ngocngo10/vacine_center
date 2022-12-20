@@ -19,7 +19,10 @@ import {
   APPOINTMENT_FAIL,
   CONFIRM_APPOINTMENT_REQUEST,
   CONFIRM_APPOINTMENT_SUCCESS,
-  CONFIRM_APPOINTMENT_FAIL
+  CONFIRM_APPOINTMENT_FAIL,
+  UN_CONFIRM_APPOINTMENT_REQUEST,
+  UN_CONFIRM_APPOINTMENT_SUCCESS,
+  UN_CONFIRM_APPOINTMENT_FAIL
 } from '../constants/appointment.constant';
 
 export const appointmentConfirmReducer = (state = {}, action) => {
@@ -32,6 +35,22 @@ export const appointmentConfirmReducer = (state = {}, action) => {
         confirmSuccess: true
       };
     case CONFIRM_APPOINTMENT_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const appointmentUnConfirmReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UN_CONFIRM_APPOINTMENT_REQUEST:
+      return { loading: true };
+    case UN_CONFIRM_APPOINTMENT_SUCCESS:
+      return {
+        loading: false,
+        unConfirmSuccess: true
+      };
+    case UN_CONFIRM_APPOINTMENT_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

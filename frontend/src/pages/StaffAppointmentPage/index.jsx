@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Table, Input, Button, Select, Row, Col, DatePicker, Card, Form } from 'antd';
-import { CheckOutlined } from '@ant-design/icons';
+import { Table, Input, Tag, Button, Select, Row, Col, DatePicker, Card, Form } from 'antd';
+import { CheckOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getScheduleOnDay } from '../../actions/schedule.action';
 import { getAppointmentHistories } from '../../actions/appointment.action';
@@ -56,14 +56,15 @@ const StaffAppointmentPage = () => {
       desiredDate: values.desiredDate ? moment(values.desiredDate).format('YYYY-MM-DD') : null,
       scheduleId: values.schedule
     };
+
     if (values.status === 1) {
-      query = { ...query, isConfirmed: 'false', isCancelled: 'false' };
+      query = { ...query, isConfirmed: 'null', isCancelled: 'false' };
     }
     if (values.status === 2) {
       query = { ...query, isConfirmed: 'true', isCancelled: 'false' };
     }
     if (values.status === 3) {
-      query = { ...query, isCancelled: 'true' };
+      query = { ...query, isCancelled: 'trueOrFalseConfirm' };
     }
     dispatch(getAppointmentHistories(query));
   };
@@ -119,14 +120,26 @@ const StaffAppointmentPage = () => {
         ))
     },
     {
-      title: 'Đã xác nhận',
+      title: 'Xác nhận',
       dataIndex: 'isConfirmed',
       key: 'isConfirmed',
-      align: 'center',
-      render: (value) => value && <CheckOutlined style={{ color: 'blue' }} />
+      render: (isConfirmed) =>
+        isConfirmed ? (
+          <Tag icon={<CheckCircleOutlined />} color="success">
+            ĐÃ XÁC NHẬN
+          </Tag>
+        ) : typeof isConfirmed === 'boolean' && !isConfirmed ? (
+          <Tag icon={<CloseCircleOutlined />} color="error">
+            ĐÃ TỪ CHỐI
+          </Tag>
+        ) : (
+          <Tag icon={<CloseCircleOutlined />} color="purple">
+            CHƯA XÁC NHẬN
+          </Tag>
+        )
     },
     {
-      title: 'Đã hủy',
+      title: 'Đã tự hủy',
       dataIndex: 'isCancelled',
       align: 'center',
       key: 'isCancelled',
@@ -153,8 +166,8 @@ const StaffAppointmentPage = () => {
 
   return (
     <div>
-      <h2 className="page-title">Quản lí đăng kí tiêm trực tuyến</h2>
       <Card style={{ borderRadius: 10 }}>
+        <h2 className="page-title">Quản lí đăng kí tiêm trực tuyến</h2>
         <Form onFinish={handleOnSearch}>
           <Row justify="space-between">
             <Col>

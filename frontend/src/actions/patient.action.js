@@ -5,7 +5,10 @@ import {
   PATIENT_LIST_FAIL,
   PATIENT_REQUEST,
   PATIENT_SUCCESS,
-  PATIENT_FAIL
+  PATIENT_FAIL,
+  PATIENT_INJECTIONS_REQUEST,
+  PATIENT_INJECTIONS_SUCCESS,
+  PATIENT_INJECTIONS_FAIL
 } from '../constants/patient.constant';
 
 import { logout } from './user.action';
@@ -96,3 +99,54 @@ export const getPatient = (id) => async (dispatch, getState) => {
     });
   }
 };
+
+export const getPatientInjections =
+  ({ query, id }) =>
+  async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: PATIENT_INJECTIONS_REQUEST
+      });
+
+      const {
+        userLogin: { userInfo }
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+          'Content-Type': 'application/json'
+        }
+      };
+
+      const reqQuery = { ...query };
+
+      const queries = [];
+      for (let key in reqQuery) {
+        if (reqQuery[key]) {
+          queries.push(`${key}=${reqQuery[key]}`);
+        }
+      }
+      const queryString = queries.join('&');
+
+      const url = queryString
+        ? `${BASE_URL}/api/patients/${id}/injections?${queryString}`
+        : `${BASE_URL}/api/patients/${id}/injections`;
+
+      const { data } = await axios.get(url, config);
+
+      console.log('data', data);
+      dispatch({
+        type: PATIENT_INJECTIONS_SUCCESS,
+        payload: data
+      });
+    } catch (error) {
+      if (error.response?.status == 401 || error.response?.status == 403) {
+        dispatch(logout());
+      }
+      dispatch({
+        type: PATIENT_INJECTIONS_FAIL,
+        payload: error.response ? error.response.data.error : error.message
+      });
+    }
+  };

@@ -6,7 +6,8 @@ import { getProvinceList } from '../../actions/province.action';
 import {
   editAppointment,
   getAppointment,
-  confirmAppointment
+  confirmAppointment,
+  unConfirmAppointment
 } from '../../actions/appointment.action';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
@@ -18,6 +19,7 @@ const StaffAppointmentDetailPage = () => {
   const dispatch = useDispatch();
   const [isCheckInAction, setIsCheckInAction] = useState(false);
   const [isConfirmAction, setIsConfirmAction] = useState(false);
+  const [isUnConfirmAction, setIsUnConfirmAction] = useState(false);
   const { id } = useParams();
 
   const provinceList = useSelector((state) => state.provinceList);
@@ -47,16 +49,28 @@ const StaffAppointmentDetailPage = () => {
   const appointmentConfirm = useSelector((state) => state.appointmentConfirm);
   const { confirmSuccess } = appointmentConfirm;
 
+  const appointmentUnConfirm = useSelector((state) => state.appointmentUnConfirm);
+  const { unConfirmSuccess } = appointmentUnConfirm;
+
   const handleCheckIn = () => {
     dispatch(editAppointment({ isCheckIn: true, id }));
+    setIsUnConfirmAction(false);
     setIsConfirmAction(false);
     setIsCheckInAction(true);
   };
 
   const handleConfirm = () => {
     dispatch(confirmAppointment(id));
+    setIsUnConfirmAction(false);
     setIsCheckInAction(false);
     setIsConfirmAction(true);
+  };
+
+  const handleUnConfirm = () => {
+    setIsCheckInAction(false);
+    setIsConfirmAction(false);
+    setIsUnConfirmAction(true);
+    dispatch(unConfirmAppointment(id));
   };
 
   useEffect(() => {
@@ -66,7 +80,7 @@ const StaffAppointmentDetailPage = () => {
     } else {
       navigate('/login');
     }
-  }, [userInfo, id, editSuccess, confirmSuccess]);
+  }, [userInfo, id, editSuccess, confirmSuccess, unConfirmSuccess]);
   return loading ? (
     <Loader />
   ) : error ? (
@@ -80,6 +94,9 @@ const StaffAppointmentDetailPage = () => {
       {appointmentConfirm?.error && <Message description={appointmentConfirm?.error} />}
       {confirmSuccess && isConfirmAction && (
         <Message type="success" description="Xác nhận cuộc hẹn thành công!" />
+      )}
+      {unConfirmSuccess && isUnConfirmAction && (
+        <Message type="success" description="Từ chối cuộc hẹn thành công!" />
       )}
       <Row justify="center">
         <Col span={24}>
@@ -213,7 +230,13 @@ const StaffAppointmentDetailPage = () => {
               <Col span={12}>
                 <span>
                   Trạng thái xác nhận:
-                  <strong>{appointmentItem?.isConfirmed ? 'Đã xác nhận' : 'Chưa xác nhận'}</strong>
+                  <strong>
+                    {appointmentItem?.isConfirmed
+                      ? 'Đã xác nhận'
+                      : typeof appointmentItem?.isConfirmed === 'boolean'
+                      ? 'Đã từ chối'
+                      : 'Chưa xác nhận'}
+                  </strong>
                 </span>
               </Col>
               <Col>
@@ -242,23 +265,40 @@ const StaffAppointmentDetailPage = () => {
                   Trở về
                 </Button>
               </Col>
-              <Col span={4}>
-                <Button
-                  onClick={handleConfirm}
-                  disabled={
-                    appointmentItem?.isConfirmed || appointmentItem?.isCancelled ? true : false
-                  }
-                  style={{ background: '#1f2b6c', border: '#1f2b6c', color: '#fff' }}>
-                  Xác nhận hẹn
-                </Button>
-              </Col>
+              {typeof appointmentItem?.isConfirmed === 'object' &&
+                !appointmentItem?.isConfirmed &&
+                !appointmentItem?.isCancelled && (
+                  <Col span={4}>
+                    <Button
+                      onClick={handleConfirm}
+                      style={{ background: '#1f2b6c', border: '#1f2b6c', color: '#fff' }}>
+                      Xác nhận hẹn
+                    </Button>
+                  </Col>
+                )}
+              {typeof appointmentItem?.isConfirmed === 'boolean' &&
+                appointmentItem?.isConfirmed &&
+                !appointmentItem?.isCancelled && (
+                  <Col span={4}>
+                    <Button
+                      onClick={handleUnConfirm}
+                      style={{ background: '#dc3545', border: '#dc3545', color: '#fff' }}>
+                      Từ chối cuộc hẹn
+                    </Button>
+                  </Col>
+                )}
+
               <Col>
                 <Button
                   disabled={
-                    appointmentItem?.checkInAt || appointmentItem?.isCancelled ? true : false
+                    appointmentItem?.checkInAt ||
+                    appointmentItem?.isCancelled ||
+                    !appointmentItem?.isConfirmed
+                      ? true
+                      : false
                   }
                   onClick={handleCheckIn}
-                  style={{ background: '#dc3545', border: '#dc3545', color: '#fff' }}>
+                  style={{ background: '#0d65ff', border: '#0d65ff', color: '#fff' }}>
                   Xác nhận check in
                 </Button>
               </Col>

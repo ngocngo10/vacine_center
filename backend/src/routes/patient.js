@@ -9,5 +9,6 @@ router.get('/', authMiddleware.validateToken, PatientController.find);
 router.get('/:id', authMiddleware.validateToken, PatientController.findOne);
 router.put('/:id', authMiddleware.validateToken, PatientController.update);
 router.delete('/:id', authMiddleware.validateToken, PatientController.deletePatient);
+router.get('/:id/injections', authMiddleware.validateToken, PatientController.injectionHistories);
 
 module.exports = router;

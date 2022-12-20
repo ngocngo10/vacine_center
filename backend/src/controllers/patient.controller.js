@@ -57,10 +57,20 @@ async function deletePatient(req, res, next) {
   }
 }
 
+async function injectionHistories(req, res, next) {
+  try {
+    const vaccines = await patientService.injectionHistories(req.params.id, req.query);
+    return res.json({ vaccines });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   create,
   find,
   findOne,
   update,
-  deletePatient
+  deletePatient,
+  injectionHistories
 };

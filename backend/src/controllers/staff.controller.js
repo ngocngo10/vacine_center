@@ -12,6 +12,18 @@ async function confirmAppointment(req, res, next) {
   }
 }
 
+async function unConfirmAppointment(req, res, next) {
+  try {
+    await staffService.unConfirmAppointment(req.params.id);
+    return res.json({
+      message: 'Appointment is not confirmed'
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
-  confirmAppointment
+  confirmAppointment,
+  unConfirmAppointment
 };
