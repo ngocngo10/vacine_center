@@ -72,7 +72,11 @@ import {
 
 import { screenTestCreateReducer, screenTestEditReducer } from './reducers/screen_test.reducer';
 
-import { patientListReducer, patientReducer } from './reducers/patient.reducer';
+import {
+  patientListReducer,
+  patientReducer,
+  patientInjectionsReducer
+} from './reducers/patient.reducer';
 
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
@@ -132,6 +136,7 @@ const reducer = combineReducers({
 
   patientList: patientListReducer,
   patient: patientReducer,
+  patientInjections: patientInjectionsReducer,
   injectionDeleteMulti: injectionDeleteMultiReducer
 });
 
