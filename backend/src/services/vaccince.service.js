@@ -63,6 +63,10 @@ module.exports = class VaccineService {
         };
       }
 
+      if (reqQuery.code) {
+        findOptions.where['$vaccine_code$'] = reqQuery.code;
+      }
+
       const page = reqQuery.page || 1;
       findOptions.limit = +reqQuery.perPage || 10;
       findOptions.offset = (page - 1) * findOptions.limit;

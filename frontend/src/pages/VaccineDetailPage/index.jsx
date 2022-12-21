@@ -48,7 +48,7 @@ const VaccineDetailPage = () => {
                       {vaccineInforms?.length &&
                         vaccineInforms.map((informItem, index) => (
                           <li key={informItem.id} className="sidebar-item">
-                            <a href={`#inform-${informItem.id}`}>{`${index + 1}. ${
+                            <a href={`#inform-${index + 1}`}>{`${index + 1}. ${
                               informItem.title
                             }`}</a>
                           </li>
