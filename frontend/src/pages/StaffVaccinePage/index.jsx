@@ -1,21 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { Image } from 'antd';
+import { Table, Input, Row, Col, Form, Select, Button, Image } from 'antd';
 import Loader from '../../components/Loader';
-import Header from '../../components/table/Header';
-import useDataTable from '../../components/table/DataTable';
-import {
-  getVaccineList,
-  deleteSingleVaccine,
-  deleteMultiVaccine
-} from '../../actions/vaccine.action';
 import Message from '../../components/Message';
+import Container from '../../layout/Container';
+import { getVaccineList } from '../../actions/vaccine.action';
 import './index.css';
 
-const AdminVaccinePage = () => {
+const { Search } = Input;
+
+const StaffVaccinePage = () => {
+  const DEFAULT_PAGE_NUMBER = 0;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_NUMBER);
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -23,19 +23,26 @@ const AdminVaccinePage = () => {
   const vaccineList = useSelector((state) => state.vaccineList);
   const { loading, error, vaccines, totalItem } = vaccineList;
 
-  const vaccineSingleDelete = useSelector((state) => state.vaccineSingleDelete);
-  const { singleDeleteSuccess: singleDeleteSuccess } = vaccineSingleDelete;
+  const handleTableChange = (pagination) => {
+    dispatch(getVaccineList({ perPage: 10, page: pagination.current }));
+    setCurrentPage(pagination.current - 1);
+  };
 
-  const vaccineMultiDelete = useSelector((state) => state.vaccineMultiDelete);
-  const { multiDeleteSuccess: multiDeleteSuccess } = vaccineMultiDelete;
+  const handleOnSearchVaccineName = (value) => {
+    dispatch(getVaccineList({ perPage: 10, name: value }));
+  };
+
+  const handleOnSearchVaccineCode = (value) => {
+    dispatch(getVaccineList({ perPage: 10, code: value }));
+  };
 
   useEffect(() => {
-    if (userInfo && userInfo.user.roles.includes('admin')) {
+    if (userInfo && userInfo.user.roles.includes('staff')) {
       dispatch(getVaccineList({ perPage: 10 }));
     } else {
       navigate('/login');
     }
-  }, [singleDeleteSuccess, multiDeleteSuccess, userInfo]);
+  }, [userInfo]);
 
   const columns = [
     {
@@ -64,14 +71,9 @@ const AdminVaccinePage = () => {
       title: 'Tên vắc xin',
       dataIndex: 'name',
       key: 'name',
-      render: (name, record) => <Link to={'/admin-home/vaccines/' + record.key}>{name}</Link>
+      render: (name, record) => <Link to={'/staff-home/vaccines/' + record.key}>{name}</Link>
     },
 
-    // {
-    //   title: 'Nguồn gốc',
-    //   dataIndex: 'origin',
-    //   key: 'origin'
-    // },
     {
       title: 'Giá',
       dataIndex: 'price',
@@ -96,58 +98,43 @@ const AdminVaccinePage = () => {
     origin: vaccine.origin,
     qty: vaccine.quantity
   }));
-
-  const handleDeleteSingleVaccine = (id) => {
-    dispatch(deleteSingleVaccine(id));
-  };
-
-  const handleDeleteMultiVaccine = (ids) => {
-    dispatch(deleteMultiVaccine(ids));
-  };
-
-  const getVaccines = (page) => {
-    dispatch(getVaccineList({ perPage: 10, page: page }));
-  };
-
-  const handleOnSearch = (name) => {
-    dispatch(getVaccineList({ name, perPage: 10 }));
-  };
-
-  const {
-    DataTable,
-    hasSelected,
-    selectedRowKeys,
-    selectedRow,
-    currentPage,
-    pageSize,
-    resetPagination
-  } = useDataTable({
-    columns: columns,
-    dataSource: data,
-    updateEntityPath: 'admin-home/vaccines/update-vaccine',
-    handleDelete: handleDeleteSingleVaccine,
-    handleChangePage: getVaccines
-  });
-
   return loading ? (
     <Loader />
   ) : error ? (
     <Message description={error} />
   ) : (
     <div className="vaccines-card">
-      <>
-        <h2 className="page-title">Danh sách vắc xin</h2>
-        <Header
-          addNewPath="admin-home/vaccines/add-vaccine"
-          selectedRowKeys={selectedRowKeys}
-          hasSelected={hasSelected}
-          handleMultiDelete={handleDeleteMultiVaccine}
-          handleSearch={handleOnSearch}
-        />
-        <DataTable />
-      </>
+      <Container>
+        <>
+          <h2 className="page-title">Danh sách vắc xin</h2>
+          <Row justify="space-evenly">
+            <Col span={8}>
+              <Search onSearch={handleOnSearchVaccineCode} placeholder="Tìm theo mã vắc xin" />
+            </Col>
+            <Col span={8}>
+              <Search onSearch={handleOnSearchVaccineName} placeholder="Tìm tên vắc xin" />
+            </Col>
+          </Row>
+
+          <Table
+            style={{ marginTop: 20 }}
+            rowKey={(record) => record.key}
+            dataSource={data.content}
+            columns={columns}
+            onChange={handleTableChange}
+            pagination={{
+              pageSize: 10,
+              current: currentPage + 1,
+              total: data.totalElements,
+              showTotal: (total, range) => {
+                return `${range[0]}-${range[1]} of ${total} items`;
+              }
+            }}
+          />
+        </>
+      </Container>
     </div>
   );
 };
 
-export default AdminVaccinePage;
+export default StaffVaccinePage;
