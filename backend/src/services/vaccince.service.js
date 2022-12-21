@@ -64,7 +64,7 @@ module.exports = class VaccineService {
       }
 
       if (reqQuery.code) {
-        findOptions.where['$vaccine_code$'] = reqQuery.code;
+        findOptions.where.vaccineCode = reqQuery.code;
       }
 
       const page = reqQuery.page || 1;
