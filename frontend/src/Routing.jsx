@@ -43,6 +43,7 @@ import AdminWarehousePage from './pages/AdminWarehousePage';
 import Main from './components/Main';
 
 import ProfilePage from './pages/ProfilePage';
+import StaffVaccinePage from './pages/StaffVaccinePage';
 const Routing = () => {
   return (
     <Routes>
@@ -102,7 +103,8 @@ const Routing = () => {
           path="appointments-history/details/:id"
           element={<StaffInjectionHistoryDetailPage />}
         />
-
+        <Route exact path="vaccines" element={<StaffVaccinePage />} />
+        <Route exact path="vaccines/:vaccineId" element={<VaccineDetailPage />} />
         <Route exact path="profile" element={<ProfilePage />} />
       </Route>
     </Routes>
