@@ -44,6 +44,8 @@ import Main from './components/Main';
 
 import ProfilePage from './pages/ProfilePage';
 import StaffVaccinePage from './pages/StaffVaccinePage';
+
+import DashboardPage from './pages/DashboardPage';
 const Routing = () => {
   return (
     <Routes>
@@ -65,7 +67,8 @@ const Routing = () => {
       </Route>
 
       <Route exact path="/admin-home" element={<AdminMain />}>
-        <Route index element={<AdminVaccinePage />} />
+        <Route index element={<DashboardPage />} />
+        <Route path="dashboard" element={<DashboardPage />} />
         <Route path="vaccines" element={<AdminVaccinePage />} />
         <Route path="vaccines/:id" element={<AdminDetailVaccine />} />
         <Route path="vaccines/add-vaccine" element={<AdminAddVaccine />} />

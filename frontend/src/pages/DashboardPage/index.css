@@ -1,0 +1,10 @@
+.top-vaccines {
+  border-radius: 10px;
+}
+
+.top-vaccines__title {
+  color: var(--color-primary);
+  font-family: 'WorkSans-Medium';
+  font-size: 18px;
+  line-height: 1.4;
+}
