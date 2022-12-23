@@ -41,6 +41,43 @@ async function sendEmailConfirmAppointment(emailAddress, data) {
     });
 }
 
+async function sendEmailResetPassword(emailAddress, link) {
+  const params = {
+    Destination: {
+      ToAddresses: [emailAddress]
+    },
+    Message: {
+      Body: {
+        Html: {
+          Charset: 'UTF-8',
+          Data: `<p>Bấm vào đường dẫn dưới đây để thay đổi mật khẩu của bạn.</p>
+            <p>${link}</p>
+          `
+        }
+      },
+      Subject: {
+        Charset: 'UTF-8',
+        Data: 'Thay đổi mật khẩu của bạn.'
+      }
+    },
+    Source: 'no-reply@mail.datn-vaccine-center.website'
+  };
+
+  const sendPromise = new AWS.SES({
+    apiVersion: '2010-12-01'
+  })
+    .sendEmail(params)
+    .promise();
+  sendPromise
+    .then(function (data) {
+      console.log(data.MessageId);
+    })
+    .catch(function (err) {
+      console.error(err, err.stack);
+    });
+}
+
 module.exports = {
-  sendEmailConfirmAppointment
+  sendEmailConfirmAppointment,
+  sendEmailResetPassword
 };
