@@ -54,7 +54,7 @@ module.exports = class VaccineService {
 
   async find(reqQuery) {
     try {
-      let findOptions = {};
+      let findOptions = { where: {} };
       if (reqQuery.name) {
         findOptions.where = {
           name: {
@@ -82,7 +82,7 @@ module.exports = class VaccineService {
         data.rows = vaccines;
         return data;
       } else {
-        if (reqQuery.categoryId) findOptions.where = { categoryId: reqQuery.categoryId };
+        if (reqQuery.categoryId) findOptions.where.categoryId = reqQuery.categoryId;
         const data = await this.repository.find(findOptions);
         return data;
       }

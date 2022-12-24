@@ -46,6 +46,9 @@ import ProfilePage from './pages/ProfilePage';
 import StaffVaccinePage from './pages/StaffVaccinePage';
 
 import DashboardPage from './pages/DashboardPage';
+
+import SearchEmailPage from './pages/SearchEmailPage';
+import NewPasswordPage from './pages/NewPasswordPage';
 const Routing = () => {
   return (
     <Routes>
@@ -53,6 +56,9 @@ const Routing = () => {
         <Route index element={<HomePage />} />
         <Route exact path="register" element={<SignUpPage />} />
         <Route exact path="login" element={<SignInPage />} />
+        <Route exact path="forget-password" element={<SearchEmailPage />} />
+        <Route exact path="forget-password/new-password" element={<NewPasswordPage />} />
+
         <Route exact path="profile" element={<ProfilePage />} />
 
         <Route path="vaccine-list" element={<VaccineListPage />} />
