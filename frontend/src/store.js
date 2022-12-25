@@ -8,7 +8,9 @@ import {
   userListReducer,
   userReducer,
   userCreateReducer,
-  userEditReducer
+  userEditReducer,
+  passwordForgotReducer,
+  passwordChangeReducer
 } from './reducers/user.reducer';
 import {
   categoryListReducer,
@@ -87,6 +89,8 @@ const reducer = combineReducers({
   user: userReducer,
   userCreate: userCreateReducer,
   userEdit: userEditReducer,
+  passwordForgot: passwordForgotReducer,
+  passwordChange: passwordChangeReducer,
 
   categoryList: categoryListReducer,
   vaccineList: vaccineListReducer,

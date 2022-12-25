@@ -1,20 +1,27 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Form, Input, Row, Col } from 'antd';
 import { MailOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import Container from '../../layout/Container';
+import Message from '../../components/Message';
+import { getForgotPasswordLink } from '../../actions/user.action';
 import './index.css';
 
 const SearchEmailPage = () => {
   const navigate = useNavigate();
-  const onFinish = (values) => {
-    console.log('values', values);
-    navigate('/forget-password/new-password');
+  const dispatch = useDispatch();
+
+  const { loading, error, success } = useSelector((state) => state.passwordForgot);
+  const onFinish = (value) => {
+    dispatch(getForgotPasswordLink(value));
   };
   return (
     <div>
       <Container>
         <div className="forget-password-card">
+          {error && <Message description={error} />}
+          {success && <Message description="Vui lòng check mail để nhận link đổi mật khẩu!" />}
           <h2 className="page-title">Tìm tài khoản</h2>
           <Form onFinish={onFinish} name="forget-password-form" className="forget-password-form">
             <Form.Item
