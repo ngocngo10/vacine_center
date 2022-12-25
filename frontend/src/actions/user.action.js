@@ -18,7 +18,13 @@ import {
   USER_CREATE_FAIL,
   USER_EDIT_REQUEST,
   USER_EDIT_SUCCESS,
-  USER_EDIT_FAIL
+  USER_EDIT_FAIL,
+  PASSWORD_FORGOT_REQUEST,
+  PASSWORD_FORGOT_SUCCESS,
+  PASSWORD_FORGOT_FAIL,
+  PASSWORD_CHANGE_REQUEST,
+  PASSWORD_CHANGE_SUCCESS,
+  PASSWORD_CHANGE_FAIL
 } from '../constants/user.constant';
 import { BASE_URL } from '../constants/base_url.constant';
 
@@ -78,6 +84,58 @@ export const login = (sendData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
+      payload: error.response ? error.response.data.error : error.message
+    });
+  }
+};
+
+export const getForgotPasswordLink = (email) => async (dispatch) => {
+  try {
+    dispatch({
+      type: PASSWORD_FORGOT_REQUEST
+    });
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const { data } = await axios.post(`${BASE_URL}/auth/forgot-password`, email, config);
+
+    dispatch({
+      type: PASSWORD_FORGOT_SUCCESS,
+      payload: data
+    });
+  } catch (error) {
+    dispatch({
+      type: PASSWORD_FORGOT_FAIL,
+      payload: error.response ? error.response.data.error : error.message
+    });
+  }
+};
+
+export const changeNewPassword = (sendData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: PASSWORD_CHANGE_REQUEST
+    });
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const { data } = await axios.post(`${BASE_URL}/auth/change-password`, sendData, config);
+
+    dispatch({
+      type: PASSWORD_CHANGE_SUCCESS,
+      payload: data
+    });
+  } catch (error) {
+    dispatch({
+      type: PASSWORD_CHANGE_FAIL,
       payload: error.response ? error.response.data.error : error.message
     });
   }

@@ -70,9 +70,9 @@ const SignInPage = () => {
                 />
               </Form.Item>
               <Form.Item>
-                <a className="login-form-forgot" href="">
+                <Link className="login-form-forgot" to="/forget-password">
                   Quên mật khẩu
-                </a>
+                </Link>
               </Form.Item>
               <Form.Item>
                 <Button type="primary" htmlType="submit" className="login-form-btn">

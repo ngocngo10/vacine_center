@@ -163,11 +163,16 @@ module.exports = class AuthService {
         email: email
       }
     });
+    if (!user) {
+      throw new ErrorCreator('Email wrong!', 400);
+    }
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(email, salt);
     user.forgotPasswordToken = hash;
     await user.save();
-    const link = 'http://datn-vaccine-center.website:8080?resetPasswordToken=' + hash;
+    const link =
+      'http://datn-vaccine-center.website:8080/forget-password/new-password?resetPasswordToken=' +
+      hash;
     await sendEmailResetPassword(user.email, link);
   }
 
