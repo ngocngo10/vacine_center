@@ -43,9 +43,21 @@ async function unblockMultiUser(req, res, next) {
   }
 }
 
+async function statistics(req, res, next) {
+  try {
+    const statistics = await adminService.statistics(req.query);
+    res.json({
+      statistics
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   blockUser,
   unblockUser,
   blockMultiUser,
-  unblockMultiUser
+  unblockMultiUser,
+  statistics
 };

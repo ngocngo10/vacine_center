@@ -31,4 +31,11 @@ router.put(
   AdminController.unblockMultiUser
 );
 
+router.get(
+  '/statistics/',
+  authMiddleware.validateToken,
+  authMiddleware.isAdmin,
+  AdminController.statistics
+);
+
 module.exports = router;
