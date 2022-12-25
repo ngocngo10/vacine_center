@@ -5,6 +5,7 @@ const constants = require('../constants');
 const { generateLoginToken, generateRefreshToken } = require('../utils');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { sendEmailResetPassword } = require('../utils/send_mail');
 
 module.exports = class AuthService {
   constructor() {
@@ -135,6 +136,46 @@ module.exports = class AuthService {
       throw new ErrorCreator(constants.INVALID_REFRESH_TOKEN, 401);
     }
   }
+
+  async changePassword(body) {
+    const { forgotPasswordToken, newPassword } = body;
+    const user = await this.repository.model.findOne({
+      where: {
+        forgotPasswordToken
+      }
+    });
+
+    if (!user) {
+      throw new ErrorCreator('Invalid forgot password token', 400);
+    }
+    const salt = bcrypt.genSaltSync(10);
+    const password = bcrypt.hashSync(newPassword, salt);
+    user.password = password;
+    user.forgotPasswordToken = null;
+    await user.save();
+    return;
+  }
+
+  async forgotPassword(body) {
+    const email = body.email;
+    const user = await this.repository.model.findOne({
+      where: {
+        email: email
+      }
+    });
+    if (!user) {
+      throw new ErrorCreator('Email wrong!', 400);
+    }
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(email, salt);
+    user.forgotPasswordToken = hash;
+    await user.save();
+    const link =
+      'http://datn-vaccine-center.website:8080/forget-password/new-password?resetPasswordToken=' +
+      hash;
+    await sendEmailResetPassword(user.email, link);
+  }
+
   async checkUserExisted(phoneNumber) {
     return await this.repository.findUser({ phoneNumber });
   }

@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Table, Input, Tag, Button, Select, Row, Col, DatePicker, Card, Form } from 'antd';
+import {
+  Table,
+  Input,
+  Tag,
+  Button,
+  Select,
+  Row,
+  Col,
+  DatePicker,
+  Statistic,
+  Card,
+  Form
+} from 'antd';
 import { CheckOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getScheduleOnDay } from '../../actions/schedule.action';
@@ -12,6 +24,8 @@ const StaffAppointmentPage = () => {
   const DEFAULT_PAGE_NUMBER = 0;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [slot, setSlot] = useState(0);
+  const [registerNumber, setRegisterNumber] = useState(0);
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -39,6 +53,8 @@ const StaffAppointmentPage = () => {
   ];
 
   const handleChangeDay = (date) => {
+    setRegisterNumber(0);
+    setSlot(0);
     const selectedDay = moment(date).format('YYYY-MM-DD');
     dispatch(getScheduleOnDay(selectedDay));
   };
@@ -67,6 +83,13 @@ const StaffAppointmentPage = () => {
       query = { ...query, isCancelled: 'trueOrFalseConfirm' };
     }
     dispatch(getAppointmentHistories(query));
+  };
+
+  const onChangeSchedule = (value) => {
+    const schedule = schedules.find((item) => (item.id = value));
+    console.log('schedule', schedule);
+    setRegisterNumber(schedule.registerParticipantNumber);
+    setSlot(schedule.totalParticipant);
   };
 
   useEffect(() => {
@@ -168,6 +191,7 @@ const StaffAppointmentPage = () => {
     <div>
       <Card style={{ borderRadius: 10 }}>
         <h2 className="page-title">Quản lí đăng kí tiêm trực tuyến</h2>
+
         <Form onFinish={handleOnSearch}>
           <Row justify="space-between">
             <Col>
@@ -180,6 +204,7 @@ const StaffAppointmentPage = () => {
                 <Input placeholder="Tìm tên người tiêm" style={{ float: 'left', width: 250 }} />
               </Form.Item>
             </Col>
+
             <Col>
               <Form.Item name="desiredDate">
                 <DatePicker placeholder="Chọn ngày" onChange={handleChangeDay} />
@@ -194,6 +219,7 @@ const StaffAppointmentPage = () => {
                   filterOption={(input, option) =>
                     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                   }
+                  onChange={onChangeSchedule}
                   options={scheduleOptions}
                 />
               </Form.Item>
@@ -218,7 +244,21 @@ const StaffAppointmentPage = () => {
             </Col>
           </Row>
         </Form>
-
+        <Row justify="center">
+          <Col span={6}>
+            <Card>
+              <Statistic
+                title="Người đăng kí / Lượt khám tối đa"
+                value={registerNumber}
+                suffix={`/${slot}`}
+                valueStyle={{
+                  color: '#3f8600'
+                }}
+              />
+            </Card>
+          </Col>
+        </Row>
+        <br></br>
         <Table
           style={{ marginTop: 20 }}
           rowKey={(record) => record.key}

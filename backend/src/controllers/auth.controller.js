@@ -38,9 +38,30 @@ async function logout(req, res, next) {
     next(error);
   }
 }
+
+async function changePassword(req, res, next) {
+  try {
+    await authService.changePassword(req.body);
+    res.json({ message: 'Password reset successfully' });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function forgotPassword(req, res, next) {
+  try {
+    await authService.forgotPassword(req.body);
+    res.json({ message: 'Please check mail to reset your password' });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   login,
   logout,
   refreshToken,
-  register
+  register,
+  forgotPassword,
+  changePassword
 };

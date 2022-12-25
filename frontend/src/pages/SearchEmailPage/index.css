@@ -1,0 +1,7 @@
+.forget-password-card {
+  width: 700px;
+  padding: 20px 20px;
+  margin: 50px auto;
+  box-shadow: rgb(64 29 131) 2px 2px 6px;
+  background-color: var(--color-third);
+}
