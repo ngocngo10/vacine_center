@@ -46,7 +46,7 @@ db.sequelize
       function() {
         const repository = new ScheduleRepository();
         const scheduleConfigRepository = new ScheduleConfigRepository();
-        const date = moment().tz('Asia/Ho_Chi_Minh').startOf('day').add(14, 'days');
+        const date = moment().tz('Asia/Ho_Chi_Minh').startOf('day').add(20, 'days');
         const db = {
           scheduleConfigRepository,
           repository
