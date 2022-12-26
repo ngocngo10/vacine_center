@@ -69,7 +69,7 @@ export const getCategoryList = (query) => async (dispatch) => {
       payload: data
     });
 
-    localStorage.setItem('disease-categories', JSON.stringify(data.rows));
+    // localStorage.setItem('disease-categories', JSON.stringify(data.rows));
   } catch (error) {
     dispatch({
       type: CATEGORY_LIST_FAIL,

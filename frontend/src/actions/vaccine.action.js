@@ -47,7 +47,7 @@ export const getVaccineList = (query) => async (dispatch) => {
       type: VACCINE_LIST_SUCCESS,
       payload: data
     });
-    localStorage.setItem('vaccines', JSON.stringify(data.rows));
+    // localStorage.setItem('vaccines', JSON.stringify(data.rows));
   } catch (error) {
     dispatch({
       type: VACCINE_LIST_FAIL,

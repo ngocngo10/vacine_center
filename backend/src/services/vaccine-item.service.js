@@ -2,6 +2,7 @@ const { VaccineItemRepository } = require('../repositories');
 const { sequelize } = require('../models');
 const ErrorCreator = require('../utils/error_creator');
 const { Op } = require('sequelize');
+const moment = require('moment-timezone');
 
 module.exports = class VaccineItemService {
   constructor() {
@@ -35,6 +36,19 @@ module.exports = class VaccineItemService {
 
       if (reqQuery.vaccineCode) {
         findOptions.where.vaccineCode = reqQuery.vaccineCode;
+      }
+
+      if (reqQuery.isExpired) {
+        findOptions.where.expirationDate = {
+          [Op.lt]: moment().format('YYYY-MM-DD')
+        }
+      }
+
+      if (reqQuery.expiredDay) {
+        findOptions.where.expirationDate = {
+          [Op.lt]: moment().add(+reqQuery.expiredDay, 'days').startOf('day').format('YYYY-MM-DD'),
+          [Op.gte]: moment().startOf('day').format('YYYY-MM-DD')
+        }
       }
 
       if (reqQuery.isAvailable) {

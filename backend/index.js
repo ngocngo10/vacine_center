@@ -36,6 +36,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 const db = require('./src/models');
+const { ScheduleConfigRepository, ScheduleRepository } = require('./src/repositories');
 db.sequelize
   .sync()
   .then(() => {
@@ -43,7 +44,13 @@ db.sequelize
     const job = new cron.CronJob(
       '0 0 0 * * *',
       function() {
+        const repository = new ScheduleRepository();
+        const scheduleConfigRepository = new ScheduleConfigRepository();
         const date = moment().tz('Asia/Ho_Chi_Minh').startOf('day').add(14, 'days');
+        const db = {
+          scheduleConfigRepository,
+          repository
+        }
         jobs.createDailySchedules(date, db);
       },
       null,

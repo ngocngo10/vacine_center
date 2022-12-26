@@ -13,7 +13,6 @@ async function validateToken(req, res, next) {
       req.user = {
         ...decoded.user
       };
-      console.log('req.user,', req.user);
       return next();
     }
 
@@ -30,7 +29,6 @@ async function validateToken(req, res, next) {
 
 async function isAdmin(req, res, next) {
   const user = await User.findByPk(req.user.id);
-  console.log(user);
   if (!user || !user.roles.includes('admin')) {
     next(new ErrorCreator('Permission deny.', 403));
   }
@@ -39,7 +37,6 @@ async function isAdmin(req, res, next) {
 
 async function isStaff(req, res, next) {
   const user = await User.findByPk(req.user.id);
-  console.log(user);
   if (!user || !user.roles.includes('staff')) {
     next(new ErrorCreator('Permission deny.', 403));
   }
@@ -48,7 +45,6 @@ async function isStaff(req, res, next) {
 
 async function isUser(req, res, next) {
   const user = await User.findByPk(req.user.id);
-  console.log(user);
   if (!user || !user.roles.includes('user')) {
     next(new ErrorCreator('Permission deny.', 403));
   }
