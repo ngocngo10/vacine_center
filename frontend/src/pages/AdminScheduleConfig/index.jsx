@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
-import { Card, Row, Col, Divider, Button, Modal } from 'antd';
+import { Card, Row, Col, Divider, Button, Modal , Popconfirm} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import FormConfig from '../../components/FormConfig';
@@ -24,8 +24,8 @@ const AdminScheduleConfig = () => {
   const scheduleConfigCreate = useSelector((state) => state.scheduleConfigCreate);
   const { createSuccess } = scheduleConfigCreate;
 
-  const scheduleConfigEdit = useSelector((state) => state.scheduleConfigEdit);
-  const { editSuccess } = scheduleConfigEdit;
+  // const scheduleConfigEdit = useSelector((state) => state.scheduleConfigEdit);
+  // const { editSuccess } = scheduleConfigEdit;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
@@ -62,15 +62,15 @@ const AdminScheduleConfig = () => {
 
   return loading ? (
     <Loader />
-  ) : error || scheduleConfigCreate.error || scheduleConfigEdit.error ? (
+  ) : error || scheduleConfigCreate.error ? (
     <Message
       description={`${error ? error : ''} ${
         scheduleConfigCreate.error ? scheduleConfigCreate.error : ''
-      } ${scheduleConfigEdit.error ? scheduleConfigEdit.error : ''}`}
+      } `}
     />
   ) : (
     <>
-      {(createSuccess || editSuccess) && (
+      {(createSuccess ) && (
         <Message description="Cài đặt lịch thành công" type="success" />
       )}
       <Card loading={false} className="appointment-schedule-card">
