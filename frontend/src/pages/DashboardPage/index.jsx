@@ -79,7 +79,7 @@ const DashboardPage = () => {
   ];
 
   const data = {};
-  data.content = statistics?.totalVaccines?.map((vaccine, index) => ({
+  data.content = statistics?.vaccines?.map((vaccine, index) => ({
     key: vaccine.id,
     index: index + 1,
     name: vaccine.name,
@@ -141,7 +141,7 @@ const DashboardPage = () => {
         <Row>
           <Col span={24}>
             <Card className="top-vaccines">
-              <h3 className="top-vaccines__title">Top 10 vắc xin được tiêm nhiều nhất</h3>
+              <h3 className="top-vaccines__title">Top vắc xin được tiêm nhiều nhất</h3>
               <Divider />
               {loading ? (
                 <Loader />
