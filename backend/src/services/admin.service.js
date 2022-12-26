@@ -52,15 +52,15 @@ module.exports = class AdminService {
     }
 
     userOptions.where.createdAt = {
-      [Op.gt]: startTime.format('YYYY-MM-DD'),
+      [Op.gte]: startTime.format('YYYY-MM-DD'),
       [Op.lt]: endTime.format('YYYY-MM-DD')
     };
     patientOptions.where.createdAt = {
-      [Op.gt]: startTime.format('YYYY-MM-DD'),
+      [Op.gte]: startTime.format('YYYY-MM-DD'),
       [Op.lt]: endTime.format('YYYY-MM-DD')
     };
     vaccineOptions.where.createdAt = {
-      [Op.gt]: startTime.format('YYYY-MM-DD'),
+      [Op.gte]: startTime.format('YYYY-MM-DD'),
       [Op.lt]: endTime.format('YYYY-MM-DD')
     };
 
@@ -116,9 +116,9 @@ module.exports = class AdminService {
     const appointments = (await sequelize.query(`
       SELECT count(*) AS total,
         sum(case when is_confirmed IS NULL then 1 else 0 end) AS unconfirmed,
-        sum(case when is_confirmed = TRUE then 1 else 0 end) AS checkIn
+        sum(case when is_confirmed = TRUE and check_in_at IS NOT NULL then 1 else 0 end) AS checkIn
       FROM appointments
-      WHERE "appointments"."createdAt" < :end_time and "appointments"."createdAt" > :start_time
+      WHERE "appointments"."desired_date" < :end_time and "appointments"."desired_date" >= :start_time
     `, {
       replacements: {
         start_time: startTime.format('YYYY-MM-DD'),

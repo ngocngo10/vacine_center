@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { ScheduleConfigRepository } = require('../repositories');
 const { ScheduleRepository } = require('../repositories');
 
@@ -21,6 +22,14 @@ function addMinuteToStringHour(str, minute) {
 
 async function createDailySchedules(date, db) {
   const { repository, scheduleConfigRepository } = db;
+  const existedSchedules = await repository.model.findAll({
+    where: {
+      day: date
+    }
+  });
+  if (existedSchedules.length) {
+    return;
+  }
   const scheduleConfigs = await scheduleConfigRepository.find();
   const scheduleConfig = scheduleConfigs[1] || scheduleConfigs[0];
   const morningTime = toHour(scheduleConfig.restTime) - toHour(scheduleConfig.startAt);

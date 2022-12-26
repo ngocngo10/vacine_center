@@ -1,5 +1,16 @@
 import React, { useRef, useEffect } from 'react';
-import { InputNumber, Button, Form, Row, Col, Select, Divider, TimePicker, DatePicker } from 'antd';
+import {
+  InputNumber,
+  Button,
+  Form,
+  Row,
+  Col,
+  Select,
+  Divider,
+  TimePicker,
+  DatePicker,
+  Popconfirm
+} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import './index.css';
@@ -8,6 +19,7 @@ const FormConfig = ({ appointmentConfig, handleOnSubmit, okText, handleCancel })
   const navigate = useNavigate();
   const format = 'HH:mm';
   const formRef = useRef(null);
+  const [form] = Form.useForm();
 
   const onFinish = (values) => {
     values.startAt = moment(values.startAt).format('HH:mm');
@@ -26,7 +38,7 @@ const FormConfig = ({ appointmentConfig, handleOnSubmit, okText, handleCancel })
   };
 
   let disabled;
-  if (appointmentConfig?.index === 0) {
+  if (appointmentConfig?.index === 0 || appointmentConfig?.index === 1) {
     disabled = true;
   } else disabled = false;
 
@@ -46,6 +58,7 @@ const FormConfig = ({ appointmentConfig, handleOnSubmit, okText, handleCancel })
   return (
     <Form
       ref={formRef}
+      form={form}
       layout="vertical"
       className="appointment-config-form"
       labelCol={{
@@ -232,8 +245,18 @@ const FormConfig = ({ appointmentConfig, handleOnSubmit, okText, handleCancel })
           </Form.Item>
         </Col>
       </Row>
+      {handleCancel && (
+        <Row>
+          <Col span={24}>
+            <p className='note-add-schedule'>
+              Chú ý: Kiểm tra thông tin trước khi Cài đặt, vì sau khi cài đặt không được cập nhật!
+            </p>
+          </Col>
+        </Row>
+      )}
+      <br></br>
       <Row justify="center">
-        {(appointmentConfig?.index === 1 || handleCancel) && (
+        {handleCancel && (
           <>
             <Button type="primary" className="btn-cancel" onClick={handleCancelBtn}>
               Hủy
