@@ -2,3 +2,7 @@
   margin-top: 30px;
   font-family: 'WorkSans-Regular';
 }
+
+.note-add-schedule {
+  color: red;
+}
