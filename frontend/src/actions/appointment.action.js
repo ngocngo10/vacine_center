@@ -174,7 +174,7 @@ export const getAppointmentHistories = (query) => async (dispatch, getState) => 
       type: APPOINTMENT_LIST_SUCCESS,
       payload: data
     });
-    localStorage.setItem('appointments', JSON.stringify(data.rows));
+    // localStorage.setItem('appointments', JSON.stringify(data.rows));
   } catch (error) {
     if (error.response?.status == 401 || error.response?.status == 403) {
       dispatch(logout());

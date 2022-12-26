@@ -1,26 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Container from '../../layout/Container';
-import { LikeOutlined, ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
-import { Col, Row, Statistic, Card, Divider, Table, Image } from 'antd';
-import { useNavigate, Link } from 'react-router-dom';
+import { Col, Row, Statistic, Card, Divider, Table, Image , Form, Button, DatePicker} from 'antd';
+import { useNavigate } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
-import { getVaccineList } from '../../actions/vaccine.action';
+import { getStatistics } from '../../actions/statistic.action';
+import moment from 'moment';
 import './index.css';
 
 const DashboardPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [valueDate, setValueDate] = useState(moment());
+  const [valueMonth, setValueMonth] = useState(null);
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const vaccineList = useSelector((state) => state.vaccineList);
-  const { loading, error, vaccines, totalItem } = vaccineList;
+  const statistic = useSelector((state) => state.statistic);
+  const { loading, error, statistics } = statistic;
+
+  const onChangeDate = (date, dateString) => {
+    setValueMonth(null);
+    setValueDate(date);
+    const day = date.format('YYYY-MM-DD')
+    dispatch(getStatistics({ searchBy: 'day', searchItem:  day}));
+  }
+
+  const onChangeMonth = (month, monthString) => {
+    setValueDate(null);
+    setValueMonth(month);
+    const selectedMonth = month.format('YYYY-MM').concat('-01');
+    dispatch(getStatistics({ searchBy: 'month', searchItem:  selectedMonth}));
+
+  }
 
   useEffect(() => {
     if (userInfo && userInfo.user.roles.includes('admin')) {
-      dispatch(getVaccineList({ perPage: 10 }));
+      dispatch(getStatistics({ }));
     } else {
       navigate('/login');
     }
@@ -56,64 +73,66 @@ const DashboardPage = () => {
 
     {
       title: 'Số lượng đã tiêm',
-      dataIndex: 'price',
-      key: 'price'
+      dataIndex: 'count',
+      key: 'count'
     }
   ];
 
   const data = {};
-  data.totalElements = totalItem;
-  data.content = vaccines.map((vaccine, index) => ({
+  data.content = statistics?.totalVaccines?.map((vaccine, index) => ({
     key: vaccine.id,
     index: index + 1,
-    image: vaccine.image,
     name: vaccine.name,
-    price: vaccine.price,
     vaccineCode: vaccine.vaccineCode,
-    origin: vaccine.origin,
-    qty: vaccine.quantity
+    image: vaccine.image,
+    count: vaccine.total
   }));
 
   return (
     <div>
       <Container>
+      <Row justify='start'>
+        <Col ><DatePicker value={valueDate} onChange={onChangeDate} style={{marginRight: 10}} placeholder='Chọn ngày' format="DD-MM-YYYY" /></Col>
+        <Col><DatePicker value={valueMonth} onChange={onChangeMonth}  placeholder='Chọn tháng' picker="month" format="MM-YYYY" /></Col>
+      </Row>
+      <br></br>
         <Row gutter={16}>
           <Col span={6}>
-            <Card>
-              <Statistic title="Người đăng kí / Lượt khám tối đa" value={93} suffix="/ 100" />
+            <Card >
+              <Statistic title="Số người check in" value={statistics?.appointments?.checkIn || 0}    valueStyle={{
+                  color: '#321fdb'
+                }}/>
             </Card>
           </Col>
           <Col span={6}>
             <Card>
-              <Statistic title="Người check in/ Lượt khám tối đa" value={93} suffix="/ 100" />
+              <Statistic title="Tổng số mũi tiêm" value={statistics?.totalInjection}     valueStyle={{
+                  color: '#f9b115'
+                }}/>
             </Card>
           </Col>
 
           <Col span={6}>
             <Card>
               <Statistic
-                title="Active"
-                value={11.28}
-                precision={2}
+                title="Số bệnh nhân mới"
+                value={statistics?.patients}
                 valueStyle={{
                   color: '#3f8600'
                 }}
-                prefix={<ArrowUpOutlined />}
-                suffix="%"
               />
             </Card>
           </Col>
           <Col span={6}>
             <Card>
               <Statistic
-                title="Idle"
-                value={9.3}
-                precision={2}
+                title="Số người dùng mới"
+                value={statistics?.users}
+      
                 valueStyle={{
                   color: '#cf1322'
                 }}
-                prefix={<ArrowDownOutlined />}
-                suffix="%"
+               
               />
             </Card>
           </Col>
