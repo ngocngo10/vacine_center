@@ -244,7 +244,7 @@ const StaffAppointmentPage = () => {
             </Col>
           </Row>
         </Form>
-        <Row justify="center">
+        {/* <Row justify="center">
           <Col span={6}>
             <Card>
               <Statistic
@@ -258,7 +258,7 @@ const StaffAppointmentPage = () => {
             </Card>
           </Col>
         </Row>
-        <br></br>
+        <br></br> */}
         <Table
           style={{ marginTop: 20 }}
           rowKey={(record) => record.key}
