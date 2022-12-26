@@ -46,7 +46,8 @@ module.exports = class VaccineItemService {
 
       if (reqQuery.expiredDay) {
         findOptions.where.expirationDate = {
-          [Op.lt]: moment().add(+reqQuery.expiredDay, 'days').format('YYYY-MM-DD')
+          [Op.lt]: moment().add(+reqQuery.expiredDay, 'days').startOf('day').format('YYYY-MM-DD'),
+          [Op.gte]: moment().startOf('day').format('YYYY-MM-DD')
         }
       }
 

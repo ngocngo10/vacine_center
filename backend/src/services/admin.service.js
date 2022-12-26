@@ -43,13 +43,12 @@ module.exports = class AdminService {
     const vaccineOptions = { where: {} };
     const patientOptions = { where: {} };
     let startTime, endTime;
-    if (searchBy === 'day') {
-      startTime = searchItem ? searchItem : moment().startOf('day');
-      endTime = startTime.clone().add(1, 'days');
-    }
     if (searchBy === 'month') {
-      startTime = moment().startOf('year').add(+searchItem - 1, 'months');
+      startTime = searchItem ? moment(searchItem).startOf('day') : moment().startOf('month').startOf('day');
       endTime = startTime.clone().add(1, 'months');
+    } else {
+      startTime = searchItem ? moment(searchItem).startOf('day') : moment().startOf('day');
+      endTime = startTime.clone().add(1, 'days');
     }
 
     userOptions.where.createdAt = {

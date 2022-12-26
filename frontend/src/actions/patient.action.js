@@ -52,7 +52,7 @@ export const getPatientList = (query) => async (dispatch, getState) => {
       payload: data
     });
 
-    localStorage.setItem('patients', JSON.stringify(data.rows));
+    // localStorage.setItem('patients', JSON.stringify(data.rows));
   } catch (error) {
     if (error.response?.status == 401 || error.response?.status == 403) {
       dispatch(logout());

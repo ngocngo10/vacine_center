@@ -77,14 +77,14 @@ const Header = () => {
                 </li>
               </ul>
             </li>
-            <li className="header-action__time">
+            {/* <li className="header-action__time">
               <ul className="header-action__item">
                 <li>GIỜ LÀM VIỆC</li>
                 <li>
                   <time>07:00 - 20:00 Everyday</time>
                 </li>
               </ul>
-            </li>
+            </li> */}
             <li className="header-action__location">
               <ul className="header-action__item">
                 <li>LOCATION</li>

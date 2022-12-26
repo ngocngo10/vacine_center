@@ -81,6 +81,8 @@ import {
   patientInjectionsReducer
 } from './reducers/patient.reducer';
 
+import {statisticReducer} from './reducers/statistic.reducer'
+
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
@@ -143,32 +145,34 @@ const reducer = combineReducers({
   patientList: patientListReducer,
   patient: patientReducer,
   patientInjections: patientInjectionsReducer,
-  injectionDeleteMulti: injectionDeleteMultiReducer
+  injectionDeleteMulti: injectionDeleteMultiReducer,
+
+  statistic: statisticReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
   ? JSON.parse(localStorage.getItem('userInfo'))
   : null;
 
-const vaccineListFromStorage = localStorage.getItem('vaccines')
-  ? JSON.parse(localStorage.getItem('vaccines'))
-  : null;
+// const vaccineListFromStorage = localStorage.getItem('vaccines')
+//   ? JSON.parse(localStorage.getItem('vaccines'))
+//   : null;
 
-const diseaseCategoriesFromStorage = localStorage.getItem('disease-categories')
-  ? JSON.parse(localStorage.getItem('disease-categories'))
-  : null;
+// const diseaseCategoriesFromStorage = localStorage.getItem('disease-categories')
+//   ? JSON.parse(localStorage.getItem('disease-categories'))
+//   : null;
 
-const patientsFromStorage = localStorage.getItem('patients')
-  ? JSON.parse(localStorage.getItem('patients'))
-  : null;
+// const patientsFromStorage = localStorage.getItem('patients')
+//   ? JSON.parse(localStorage.getItem('patients'))
+//   : null;
 
 const initialState = {
   userLogin: { userInfo: userInfoFromStorage },
-  vaccineList: { vaccines: vaccineListFromStorage },
-  categoryList: { categories: diseaseCategoriesFromStorage },
-  patientList: {
-    patients: patientsFromStorage
-  }
+  // vaccineList: { vaccines: vaccineListFromStorage },
+  // categoryList: { categories: diseaseCategoriesFromStorage },
+  // patientList: {
+  //   patients: patientsFromStorage
+  // }
 };
 
 const middleware = [thunk];

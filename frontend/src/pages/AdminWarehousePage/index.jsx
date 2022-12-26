@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Table, Button, Row, Col, Input, Modal, Card, Upload } from 'antd';
+import { Table, Button, Row, Col, Input, Modal, Card, Upload , Form, Select} from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { getSignedRequest } from '../../actions/upload.action';
 import { getVaccineListWarehouse, createVaccineWarehouse } from '../../actions/warehouse.action';
@@ -47,13 +47,23 @@ const AdminWarehousePage = () => {
     setCurrentPage(pagination.current - 1);
   };
 
-  const handleOnSearchCode = (value) => {
-    dispatch(getVaccineListWarehouse({ perPage: 10, vaccineCode: value }));
+  const onFinish = (values) => {
+    let query = {
+      perPage: 10,
+      vaccineCode: values.code,
+      vaccineName: values.name
+    }
+    
+    if (values.status === 1) {
+      query = { ...query, isExpired: 'true' };
+    }
+    if (values.status === 2) {
+      query = { ...query, expiredDay: 30  };
+    }
+   
+    dispatch(getVaccineListWarehouse(query));
   };
 
-  const handleOnSearchName = (value) => {
-    dispatch(getVaccineListWarehouse({ perPage: 10, vaccineName: value }));
-  };
 
   useEffect(() => {
     if (imageUrl) {
@@ -69,6 +79,11 @@ const AdminWarehousePage = () => {
       navigate('/login');
     }
   }, [userInfo, createSuccess]);
+
+     const statusOptions = [
+    { label: 'Đã hết hạn', value: 1 },
+    { label: 'Sẽ hết hạn trong vòng 30 ngày', value: 2 },
+  ];
 
   const columns = [
     {
@@ -139,68 +154,87 @@ const AdminWarehousePage = () => {
     <div>
       <Card style={{ borderRadius: 10 }}>
         <h2 className="page-title">Quản lí kho vắc xin</h2>
-        <Row justify="space-between">
-          <Col span={8}>
-            <Search onSearch={handleOnSearchCode} placeholder="Tìm theo mã vắc xin" />
-          </Col>
-          <Col span={8}>
-            <Search onSearch={handleOnSearchName} placeholder="Tìm theo tên vắc xin" />
-          </Col>
-          <Col>
-            <Upload
-              accept=".xls, .xlsx"
-              showUploadList={false}
-              onChange={(file) => onChangeUpload(file)}
-              beforeUpload={(file) => {
-                const reader = new FileReader();
+        <Form onFinish={onFinish}>
+          <Row justify="space-between">
+            <Col span={6}>
+              <Form.Item name="code">
+                <Input placeholder="Tìm theo mã vắc xin" />
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item name="name">
+                <Input placeholder="Tìm theo tên vắc xin" />
+              </Form.Item>
+            </Col>
+            <Col span={5}>
+              <Form.Item name="status">
+              <Select
+                  showSearch
+                  placeholder="Tình trạng"
+                  optionFilterProp="children"
+                  options={statusOptions}
+                />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item >
+               <Button type="primary"  htmlType='submit'>Tìm kiếm</Button>
+              </Form.Item>
+            </Col>
 
-                reader.onload = (e) => {};
-                reader.readAsText(file);
+        <Col>
+          <Upload
+            accept=".xls, .xlsx"
+            showUploadList={false}
+            onChange={(file) => onChangeUpload(file)}
+            beforeUpload={(file) => {
+              const reader = new FileReader();
 
-                // Prevent upload
-                return false;
-              }}>
-              <Button type="primary" icon={<UploadOutlined />}>
-                Nhập kho vắc xin
-              </Button>
-            </Upload>
-          </Col>
-        </Row>
-        {loading ? (
-          <Loader />
-        ) : error ? (
-          <Message description={error} />
-        ) : (
-          <Table
-            style={{ marginTop: 20 }}
-            rowKey={(record) => record.key}
-            onRow={(record) => {
-              return {
-                onClick: () => {
-                  const id = record.key;
-                  const vaccineItem = vaccineItemList.find((item) => (item.id = id));
-                  setSelectedRow(vaccineItem);
-                  showModal();
-                }
-              };
-            }}
-            dataSource={data.content}
-            columns={columns}
-            onChange={handleTableChange}
-            pagination={{
-              pageSize: 10,
-              current: currentPage + 1,
-              total: data.totalElements,
-              showTotal: (total, range) => {
-                return `${range[0]}-${range[1]} of ${total} items`;
+              reader.onload = (e) => { };
+              reader.readAsText(file);
+
+              // Prevent upload
+              return false;
+            } }>
+            <Button type="primary" icon={<UploadOutlined />}>
+              Nhập kho vắc xin
+            </Button>
+          </Upload>
+        </Col>
+      </Row>
+      </Form>
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message description={error} />
+      ) : (
+        <Table
+          style={{ marginTop: 20 }}
+          rowKey={(record) => record.key}
+          onRow={(record) => {
+            return {
+              onClick: () => {
+                const id = record.key;
+                const vaccineItem = vaccineItemList.find((item) => (item.id = id));
+                setSelectedRow(vaccineItem);
+                showModal();
               }
-            }}
-          />
-        )}
-        {vaccineWareHouseCreate?.error && <Message description={vaccineWareHouseCreate.error} />}
-      </Card>
-
-      <Modal width={900} open={isModalOpen} onCancel={handleCancel} footer={null}>
+            };
+          } }
+          dataSource={data.content}
+          columns={columns}
+          onChange={handleTableChange}
+          pagination={{
+            pageSize: 10,
+            current: currentPage + 1,
+            total: data.totalElements,
+            showTotal: (total, range) => {
+              return `${range[0]}-${range[1]} of ${total} items`;
+            }
+          }} />
+      )}
+      {vaccineWareHouseCreate?.error && <Message description={vaccineWareHouseCreate.error} />}
+    </Card><Modal width={900} open={isModalOpen} onCancel={handleCancel} footer={null}>
         <Card className="warehouse-card">
           <h2 className="page-title">Thông tin chi tiết đơn hàng nhập kho vắc xin</h2>
           <Row justify="space-around">
