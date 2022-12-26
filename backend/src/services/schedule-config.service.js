@@ -11,7 +11,7 @@ module.exports = class ScheduleConfigService {
   }
   async create(data) {
     await this.repository.create(data);
-    const toDate = moment().tz('Asia/Ho_Chi_Minh').add(14, 'days').startOf('day');
+    const toDate = moment().tz('Asia/Ho_Chi_Minh').add(20, 'days').startOf('day');
     const fromDate = moment(data.applyFrom).startOf('day');
     // if (fromDate.diff(moment().tz('Asia/Ho_Chi_Minh'), 'day') <= 0) {
     //   throw new ErrorCreator('Vui lòng chọn ngày áp dụng lớn hơn ngày hiện tại!', 400);
