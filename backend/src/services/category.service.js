@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { CategoryRepository, AgeGroupRepository } = require('../repositories');
 
 module.exports = class CategoryService {

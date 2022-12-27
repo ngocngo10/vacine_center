@@ -225,13 +225,25 @@ export const createCategory = (category) => async (dispatch, getState) => {
   }
 };
 
-export const getAgeGroups = () => async (dispatch) => {
+export const getAgeGroups = (query) => async (dispatch) => {
   try {
     dispatch({
       type: AGE_GROUPS_CATEGORY_REQUEST
     });
 
-    const url = `${BASE_URL}/api/age-groups`;
+    const reqQuery = { ...query };
+
+    const queries = [];
+    for (let key in reqQuery) {
+      if (reqQuery[key]) {
+        queries.push(`${key}=${reqQuery[key]}`);
+      }
+    }
+    const queryString = queries.join('&');
+
+    const url = queryString
+      ? `${BASE_URL}/api/age-groups?${queryString}`
+      : `${BASE_URL}/api/age-groups`;
 
     const { data } = await axios.get(url);
 
