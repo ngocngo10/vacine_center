@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { AgeGroupRepository } = require('../repositories');
 
 module.exports = class AgeGroupService {
