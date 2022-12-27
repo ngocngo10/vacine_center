@@ -79,7 +79,7 @@ const DashboardPage = () => {
   ];
 
   const data = {};
-  data.content = statistics?.vaccines?.map((vaccine, index) => ({
+  data.content = statistics?.totalVaccines?.map((vaccine, index) => ({
     key: vaccine.id,
     index: index + 1,
     name: vaccine.name,
