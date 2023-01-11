@@ -31,7 +31,7 @@ Building a website to manage vaccinations of the health center
 - Users update their profile
 
 ## Features
-- [Vaccine Center]([http://datn-vaccine-center.website:8080/])
+- [Vaccine Center](http://datn-vaccine-center.website:8080/)
 
 
 ## Usage
