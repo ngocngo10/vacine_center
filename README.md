@@ -30,7 +30,7 @@ Building a website to manage vaccinations of the health center
 - Admin manage vaccine warehouse
 - Users update their profile
 
-## Features
+## Web
 - [Vaccine Center](http://datn-vaccine-center.website:8080/)
 
 
