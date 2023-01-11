@@ -13,7 +13,7 @@ Building a website to manage vaccinations of the health center
 
 ## Features
 
-- Sign up, Sign up
+- Sign in, Sign up
 - Look up vaccine information
 - Users book an appointment
 - Users make appointments according to the time frame
